@@ -1,15 +1,16 @@
-$(document).ready(function(){
+$(document).ready(async function () {
     bindings();
 
-                $(".inputPA, .inputOutros, .inputMA").closest("div.inputGroup").hide();
-
+    $(".inputPA, .inputOutros, .inputMA").closest("div.inputGroup").hide();
+    modelos = await promiseBuscaModelosDeEquipamentosDoSisma();
+    preencheOptionsDosModelos();
 });
 
-function bindings(){
-    $("#checkboxTemMaoDeObra").on("change", function(){
+function bindings() {
+    $("#checkboxTemMaoDeObra").on("change", function () {
         if ($(this).is(":checked")) {
             $("#divValorMaoDeObra").show();
-        }else{
+        } else {
             $("#divValorMaoDeObra").hide();
         }
     });
@@ -31,5 +32,9 @@ function bindings(){
             $(".inputMA, .inputPA").closest("div.inputGroup").hide();
             $(".inputOutros").closest("div.inputGroup").show();
         }
+    });
+
+    $("#modelo").on("change", function () {
+        preencheInformacoesDoModelo($(this).val());
     });
 }

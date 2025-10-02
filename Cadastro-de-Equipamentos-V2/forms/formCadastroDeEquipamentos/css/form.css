@@ -10,3 +10,18 @@
 .form-control{
     background-color: #F7F8FA !important;
 }
+
+
+.selectize-dropdown .active:not(.selected){
+    background-color: lightgray !important;
+    color: black !important;
+}
+.selectize-dropdown .selected{
+    background-color: lightgray !important;
+    color: black !important;
+}
+.selectize-control.single .selectize-input{
+    box-shadow: rgba(0, 0, 0, 0.0) !important;
+    background-color: #fff !important;
+    background-image: none !important;
+}

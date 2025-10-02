@@ -6,6 +6,16 @@
 	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/portal/resources/js/jquery/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/portal/resources/js/mustache/mustache-min.js"></script>
 	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/style-guide/js/fluig-style-guide.min.js" charset="utf-8"></script>
+	<script src="/webdesk/vcXMLRPC.js"></script>
+
+	<!-- Selectize -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css"
+		integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+		integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
 	<!-- Formulário -->
 	<link rel="stylesheet" href="css/header.css">
@@ -88,24 +98,24 @@
 			<div class="row">
 				<div class="col-md-6 inputGroup">
 					<label for="modelo">Modelo:</label>
-					<select name="modelo" id="modelo" class="form-control inputPA inputMA"></select>
+					<select name="modelo" id="modelo" class="inputPA inputMA"></select>
 					<br>
 				</div>
 				<div class="col-md-6 inputGroup ">
 					<label for="fabricante">Fabricante:</label>
-					<select name="fabricante" id="fabricante" class="form-control inputPA inputMA"></select>
+					<input type="text" name="fabricante" id="fabricante" class="form-control inputPA inputMA">
 					<br>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-6 inputGroup">
 					<label for="classeMecanica">Classe Mecânica:</label>
-					<select name="classeMecanica" id="classeMecanica" class="form-control inputMA"></select>
+					<input type="text" name="classeMecanica" id="classeMecanica" class="form-control inputMA">
 					<br>
 				</div>
 				<div class="col-md-6 inputGroup">
 					<label for="classOperacional">Classe Operacional:</label>
-					<select name="classOperacional" id="classOperacional" class="form-control inputMA"></select>
+					<input type="text" name="classOperacional" id="classOperacional" class="form-control inputMA">
 					<br>
 				</div>
 			</div>
