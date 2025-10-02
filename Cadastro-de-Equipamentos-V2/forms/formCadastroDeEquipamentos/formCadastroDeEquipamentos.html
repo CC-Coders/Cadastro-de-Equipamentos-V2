@@ -16,6 +16,13 @@
 		integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
 		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+	<!-- Castilho Dev Guida -->
+    <script src="/castilho_dev_guide/resources/js/castilho-utils.js"></script>
+    <script src="/castilho_dev_guide/resources/js/castilho-consultas-rm.js"></script>
+
+	<!-- jQuery Mask -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
 
 	<!-- Formulário -->
 	<link rel="stylesheet" href="css/header.css">
@@ -23,6 +30,7 @@
 	<link rel="stylesheet" href="css/paginacao.css">
 	<link rel="stylesheet" href="css/form.css">
 
+	<script src="js/jquery.maskMoney.js"></script>
 	<script src="js/paginacao.js"></script>
 	<script src="js/functions.js"></script>
 	<script src="js/script.js"></script>
@@ -31,8 +39,15 @@
 <div class="fluig-style-guide">
 <form name="form" role="form">
 	<div style="display: none;">
+		<!-- Parametros Formulario -->
+		<input type="hidden" id="atividade" name="atividade" />
+        <input type="hidden" id="formMode" name="formMode" />
+        <input type="hidden" id="userCode" name="userCode" />
+        <input type="hidden" id="isMobile" name="isMobile" />
 
 
+		<!-- Dados Solicitacao -->
+        <input type="hidden" id="solicitante" name="solicitante" />
 	</div>
 
 
@@ -62,22 +77,22 @@
 			<div class="row">
 				<div class="col-md-6">
 					<label for="coligada">Coliga/Empresa:</label>
-					<select name="coligada" id="coligada" class="form-control"></select>
+					<select name="coligada" id="coligada" class=""></select>
 				</div>
 				<div class="col-md-6">
 					<label for="obra">Obra:</label>
-					<select name="obra" id="obra" class="form-control"></select>
+					<select name="obra" id="obra" class=""></select>
 				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-6">
 					<label for="descricaoEquipamento">Descrição do Equipamento:</label>
-					<select name="descricaoEquipamento" id="descricaoEquipamento" class="form-control"></select>
+					<input type="text" name="descricaoEquipamento" id="descricaoEquipamento" class="form-control">
 				</div>
 				<div class="col-md-6">
 					<label for="prefixo">Prefixo:</label>
-					<select name="prefixo" id="prefixo" class="form-control"></select>
+					<input type="text" name="prefixo" id="prefixo" class="form-control">
 				</div>
 			</div>
 		</div>
@@ -221,7 +236,13 @@
 				</div>
 				<div class="col-md-6">
 					<label for="">Km/Horas:</label>
-					<input type="text" name="kmChegadaObra" id="kmChegadaObra" class="form-control">
+					<div class="flexInput">
+						<input type="text" name="kmChegadaObra" id="kmChegadaObra" class="form-control">
+						<select name="tipoKmChegadaObra" id="tipoKmChegadaObra" class="form-control">
+							<option value="KM">KM</option>
+							<option value="Horas">Horas</option>
+						</select>
+					</div>
 					<br>
 				</div>
 			</div>
@@ -248,7 +269,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<label for="fornecedor">Fornecedor (CPF/CNPJ):</label>
-					<select name="fornecedor" id="fornecedor" class="form-control"></select>
+					<select name="fornecedor" id="fornecedor" ></select>
 					<br>
 				</div>
 			</div>

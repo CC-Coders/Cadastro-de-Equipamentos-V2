@@ -45,3 +45,37 @@ function preencheInformacoesDoModelo(ID_MODELO){
 }
 
 
+function preenchePermissoesDoUsuario(){
+    permissoes = buscaObrasPorPermissaoDoUsuario($("#userCode").val());
+    var coligadas = Array.from(
+        new Map(permissoes.map(e => [e.CODCOLIGADA, { NOME: e.NOMEFANTASIA, CODIGO: e.CODCOLIGADA }])).values()
+    );
+
+    $("#coligada")[0].selectize.addOption(coligadas.map(e=>{return {value:`${e.CODIGO} - ${e.NOME}`, text:`${e.CODIGO} - ${e.NOME}`}}));
+}
+function preencheObras(CODCOLIGADA){
+    $("#obra")[0].selectize.clearOptions();
+    var obras = permissoes.filter(e=>e.CODCOLIGADA==CODCOLIGADA);
+    $("#obra")[0].selectize.addOption(obras.map(e=>{return {value:`${e.CODCCUSTO} - ${e.perfil}`, text:`${e.CODCCUSTO} - ${e.perfil}`}}));
+}
+
+
+function buscaFornecedores(){
+    return new Promise((resolve, reject)=>{
+        DatasetFactory.getDataset("FCFO", ["CODCFO", "CGCCFO", "NOMEFANTASIA"], [
+            DatasetFactory.createConstraint("ATIVO", 1, 1, ConstraintType.MUST),
+            DatasetFactory.createConstraint("CODCOLIGADA", 0, 0, ConstraintType.MUST)
+        ], null, {
+            success:ds=>{
+                resolve(ds.values);
+            },
+            error:error=>{
+                reject(error)  ;
+            }
+        });
+    });
+}
+async function insereOptionsDosFornecedores(){
+    var fornecedores = await buscaFornecedores();
+    $("#fornecedor")[0].selectize.addOption(fornecedores.map(e=>{return {value:`${e.CODCFO}`, text:`${e.CGCCFO} - ${e.NOMEFANTASIA}`}}));
+}
