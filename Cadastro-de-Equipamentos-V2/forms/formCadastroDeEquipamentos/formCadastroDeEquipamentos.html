@@ -11,6 +11,9 @@
 	<link rel="stylesheet" href="css/header.css">
 	<link rel="stylesheet" href="css/footer.css">
 	<link rel="stylesheet" href="css/paginacao.css">
+	<link rel="stylesheet" href="css/form.css">
+
+	<script src="js/paginacao.js"></script>
 	<script src="js/functions.js"></script>
 	<script src="js/script.js"></script>
 </head>
@@ -44,109 +47,115 @@
 		</div>
 	</header>
 	<main>
-		<div class="pagina" data-index="0" id="paginaIdentificacao">
+		<div class="pagina ativa" data-index="0" id="paginaIdentificacao">
+			<h2>Identificação (Equipamento e Obra)</h2>
 			<div class="row">
 				<div class="col-md-6">
-					<label for="">Coliga/Empresa:</label>
-					<select name="" id="" class="form-control"></select>
+					<label for="coligada">Coliga/Empresa:</label>
+					<select name="coligada" id="coligada" class="form-control"></select>
 				</div>
 				<div class="col-md-6">
-					<label for="">Obra:</label>
-					<select name="" id="" class="form-control"></select>
+					<label for="obra">Obra:</label>
+					<select name="obra" id="obra" class="form-control"></select>
 				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-6">
-					<label for="">Descrição do Equipamento:</label>
-					<select name="" id="" class="form-control"></select>
+					<label for="descricaoEquipamento">Descrição do Equipamento:</label>
+					<select name="descricaoEquipamento" id="descricaoEquipamento" class="form-control"></select>
 				</div>
 				<div class="col-md-6">
-					<label for="">Prefixo:</label>
-					<select name="" id="" class="form-control"></select>
+					<label for="prefixo">Prefixo:</label>
+					<select name="prefixo" id="prefixo" class="form-control"></select>
 				</div>
 			</div>
 		</div>
-		<div class="pagina ativa" data-index="1" id="paginaDetalhes">
+		<div class="pagina" data-index="1" id="paginaDetalhes">
+			<h2>Detalhes Técnicos e Financeiros</h2>
 			<div class="row">
 				<div class="col-md-12">
 					<label for="">Categoria:</label>
-					<select name="" id="" class="form-control">
+					<select name="categoria" id="categoria" class="form-control">
 						<option value=""></option>
-						<option value="PA">PA</option>
 						<option value="MA">MA</option>
+						<option value="PA">PA</option>
 						<option value="Outros">Outros</option>
 					</select>
+					<br>
 				</div>
 			</div>
-			<br>
 			<div class="row">
-				<div class="col-md-6">
-					<label for="">Modelo:</label>
-					<select name="" id="" class="form-control"></select>
+				<div class="col-md-6 inputGroup">
+					<label for="modelo">Modelo:</label>
+					<select name="modelo" id="modelo" class="form-control inputPA inputMA"></select>
+					<br>
 				</div>
-				<div class="col-md-6">
-					<label for="">Fabricante:</label>
-					<select name="" id="" class="form-control"></select>
+				<div class="col-md-6 inputGroup ">
+					<label for="fabricante">Fabricante:</label>
+					<select name="fabricante" id="fabricante" class="form-control inputPA inputMA"></select>
+					<br>
 				</div>
 			</div>
-			<br>
 			<div class="row">
-				<div class="col-md-6">
-					<label for="">Classe Mecânica:</label>
-					<select name="" id="" class="form-control"></select>
+				<div class="col-md-6 inputGroup">
+					<label for="classeMecanica">Classe Mecânica:</label>
+					<select name="classeMecanica" id="classeMecanica" class="form-control inputMA"></select>
+					<br>
 				</div>
-				<div class="col-md-6">
-					<label for="">Classe Operacional:</label>
-					<select name="" id="" class="form-control"></select>
+				<div class="col-md-6 inputGroup">
+					<label for="classOperacional">Classe Operacional:</label>
+					<select name="classOperacional" id="classOperacional" class="form-control inputMA"></select>
+					<br>
 				</div>
 			</div>
-			<br>
 			<div class="row">
-				<div class="col-md-6">
-					<label for="">Ano Fabricação:</label>
-					<input type="text" name="" id="" class="form-control">
+				<div class="col-md-6 inputGroup">
+					<label for="AnoFabricacao">Ano Fabricação:</label>
+					<input type="text" name="AnoFabricacao" id="AnoFabricacao" class="form-control inputPA inputMA">
+					<br>
 				</div>
-				<div class="col-md-6">
-					<label for="">Ano Modelo:</label>
-					<input type="text" name="" id="" class="form-control">
+				<div class="col-md-6 inputGroup">
+					<label for="AnoModelo">Ano Modelo:</label>
+					<input type="text" name="AnoModelo" id="AnoModelo" class="form-control inputPA inputMA">
+					<br>
 				</div>
 			</div>
-			<br>
 			<div class="row">
-				<div class="col-md-6">
-					<label for="">Placa:</label>
-					<input type="text" name="" id="" class="form-control">
+				<div class="col-md-6 inputGroup">
+					<label for="placa">Placa:</label>
+					<input type="text" name="placa" id="placa" class="form-control inputPA inputMA">
+					<br>
 				</div>
-				<div class="col-md-6">
-					<label for="">Chassis:</label>
-					<input type="text" name="" id="" class="form-control">
+				<div class="col-md-6 inputGroup">
+					<label for="chassi">Chassis:</label>
+					<input type="text" name="chassi" id="chassi" class="form-control inputPA inputMA">
+					<br>
 				</div>
 			</div>
-			<br>
 			<div class="row">
-				<div class="col-md-4">
-					<label for="">Potência do Motor:</label>
-					<div>
-						<input type="text" name="" id="" class="form-control">
-						<select name="" id="" class="form-control">
+				<div class="col-md-4 inputGroup">
+					<label for="potenciaMotor">Potência do Motor:</label>
+					<div class="flexInput">
+						<input type="text" name="potenciaMotor" id="potenciaMotor" class="form-control inputMA">
+						<select name="tipoPotenciaMotor" id="tipoPotenciaMotor" class="form-control inputMA">
 							<option value="CV">CV</option>
 							<option value="HP">HP</option>
 						</select>
 					</div>
+					<br>
 				</div>
 				<div class="col-md-4">
 
 				</div>
 				<div class="col-md-4"></div>
 			</div>
-			<br>
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-4 inputGroup">
 					<label for="">Valor Mobilização (R$):</label>
-					<div>
-						<input type="text" name="" id="" class="form-control">
-						<select name="" id="" class="form-control">
+					<div class="flexInput">
+						<input type="text" name="valorMobilizacao" id="valorMobilizacao" class="form-control inputPA inputMA inputOutros">
+						<select name="tipoValorMobilizacao" id="tipoValorMobilizacao" class="form-control inputPA inputMA inputOutros">
 							<option value="hora">Hora</option>
                         	<option value="diaria">Diária</option>
                         	<option value="mensal">Mensal</option>
@@ -155,12 +164,13 @@
                         	<option value="ton_km">Ton x KM</option>
 						</select>
 					</div>
+					<br>
 				</div>
-				<div class="col-md-4">
-					<label for="">Valor Extra (R$):</label>
-					<div>
-						<input type="text" name="" id="" class="form-control">
-						<select name="" id="" class="form-control">
+				<div class="col-md-4 inputGroup">
+					<label for="valorExtra">Valor Extra (R$):</label>
+					<div class="flexInput">
+						<input type="text" name="valorExtra" id="valorExtra" class="form-control inputPA inputMA inputOutros">
+						<select name="tipoValorExtra" id="tipoValorExtra" class="form-control inputPA inputMA inputOutros">
 							<option value="hora">Hora</option>
                         	<option value="diaria">Diária</option>
                         	<option value="mensal">Mensal</option>
@@ -169,29 +179,115 @@
                         	<option value="ton_km">Ton x KM</option>
 						</select>
 					</div>
+					<br>
 				</div>
-				<div class="col-md-4">
-					<label for="">Valor de Locação (R$):</label>
-					<input type="text" name="" id="" class="form-control">
+				<div class="col-md-4 inputGroup">
+					<label for="valorLocacao">Valor de Locação (R$):</label>
+					<input type="text" name="valorLocacao" id="valorLocacao" class="form-control inputPA inputMA inputOutros">
+					<br>
 				</div>
 			</div>
-			<br>
 			<div class="row">
-				<div class="col-md-4">
-					<label for="">Mão de Obra:</label>
+				<div class="col-md-4 inputGroup">
 					<div>
-						<input type="checkbox" name="" id="">
-						<label for="">Incluir Mão de Obra?</label>
+						<label for="">Mão de Obra:</label>
+						<input type="checkbox" name="checkboxTemMaoDeObra" id="checkboxTemMaoDeObra" class="inputMA">
+						<label for="checkboxTemMaoDeObra"> Incluir Mão de Obra?</label>
 					</div>
-					<div>
-						<label for="">Valor de Mão de Obra (R$):</label>
-						<input type="text" name="" id="" class="form-control">
+					<div id="divValorMaoDeObra" style="display: none;">
+						<label for="valorMaoDeObra">Valor de Mão de Obra (R$):</label>
+						<input type="text" name="valorMaoDeObra" id="valorMaoDeObra" class="form-control">
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="pagina" data-index="2" id="paginaOperacional"></div>
-		<div class="pagina" data-index="3" id="paginaFornecedor"></div>
+		<div class="pagina" data-index="2" id="paginaOperacional">
+			<h2>Dados Operacionais</h2>
+			<div class="row">
+				<div class="col-md-6">
+					<label for="dataChegadaObra">Data de Chegada na Obra:</label>
+					<input type="text" name="dataChegadaObra" id="dataChegadaObra" class="form-control">
+					<br>
+				</div>
+				<div class="col-md-6">
+					<label for="">Km/Horas:</label>
+					<input type="text" name="kmChegadaObra" id="kmChegadaObra" class="form-control">
+					<br>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<label for="tipoCombustivel">Tipo de combustível:</label>
+					<select name="tipoCombustivel" id="tipoCombustivel" class="form-control"></select>
+					<br>
+				</div>
+				<div class="col-md-4">
+					<label for="litrosTanque">Tanque (Litros):</label>
+					<input type="text" name="litrosTanque" id="litrosTanque" class="form-control">
+					<br>
+				</div>
+				<div class="col-md-4">
+					<label for="consumoMedio">Consumo Médio:</label>
+					<input type="text" name="consumoMedio" id="consumoMedio" class="form-control">
+					<br>
+				</div>
+			</div>
+		</div>
+		<div class="pagina" data-index="3" id="paginaFornecedor">
+			<h2>Dados do Fornecedor & Anexos</h2>
+			<div class="row">
+				<div class="col-md-12">
+					<label for="fornecedor">Fornecedor (CPF/CNPJ):</label>
+					<select name="fornecedor" id="fornecedor" class="form-control"></select>
+					<br>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<label for="enderecoFornecedor">Endereço:</label>
+					<input type="text" name="enderecoFornecedor" id="enderecoFornecedor" class="form-control">
+					<br>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<label for="cidadeFornecedor">Cidade:</label>
+					<input type="text" name="cidadeFornecedor" id="cidadeFornecedor" class="form-control">
+					<br>
+				</div>
+				<div class="col-md-4">
+					<label for="numeroFornecedor">Número:</label>
+					<input type="text" name="numeroFornecedor" id="numeroFornecedor" class="form-control">
+					<br>
+				</div>
+				<div class="col-md-4">
+					<label for="cepFornecedor">CEP:</label>
+					<input type="text" name="cepFornecedor" id="cepFornecedor" class="form-control">
+					<br>
+				</div>
+			</div>
+			<h2>Documentação</h2>
+
+			<label for="">Anexo:</label>
+			<div class="row">
+				<div class="col-md-6" style="display: flex;">
+					<select name="tipoAnexo" id="tipoAnexo" class="form-control">
+						<option value=""></option>
+						<option value="Documentação do Equipamento">Documentação do Equipamento</option>
+						<option value="Foto do Equipamento">Foto do Equipamento</option>
+						<option value="Documentação pra segurança">Documentação pra segurança</option>
+					</select>
+					<button class="btn btn-info" id="btnAnexarDocumentacao">Anexar</button>
+				</div>
+			</div>
+			<br>
+			<b>Documentos anexados:</b>
+			<div>
+				<b>❌Documentação do Equipamento</b><br>
+				<b>❌Foto do Equipamento</b><br>
+				<b>❌Documentação pra segurança</b><br>
+			</div>
+		</div>
 	</main>
 	<footer>
 		<div class="navegacao-formulario">

@@ -1,0 +1,12 @@
+.flexInput{
+    display: flex;
+}
+.flexInput>select{
+    width: fit-content !important;
+    min-width: 80px !important;
+}
+
+
+.form-control{
+    background-color: #F7F8FA !important;
+}
