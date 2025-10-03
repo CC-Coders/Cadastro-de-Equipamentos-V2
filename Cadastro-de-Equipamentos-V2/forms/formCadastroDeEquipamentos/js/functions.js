@@ -62,7 +62,7 @@ function preencheObras(CODCOLIGADA){
 
 function buscaFornecedores(){
     return new Promise((resolve, reject)=>{
-        DatasetFactory.getDataset("FCFO", ["CODCFO", "CGCCFO", "NOMEFANTASIA"], [
+        DatasetFactory.getDataset("FCFO", [], [
             DatasetFactory.createConstraint("ATIVO", 1, 1, ConstraintType.MUST),
             DatasetFactory.createConstraint("CODCOLIGADA", 0, 0, ConstraintType.MUST)
         ], null, {
@@ -77,5 +77,25 @@ function buscaFornecedores(){
 }
 async function insereOptionsDosFornecedores(){
     var fornecedores = await buscaFornecedores();
-    $("#fornecedor")[0].selectize.addOption(fornecedores.map(e=>{return {value:`${e.CODCFO}`, text:`${e.CGCCFO} - ${e.NOMEFANTASIA}`}}));
+    $("#fornecedor")[0].selectize.addOption(fornecedores.map(e=>{return {value:`${e.CODCFO} - ${e.CGCCFO}`, text:`${e.CGCCFO} - ${e.NOMEFANTASIA}`}}));
 }
+
+function buscaEnderecoFornecedor(CGCCFO){
+    return new Promise((resolve, reject)=>{
+        DatasetFactory.getDataset("RetornaEnderecoFornecedor", null, [
+            DatasetFactory.createConstraint("CGCCFO", CGCCFO, CGCCFO, ConstraintType.MUST)
+        ], null, {
+            success:ds=>{
+                if (ds.values.length == 0) {
+                    reject("Nenhum fornecedor encontrado");
+                }
+
+                resolve(ds.values[0]);
+            },
+            error:error=>{
+                reject(error);
+            }
+        });
+    });
+}
+

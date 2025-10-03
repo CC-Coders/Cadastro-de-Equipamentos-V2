@@ -67,7 +67,18 @@ function bindings() {
     });
     $("#obra").selectize();
 
-    $("#fornecedor").selectize();
+    $("#fornecedor").selectize({
+        onChange: async function(value){
+            const [CODCFO, CGCCFO] = value.split(" - ");
+            var dadosFornecedor = await buscaEnderecoFornecedor(CGCCFO);
+            $("#enderecoFornecedor").val(dadosFornecedor.RUA);
+            $("#cidadeFornecedor").val(dadosFornecedor.CIDADE);
+            $("#numeroFornecedor").val(dadosFornecedor.NUMERO);
+            $("#cepFornecedor").val(dadosFornecedor.CEP);
+            $("#estadoFornecedor").val(dadosFornecedor.CODETD);
+            $("#bairroFornecedor").val(dadosFornecedor.BAIRRO);
+        }
+    });
 
     $("#prefixo").mask("AA00.000",{
         onKeyPress:function(){
@@ -79,7 +90,10 @@ function bindings() {
             $("#placa").val($("#placa").val().toUpperCase());
         }
     });
-    $("#chassi").mask("0#", {
+    $("#chassi").mask("A", {
+         translation: {
+            'A': { pattern: /[A-Za-z0-9]/, recursive: true }
+        },
         onKeyPress:function(){
             $("#chassi").val($("#chassi").val().toUpperCase());
         }
