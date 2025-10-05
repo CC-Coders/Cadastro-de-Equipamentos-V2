@@ -4,6 +4,11 @@ const ATIVIDADES = {
     CENTRAL_DE_EQUIPAMENTOS:5,
     QSST:8,
 }
+const pastaAnexosEquipamento = {
+    PRODUCAO: "TODO",
+    DESENVOLVIMENTO :29972
+}
+const env = getServerURL() == "http://fluig.castilho.com.br:1010" ? "PRODUCAO" : "DESENVOLVIMENTO"; 
 
 $(document).ready(async function () {
     bindings();
@@ -28,6 +33,18 @@ async function loadTelaInicio(){
 
 
 function bindings() {
+    $("#btnAnexarDocumentacao").on("click", anexarDocumento);
+    $("#inputFile").on("change", function(){
+        const files = $("#inputFile")[0].files;
+        if (files.length == 0) {
+            return;
+        }
+
+        for (const file of files) {
+            loadFile(file);
+        }
+    });
+
     $("#checkboxTemMaoDeObra").on("change", function () {
         if ($(this).is(":checked")) {
             $("#divValorMaoDeObra").show();
@@ -99,6 +116,7 @@ function bindings() {
         }
     });
 
+    
 
     $("#AnoFabricacao").mask("9999");
     $("#AnoModelo").mask("9999");

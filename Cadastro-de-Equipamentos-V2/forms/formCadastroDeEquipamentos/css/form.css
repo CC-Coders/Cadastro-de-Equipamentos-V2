@@ -25,3 +25,38 @@
     background-color: #fff !important;
     background-image: none !important;
 }
+
+
+
+
+
+
+.btnAnexo{
+    display: flex !important;
+    border-radius: 5px !important;
+    align-items: center;
+    width: fit-content;
+    height: 20px !important;
+    
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-right: 0px !important;
+    overflow: hidden !important;
+
+    margin-right: 10px;
+}
+.btnAnexo>button{
+    border-radius: 0px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+.btnAnexo>button>i{
+    border-bottom-width: 4px !important;
+    padding-bottom: 0px !important;
+    padding-top: 0px !important;
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+}
+.btnAnexo>b{
+   margin-right: 10px;
+}
