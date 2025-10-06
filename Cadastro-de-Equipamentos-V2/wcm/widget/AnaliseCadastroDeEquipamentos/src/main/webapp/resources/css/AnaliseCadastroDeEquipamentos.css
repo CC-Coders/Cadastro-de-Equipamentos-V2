@@ -1,9 +1,7 @@
-#wcm_widget_14027{
-        background-color: #F7F8FA;
+#background {
+    background-color: #F7F8FA;
 }
-#background{
-        background-color: #F7F8FA;
-}
+
 .super-widget .fluig-style-guide .panel-body .form-input input.form-control.inputInfoChamado {
     height: 40px !important;
     background-color: #F7F8FA !important;
@@ -12,15 +10,15 @@
 }
 
  #filtrosHeader:hover {
-         background-color: #f8f9fa !important;
+     background-color: #f8f9fa !important;
  }
 
  #setinha {
-         display: inline-block;
-         font-size: 12px;
-         transition: transform 0.3s ease;
+     display: inline-block;
+     font-size: 12px;
+     transition: transform 0.3s ease;
  }
 
  .panel-heading {
-         user-select: none;
+     user-select: none;
  }

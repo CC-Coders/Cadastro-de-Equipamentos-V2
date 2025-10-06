@@ -4,9 +4,21 @@ function createDataset(fields, constraints, sortFields) {
         // lancaErroSeConstraintsObrigatoriasNaoInformadas(constraints, ["TIPOFILTRO", "VALORFILTRO"]);
         lancaErroSeConstraintsObrigatoriasNaoInformadas(constraints, []);
 
-        var myQuery = "SELECT * FROM VIEW_EQUIPAMENTOS_CONTRATOS WHERE"; 
+        var myQuery = "SELECT * FROM VIEW_EQUIPAMENTOS_CONTRATOS WHERE";
         // myQuery +=  constraints.TIPOFILTRO + " = " + constraints.VALORFILTRO;
 
+        var i = 0;
+        for (var campo in constraints) {
+            if (constraints[campo]) {
+                if (i > 0) myQuery += " AND";
+                myQuery += " " + campo + " LIKE '%" + constraints[campo] + "%'";
+                i++;
+            }
+        }
+        if (i === 0) {
+            myQuery = "SELECT * FROM VIEW_EQUIPAMENTOS_CONTRATOS";
+        }
+        log.info("🔎 Query executada: " + myQuery);
 
 
         var retorno = executaQuery(myQuery, [], "/jdbc/CastilhoCustom");

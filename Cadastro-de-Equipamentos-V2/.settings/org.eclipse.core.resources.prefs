@@ -1,4 +1,16 @@
 eclipse.preferences.version=1
+encoding//wcm/widget/AnaliseCadastroDeEquipamentos/src/main/resources/AnaliseCadastroDeEquipamentos.properties=utf8
+encoding//wcm/widget/AnaliseCadastroDeEquipamentos/src/main/resources/AnaliseCadastroDeEquipamentos_en_US.properties=utf8
+encoding//wcm/widget/AnaliseCadastroDeEquipamentos/src/main/resources/AnaliseCadastroDeEquipamentos_es.properties=utf8
+encoding//wcm/widget/AnaliseCadastroDeEquipamentos/src/main/resources/AnaliseCadastroDeEquipamentos_pt_BR.properties=utf8
+encoding//wcm/widget/AnaliseCadastroDeEquipamentos/src/main/resources/application.info=utf8
+encoding//wcm/widget/AnaliseCadastroDeEquipamentos/src/main/resources/edit.ftl=utf8
+encoding//wcm/widget/AnaliseCadastroDeEquipamentos/src/main/resources/view.ftl=utf8
+encoding//wcm/widget/AnaliseCadastroDeEquipamentos/src/main/webapp/WEB-INF/jboss-web.xml=utf8
+encoding//wcm/widget/AnaliseCadastroDeEquipamentos/src/main/webapp/WEB-INF/web.xml=utf8
+encoding//wcm/widget/AnaliseCadastroDeEquipamentos/src/main/webapp/resources/css/AnaliseCadastroDeEquipamentos.css=utf8
+encoding//wcm/widget/AnaliseCadastroDeEquipamentos/src/main/webapp/resources/images/icon.png=utf8
+encoding//wcm/widget/AnaliseCadastroDeEquipamentos/src/main/webapp/resources/js/AnaliseCadastroDeEquipamentos.js=utf8
 encoding//wcm/widget/ConsultaCadastroDeEquipamentos/src/main/resources/ConsultaCadastroDeEquipamentos.properties=utf8
 encoding//wcm/widget/ConsultaCadastroDeEquipamentos/src/main/resources/ConsultaCadastroDeEquipamentos_en_US.properties=utf8
 encoding//wcm/widget/ConsultaCadastroDeEquipamentos/src/main/resources/ConsultaCadastroDeEquipamentos_es.properties=utf8
