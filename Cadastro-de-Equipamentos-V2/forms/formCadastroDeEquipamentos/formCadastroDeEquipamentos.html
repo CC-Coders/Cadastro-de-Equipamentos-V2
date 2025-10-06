@@ -1,0 +1,345 @@
+<html>
+<head>
+	<!-- Fluig -->
+	<link type="text/css" rel="stylesheet" href="http://fluig.castilho.com.br:1010/style-guide/css/fluig-style-guide.min.css"/>
+	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/portal/resources/js/jquery/jquery.js"></script>
+	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/portal/resources/js/jquery/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/portal/resources/js/mustache/mustache-min.js"></script>
+	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/style-guide/js/fluig-style-guide.min.js" charset="utf-8"></script>
+	<script src="/webdesk/vcXMLRPC.js"></script>
+
+	<!-- Selectize -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css"
+		integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+		integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+	<!-- Castilho Dev Guida -->
+    <script src="/castilho_dev_guide/resources/js/castilho-utils.js"></script>
+    <script src="/castilho_dev_guide/resources/js/castilho-consultas-rm.js"></script>
+
+	<!-- jQuery Mask -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+
+	<!-- Formulário -->
+	<link rel="stylesheet" href="css/header.css">
+	<link rel="stylesheet" href="css/footer.css">
+	<link rel="stylesheet" href="css/paginacao.css">
+	<link rel="stylesheet" href="css/form.css">
+
+	<script src="js/jquery.maskMoney.js"></script>
+	<script src="js/paginacao.js"></script>
+	<script src="js/functions.js"></script>
+	<script src="js/script.js"></script>
+</head>
+<body>
+<div class="fluig-style-guide">
+<form name="form" role="form">
+	<div style="display: none;">
+		<!-- Parametros Formulario -->
+		<input type="hidden" id="atividade" name="atividade" />
+        <input type="hidden" id="formMode" name="formMode" />
+        <input type="hidden" id="userCode" name="userCode" />
+        <input type="hidden" id="isMobile" name="isMobile" />
+
+
+		<!-- Dados Solicitacao -->
+        <input type="hidden" id="solicitante" name="solicitante" />
+	</div>
+
+
+	<header>
+		<div class="wizard-progress">
+			<div class="step active" data-html="true" data-toggle="popover" title=""
+				data-content="<h1>Jurídico</h1> <p>O Jurídico é responsável por Validar e Editar o Contrato. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti error hic dolore expedita soluta provident, magni eveniet at id unde pariatur sed optio fuga reprehenderit blanditiis debitis possimus nesciunt molestiae.</p>"
+				data-original-title="Popover title">
+				Solicitante
+			</div>
+			<div class="step" data-html="true" data-toggle="popover" title=""
+				data-content="<h1>Jurídico</h1> <p>O Jurídico é responsável por Validar e Editar o Contrato. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti error hic dolore expedita soluta provident, magni eveniet at id unde pariatur sed optio fuga reprehenderit blanditiis debitis possimus nesciunt molestiae.</p>"
+				data-original-title="Popover title">
+				Central de Equipamentos<br>
+				QSST
+			</div>
+			<div class="step" data-toggle="tooltip" title="" data-html="true"
+				data-content="<h1>Jurídico</h1> <p>O Jurídico é responsável por Validar e Editar o Contrato. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti error hic dolore expedita soluta provident, magni eveniet at id unde pariatur sed optio fuga reprehenderit blanditiis debitis possimus nesciunt molestiae.</p>"
+				data-original-title="Popover title">
+				Fim
+			</div>
+		</div>
+	</header>
+	<main>
+		<div class="pagina ativa" data-index="0" id="paginaIdentificacao">
+			<h2>Identificação (Equipamento e Obra)</h2>
+			<div class="row">
+				<div class="col-md-6">
+					<label for="coligada">Coliga/Empresa:</label>
+					<select name="coligada" id="coligada" class=""></select>
+				</div>
+				<div class="col-md-6">
+					<label for="obra">Obra:</label>
+					<select name="obra" id="obra" class=""></select>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-6">
+					<label for="descricaoEquipamento">Descrição do Equipamento:</label>
+					<input type="text" name="descricaoEquipamento" id="descricaoEquipamento" class="form-control">
+				</div>
+				<div class="col-md-6">
+					<label for="prefixo">Prefixo:</label>
+					<input type="text" name="prefixo" id="prefixo" class="form-control">
+				</div>
+			</div>
+		</div>
+		<div class="pagina" data-index="1" id="paginaDetalhes">
+			<h2>Detalhes Técnicos e Financeiros</h2>
+			<div class="row">
+				<div class="col-md-12">
+					<label for="">Categoria:</label>
+					<select name="categoria" id="categoria" class="form-control">
+						<option value=""></option>
+						<option value="MA">MA</option>
+						<option value="PA">PA</option>
+						<option value="Outros">Outros</option>
+					</select>
+					<br>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 inputGroup">
+					<label for="modelo">Modelo:</label>
+					<select name="modelo" id="modelo" class="inputPA inputMA"></select>
+					<br>
+				</div>
+				<div class="col-md-6 inputGroup ">
+					<label for="fabricante">Fabricante:</label>
+					<input type="text" name="fabricante" id="fabricante" class="form-control inputPA inputMA">
+					<br>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 inputGroup">
+					<label for="classeMecanica">Classe Mecânica:</label>
+					<input type="text" name="classeMecanica" id="classeMecanica" class="form-control inputMA">
+					<br>
+				</div>
+				<div class="col-md-6 inputGroup">
+					<label for="classOperacional">Classe Operacional:</label>
+					<input type="text" name="classOperacional" id="classOperacional" class="form-control inputMA">
+					<br>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 inputGroup">
+					<label for="AnoFabricacao">Ano Fabricação:</label>
+					<input type="text" name="AnoFabricacao" id="AnoFabricacao" class="form-control inputPA inputMA">
+					<br>
+				</div>
+				<div class="col-md-6 inputGroup">
+					<label for="AnoModelo">Ano Modelo:</label>
+					<input type="text" name="AnoModelo" id="AnoModelo" class="form-control inputPA inputMA">
+					<br>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 inputGroup">
+					<label for="placa">Placa:</label>
+					<input type="text" name="placa" id="placa" class="form-control inputPA inputMA">
+					<br>
+				</div>
+				<div class="col-md-6 inputGroup">
+					<label for="chassi">Chassis:</label>
+					<input type="text" name="chassi" id="chassi" class="form-control inputPA inputMA">
+					<br>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 inputGroup">
+					<label for="potenciaMotor">Potência do Motor:</label>
+					<div class="flexInput">
+						<input type="text" name="potenciaMotor" id="potenciaMotor" class="form-control inputMA">
+						<select name="tipoPotenciaMotor" id="tipoPotenciaMotor" class="form-control inputMA">
+							<option value="CV">CV</option>
+							<option value="HP">HP</option>
+						</select>
+					</div>
+					<br>
+				</div>
+				<div class="col-md-4">
+
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 inputGroup">
+					<label for="">Valor Mobilização (R$):</label>
+					<div class="flexInput">
+						<input type="text" name="valorMobilizacao" id="valorMobilizacao" class="form-control inputPA inputMA inputOutros">
+						<select name="tipoValorMobilizacao" id="tipoValorMobilizacao" class="form-control inputPA inputMA inputOutros">
+							<option value="hora">Hora</option>
+                        	<option value="diaria">Diária</option>
+                        	<option value="mensal">Mensal</option>
+                        	<option value="anual">Anual</option>
+                        	<option value="m3_km">M³x Km</option>
+                        	<option value="ton_km">Ton x KM</option>
+						</select>
+					</div>
+					<br>
+				</div>
+				<div class="col-md-4 inputGroup">
+					<label for="valorExtra">Valor Extra (R$):</label>
+					<div class="flexInput">
+						<input type="text" name="valorExtra" id="valorExtra" class="form-control inputPA inputMA inputOutros">
+						<select name="tipoValorExtra" id="tipoValorExtra" class="form-control inputPA inputMA inputOutros">
+							<option value="hora">Hora</option>
+                        	<option value="diaria">Diária</option>
+                        	<option value="mensal">Mensal</option>
+                        	<option value="anual">Anual</option>
+                        	<option value="m3_km">M³x Km</option>
+                        	<option value="ton_km">Ton x KM</option>
+						</select>
+					</div>
+					<br>
+				</div>
+				<div class="col-md-4 inputGroup">
+					<label for="valorLocacao">Valor de Locação (R$):</label>
+					<input type="text" name="valorLocacao" id="valorLocacao" class="form-control inputPA inputMA inputOutros">
+					<br>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 inputGroup">
+					<div>
+						<label for="">Mão de Obra:</label>
+						<input type="checkbox" name="checkboxTemMaoDeObra" id="checkboxTemMaoDeObra" class="inputMA">
+						<label for="checkboxTemMaoDeObra"> Incluir Mão de Obra?</label>
+					</div>
+					<div id="divValorMaoDeObra" style="display: none;">
+						<label for="valorMaoDeObra">Valor de Mão de Obra (R$):</label>
+						<input type="text" name="valorMaoDeObra" id="valorMaoDeObra" class="form-control">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="pagina" data-index="2" id="paginaOperacional">
+			<h2>Dados Operacionais</h2>
+			<div class="row">
+				<div class="col-md-6">
+					<label for="dataChegadaObra">Data de Chegada na Obra:</label>
+					<input type="text" name="dataChegadaObra" id="dataChegadaObra" class="form-control">
+					<br>
+				</div>
+				<div class="col-md-6">
+					<label for="">Km/Horas:</label>
+					<div class="flexInput">
+						<input type="text" name="kmChegadaObra" id="kmChegadaObra" class="form-control">
+						<select name="tipoKmChegadaObra" id="tipoKmChegadaObra" class="form-control">
+							<option value="KM">KM</option>
+							<option value="Horas">Horas</option>
+						</select>
+					</div>
+					<br>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<label for="tipoCombustivel">Tipo de combustível:</label>
+					<select name="tipoCombustivel" id="tipoCombustivel" class="form-control"></select>
+					<br>
+				</div>
+				<div class="col-md-4">
+					<label for="litrosTanque">Tanque (Litros):</label>
+					<input type="text" name="litrosTanque" id="litrosTanque" class="form-control">
+					<br>
+				</div>
+				<div class="col-md-4">
+					<label for="consumoMedio">Consumo Médio:</label>
+					<input type="text" name="consumoMedio" id="consumoMedio" class="form-control">
+					<br>
+				</div>
+			</div>
+		</div>
+		<div class="pagina" data-index="3" id="paginaFornecedor">
+			<h2>Dados do Fornecedor & Anexos</h2>
+			<div class="row">
+				<div class="col-md-12">
+					<label for="fornecedor">Fornecedor (CPF/CNPJ):</label>
+					<select name="fornecedor" id="fornecedor" ></select>
+					<br>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<label for="enderecoFornecedor">Endereço:</label>
+					<input type="text" name="enderecoFornecedor" id="enderecoFornecedor" class="form-control">
+					<br>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<label for="cidadeFornecedor">Cidade:</label>
+					<input type="text" name="cidadeFornecedor" id="cidadeFornecedor" class="form-control">
+					<br>
+				</div>
+				<div class="col-md-4">
+					<label for="numeroFornecedor">Número:</label>
+					<input type="text" name="numeroFornecedor" id="numeroFornecedor" class="form-control">
+					<br>
+				</div>
+				<div class="col-md-4">
+					<label for="cepFornecedor">CEP:</label>
+					<input type="text" name="cepFornecedor" id="cepFornecedor" class="form-control">
+					<br>
+				</div>
+			</div>
+			<h2>Documentação</h2>
+
+			<label for="">Anexo:</label>
+			<div class="row">
+				<div class="col-md-6" style="display: flex;">
+					<select name="tipoAnexo" id="tipoAnexo" class="form-control">
+						<option value=""></option>
+						<option value="Documentação do Equipamento">Documentação do Equipamento</option>
+						<option value="Foto do Equipamento">Foto do Equipamento</option>
+						<option value="Documentação pra segurança">Documentação pra segurança</option>
+					</select>
+					<button class="btn btn-info" id="btnAnexarDocumentacao">Anexar</button>
+				</div>
+			</div>
+			<br>
+			<b>Documentos anexados:</b>
+			<div>
+				<b>❌Documentação do Equipamento</b><br>
+				<b>❌Foto do Equipamento</b><br>
+				<b>❌Documentação pra segurança</b><br>
+			</div>
+		</div>
+	</main>
+	<footer>
+		<div class="navegacao-formulario">
+			<button id="btn-voltar">
+				<i class="fluigicon fluigicon-pointer-left icon-md" aria-hidden="true"></i>
+			</button>
+	
+			<div class="bolinhas" style="overflow-x: scroll">
+				<div class="pagination pagination-active" data-index="0">Identificação</div>
+				<div class="pagination" data-index="1">Detalhes</div>
+				<div class="pagination" data-index="2">Operacional</div>
+				<div class="pagination" data-index="3">Fornecedor & Anexo</div>
+			</div>
+	
+			<button id="btn-avancar">
+				<i class="fluigicon fluigicon-pointer-right icon-md" aria-hidden="true"></i>
+			</button>
+		</div>
+	</footer>
+
+</form>
+</div>
+</body>
+</html>
