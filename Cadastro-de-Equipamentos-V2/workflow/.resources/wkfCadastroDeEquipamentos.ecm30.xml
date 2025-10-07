@@ -31,7 +31,8 @@
       <version>1</version>
     </processDefinitionVersionPK>
     <versionDescription></versionDescription>
-    <formId>0</formId>
+    <formId>29958</formId>
+    <formIdV2>0</formIdV2>
     <editionMode>true</editionMode>
     <updateAttachmentsVersion>false</updateAttachmentsVersion>
     <controlsAttachmentsSecurity>false</controlsAttachmentsSecurity>
@@ -319,7 +320,20 @@
       <digitalSignature>false</digitalSignature>
     </ProcessState>
   </list>
-  <list/>
+  <list>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>1</expressionOrder>
+        <version>1</version>
+        <sequence>14</sequence>
+      </conditionProcessStatePK>
+      <condition>true</condition>
+      <destinationSequenceId>15</destinationSequenceId>
+      <conditionType>0</conditionType>
+    </ConditionProcessState>
+  </list>
   <list>
     <ProcessLink>
       <processLinkPK>
@@ -459,7 +473,93 @@
     </ProcessLink>
   </list>
   <list/>
-  <list/>
+  <list>
+    <WorkflowProcessEvent>
+      <workflowProcessEventPK>
+        <companyId>1</companyId>
+        <eventId>beforeTaskSave</eventId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+      </workflowProcessEventPK>
+      <eventDescription>function beforeTaskSave(colleagueId, nextSequenceId, userList) {&#xd;
+    try {&#xd;
+        var isPAouMAouOutros = hAPI.getCardValue(&quot;categoria&quot;);&#xd;
+&#xd;
+        if (isPAouMAouOutros == &quot;PA&quot; || isPAouMAouOutros == &quot;MA&quot;) {&#xd;
+            cadastraEquipamentoNoSisma();&#xd;
+        }&#xd;
+&#xd;
+    } catch (error) {&#xd;
+        throw error;&#xd;
+    }&#xd;
+}&#xd;
+&#xd;
+function cadastraEquipamentoNoSisma() {&#xd;
+    try {&#xd;
+        var isPAouMAouOutros = hAPI.getCardValue(&quot;categoria&quot;);&#xd;
+        var CGCCFO = hAPI.getCardValue(&quot;CGCCFO&quot;);&#xd;
+&#xd;
+        var equipamento = getDadosEquipamento();&#xd;
+&#xd;
+        var ds = DatasetFactory.getDataset(&quot;dsInsereEquipamentoSisma&quot;, null, [&#xd;
+            DatasetFactory.createConstraint(&quot;EQUIPAMENTO&quot;, JSON.stringify(equipamento), JSON.stringify(equipamento), ConstraintType.MUST),&#xd;
+            DatasetFactory.createConstraint(&quot;isPAouMA&quot;, isPAouMAouOutros, isPAouMAouOutros, ConstraintType.MUST),&#xd;
+            DatasetFactory.createConstraint(&quot;CGCCFO&quot;, CGCCFO, CGCCFO&#xd;
+                , ConstraintType.MUST),&#xd;
+        ], null);&#xd;
+&#xd;
+        if (ds.getValue(0, &quot;STATUS&quot;) != &quot;SUCCESS&quot;) {&#xd;
+            throw ds.getValue(0, &quot;MENSAGEM&quot;);&#xd;
+        }&#xd;
+&#xd;
+        return true;&#xd;
+    } catch (error) {&#xd;
+        throw error&#xd;
+    }&#xd;
+}&#xd;
+&#xd;
+function getDadosEquipamento() {&#xd;
+    var CODCOLIGADA = hAPI.getCardValue(&quot;coligada&quot;);&#xd;
+    var CODCCUSTO = hAPI.getCardValue(&quot;obra&quot;);&#xd;
+    var PREFIXO = hAPI.getCardValue(&quot;prefixo&quot;);&#xd;
+    var IDMODE = hAPI.getCardValue(&quot;IDMODE&quot;);&#xd;
+    var CODICLME = hAPI.getCardValue(&quot;CODICLME&quot;);&#xd;
+    var IDCLOP = hAPI.getCardValue(&quot;IDCLOP&quot;);&#xd;
+    var CODIFABR = hAPI.getCardValue(&quot;CODIFABR&quot;);&#xd;
+    var CODIFABR = hAPI.getCardValue(&quot;CODIFABR&quot;);&#xd;
+    var CODIESPE = hAPI.getCardValue(&quot;CODIESPE&quot;);&#xd;
+    &#xd;
+    var ANOFABRI = hAPI.getCardValue(&quot;AnoFabricacao&quot;);&#xd;
+    var ANOMODELO = hAPI.getCardValue(&quot;AnoModelo&quot;);&#xd;
+    var NUMECHAS = hAPI.getCardValue(&quot;chassi&quot;);&#xd;
+    var ALUGUEL_CONTRATO = hAPI.getCardValue(&quot;valorLocacao&quot;);&#xd;
+    &#xd;
+    var DESCRICAO = hAPI.getCardValue(&quot;descricaoEquipamento&quot;);&#xd;
+    &#xd;
+    var POTENCIAHP_UNID = hAPI.getCardValue(&quot;tipoPotenciaMotor&quot;);&#xd;
+    var POTENCIAHP = hAPI.getCardValue(&quot;potenciaMotor&quot;);&#xd;
+    return {&#xd;
+        CODCOLIGADA,&#xd;
+        CODCCUSTO,&#xd;
+        PREFIXO,&#xd;
+        IDMODE,&#xd;
+        CODICLME,&#xd;
+        IDCLOP,&#xd;
+        CODIFABR,&#xd;
+        CODIFABR,&#xd;
+        CODIESPE,&#xd;
+        ANOFABRI,&#xd;
+        ANOMODELO,&#xd;
+        NUMECHAS,&#xd;
+        ALUGUEL_CONTRATO,&#xd;
+        DESCRICAO,&#xd;
+        POTENCIAHP_UNID,&#xd;
+        POTENCIAHP,&#xd;
+    };&#xd;
+&#xd;
+}</eventDescription>
+    </WorkflowProcessEvent>
+  </list>
   <list/>
   <list>
     <SwimLane>
