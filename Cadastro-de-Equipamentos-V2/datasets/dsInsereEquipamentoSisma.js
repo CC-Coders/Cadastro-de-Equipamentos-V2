@@ -1,11 +1,11 @@
 function createDataset(fields, constraints, sortFields) {
     try {
         var constraints = getConstraints(constraints);
-        lancaErroSeConstraintsObrigatoriasNaoInformadas(constraints, ["PREFIXO"]);
+        lancaErroSeConstraintsObrigatoriasNaoInformadas(constraints, ["EQUIPAMENTO"]);
 
         var IDEQUI = geraNovoIDEQUI();
 
-        insereEquipamento(IDEQUI, constraints.PREFIXO);
+        insereEquipamento(IDEQUI, JSON.parse(constraints.EQUIPAMENTO), constraints.isPAouMA,constraints.CGCCFO);
         insereTransfdiv3(IDEQUI);
         insereCombustivel(IDEQUI);
         insereTanqueCombustivel(IDEQUI);
@@ -39,7 +39,9 @@ function geraNovoIDEQUI(){
     log.dir(retorno);
     return retorno[0].IDEQUI;
 }
-function insereEquipamento(IDEQUI, PREFIXO){
+function insereEquipamento(IDEQUI, EQUIPAMENTO, isPAouMA, CNPJ){
+        var fornecedor = getFornecedorPorCNPJ(isPAouMA, CNPJ)
+
         var query = "";
         query += "INSERT INTO EQUIPAMENTO ";
         query += "(IDEQUI, ";//PK dos equipamentos, não é auto increment...
@@ -118,19 +120,19 @@ function insereEquipamento(IDEQUI, PREFIXO){
         
         var retorno = executeInsert(query, [
             {type:"int",value:IDEQUI},//IDEQUI
-            {type:"int",value:"0"},//CODITERC
-            {type:"int",value:"1"},//CODIESPE
-            {type:"varchar",value:PREFIXO},//Prefixo
+            {type:"int",value:isPAouMA == "PA" ? fornecedor.CODITERC : 0},//CODITERC
+            {type:"int",value:EQUIPAMENTO.CODIESPE},//CODIESPE
+            {type:"varchar",value:EQUIPAMENTO.PREFIXO},//Prefixo
             {type:"int",value:"2"},//CODIDIV2
             {type:"int",value:"104"},//CODIDIV3
             {type:"int",value:"2"},//CODIMEDI
-            {type:"int",value:"1795"},//IDMODE
-            {type:"int",value:"1"},//CODICLME
-            {type:"int",value:"152"},//IDCLOP
-            {type:"int",value:"15"},//CODIFABR
-            {type:"varchar",value:"123456"},//NUMECHAS
-            {type:"int",value:"2019"},//ANOFABRI
-            {type:"int",value:"2019"},//ANOMODELO
+            {type:"int",value:EQUIPAMENTO.IDMODE},//IDMODE
+            {type:"int",value:EQUIPAMENTO.CODICLME},//CODICLME
+            {type:"int",value:EQUIPAMENTO.IDCLOP},//IDCLOP
+            {type:"int",value:EQUIPAMENTO.CODIFABR},//CODIFABR
+            {type:"varchar",value:EQUIPAMENTO.NUMECHAS},//NUMECHAS
+            {type:"int",value:EQUIPAMENTO.ANOFABRI},//ANOFABRI
+            {type:"int",value:EQUIPAMENTO.ANOMODELO},//ANOMODELO
             {type:"int",value:"1"},//DIV2CONTA
             {type:"varchar",value:"1.3.01"},//CODICONTA
             {type:"int",value:"1"},//DIV2CCUSTOMB
@@ -138,10 +140,10 @@ function insereEquipamento(IDEQUI, PREFIXO){
             {type:"int",value:"1"},//DIV2CCUSTOOP
             {type:"varchar",value:"1.2.023"},//CODICCUSTOOP
             {type:"int",value:"123456"},//NUMEBEM
-            {type:"int",value:"10"},//POTENCIAHP
-            {type:"int",value:"1236"},//CODIPROP
-            {type:"varchar",value:"Cadastro teste via integração"},//DESCRICAO
-            {type:"float",value:"1200"},//ALUGUEL_CONTRATO
+            {type:"int",value:EQUIPAMENTO.POTENCIAHP},//POTENCIAHP
+            {type:"int",value:isPAouMA == "MA" ? fornecedor.CODIPROP : 0},//CODIPROP
+            {type:"varchar",value:EQUIPAMENTO.DESCRICAO},//DESCRICAO
+            {type:"float",value:EQUIPAMENTO.ALUGUEL_CONTRATO},//ALUGUEL_CONTRATO
             {type:"varchar",value:"123456"},//NUMSERIE
             {type:"int",value:"0"},//CODIPAIS
             {type:"int",value:"0"},//SIGLAUF
@@ -165,7 +167,7 @@ function insereEquipamento(IDEQUI, PREFIXO){
             {type:"int", value:"11"},//INICODILOTR
             {type:"int", value:"0"},//CODICOMBDENAT
             {type:"int", value:"0"},//CODIRESTRICAO
-            {type:"int", value:"18"},//POTENCIAHP_UNID
+            {type:"int", value:EQUIPAMENTO.POTENCIAHP_UNID},//POTENCIAHP_UNID
             {type:"int", value:"11"},//COMPRIMENTO_UNID
             {type:"int", value:"11"},//LARGURA_TOTAL_UNID
             {type:"int", value:"11"},//ALTURA_TOTAL_UNID
@@ -384,6 +386,30 @@ function insereFiltros(IDEQUI){
         {type:"int", value:0},//PERILIMP_DIA
         {type:"int", value:0},//QUANTIDADE
     ], "/jdbc/Sisma");
+}
+
+
+function getFornecedorPorCNPJ(isPAouMA, CNPJ){
+    try {
+        if (isPAouMA == "MA") {
+            var query = "SELECT CODITERC FROM TERCEIRO WHERE INSCFEDERAL = ?";
+
+            return executaQuery(query, [
+                {type:"varchar", value:CNPJ}
+            ], "/jdbc/Sisma");
+            
+        }
+        else if(isPAouMA == "PA"){
+            var query = "SELECT CODIPROP FROM PROPRIETARIO WHERE INSCFEDERAL = ?";
+        return executaQuery(query, [
+                {type:"varchar", value:CNPJ}
+            ], "/jdbc/Sisma");
+
+        }
+
+    } catch (error) {
+     throw error;   
+    }
 }
 
 

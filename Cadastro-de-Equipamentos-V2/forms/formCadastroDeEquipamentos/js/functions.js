@@ -30,6 +30,13 @@ function preencheInformacoesDoModelo(ID_MODELO){
         $("#classeMecanica").val("");
         $("#classOperacional").val("");
         $("#potenciaMotor").val("");
+        
+        $("#IDMODE").val("");
+        $("#CODICLME").val("");
+        $("#IDCLOP").val("");
+        $("#CODIFABR").val("");
+        $("#CODIFABR").val("");
+        $("#CODIESPE").val("");
     }
 
     var found = modelos.find(e=> e.ID_MODELO == ID_MODELO);
@@ -42,6 +49,13 @@ function preencheInformacoesDoModelo(ID_MODELO){
     $("#classeMecanica").val(found.CLASSEMECANICA);
     $("#classOperacional").val(found.CLASSEOPERACIONAL);
     $("#potenciaMotor").val(found.POTENCIAHP);
+
+    $("#IDMODE").val(found.IDMODE);
+    $("#CODICLME").val(found.CODICLME);
+    $("#IDCLOP").val(found.IDCLOP);
+    $("#CODIFABR").val(found.CODIFABR);
+    $("#CODIFABR").val(found.CODIFABR);
+    $("#CODIESPE").val(found.CODIESPE);
 }
 
 
