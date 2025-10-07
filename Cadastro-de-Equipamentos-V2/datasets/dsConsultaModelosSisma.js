@@ -16,7 +16,8 @@ function createDataset(fields, constraints, sortFields) {
         query += "   CLASSOPERA.DESCRICAO as CLASSEOPERACIONAL, ";
         query += "   POTENCIAHP,";
 		query += "   ITEMCARACTEC.DESCRICAO,";
-		query += "   UNIDADE.DESCRICAO as UNIDADE ";
+		query += "   UNIDADE.DESCRICAO as UNIDADE, ";
+		query += "   MODELO.CODIESPE as CODIESPE ";
         query += "FROM ";
         query += "   MODELO ";
         query += "   INNER JOIN FABRICANTE ON FABRICANTE.CODIFABR = MODELO.CODIFABR ";

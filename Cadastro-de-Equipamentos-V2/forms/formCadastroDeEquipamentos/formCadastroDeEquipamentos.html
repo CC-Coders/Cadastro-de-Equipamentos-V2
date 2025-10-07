@@ -45,6 +45,19 @@
         <input type="hidden" id="userCode" name="userCode" />
         <input type="hidden" id="isMobile" name="isMobile" />
 
+		<!--  -->
+		<input type="hidden" name="CODCOLIGADA" id="">
+		<input type="hidden" name="CODCCUSTO" id="">
+		
+		<input type="hidden" name="CGCCFO" id="CGCCFO">
+		
+
+		<!-- Dados Equipamento -->
+		 <input type="hidden" name="IDMODE" id="IDMODE">
+		 <input type="hidden" name="CODICLME" id="CODICLME">
+		 <input type="hidden" name="IDCLOP" id="IDCLOP">
+		 <input type="hidden" name="CODIFABR" id="CODIFABR">
+		 <input type="hidden" name="CODIESPE" id="CODIESPE">
 
 		<!-- Dados Solicitacao -->
         <input type="hidden" id="solicitante" name="solicitante" />
@@ -99,7 +112,7 @@
 		<div class="pagina" data-index="1" id="paginaDetalhes">
 			<h2>Detalhes Técnicos e Financeiros</h2>
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-md-6">
 					<label for="">Categoria:</label>
 					<select name="categoria" id="categoria" class="form-control">
 						<option value=""></option>
@@ -164,8 +177,8 @@
 					<div class="flexInput">
 						<input type="text" name="potenciaMotor" id="potenciaMotor" class="form-control inputMA">
 						<select name="tipoPotenciaMotor" id="tipoPotenciaMotor" class="form-control inputMA">
-							<option value="CV">CV</option>
-							<option value="HP">HP</option>
+							<option value="20">CV</option>
+							<option value="18">HP</option>
 						</select>
 					</div>
 					<br>
@@ -267,35 +280,46 @@
 		<div class="pagina" data-index="3" id="paginaFornecedor">
 			<h2>Dados do Fornecedor & Anexos</h2>
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-md-6">
 					<label for="fornecedor">Fornecedor (CPF/CNPJ):</label>
 					<select name="fornecedor" id="fornecedor" ></select>
 					<br>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-md-6">
 					<label for="enderecoFornecedor">Endereço:</label>
 					<input type="text" name="enderecoFornecedor" id="enderecoFornecedor" class="form-control">
 					<br>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-4">
-					<label for="cidadeFornecedor">Cidade:</label>
-					<input type="text" name="cidadeFornecedor" id="cidadeFornecedor" class="form-control">
-					<br>
-				</div>
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<label for="numeroFornecedor">Número:</label>
 					<input type="text" name="numeroFornecedor" id="numeroFornecedor" class="form-control">
 					<br>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<label for="cepFornecedor">CEP:</label>
 					<input type="text" name="cepFornecedor" id="cepFornecedor" class="form-control">
 					<br>
 				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<label for="estadoFornecedor">Estado:</label>
+					<input type="text" name="estadoFornecedor" id="estadoFornecedor" class="form-control">
+					<br>
+				</div>
+				<div class="col-md-3">
+					<label for="cidadeFornecedor">Cidade:</label>
+					<input type="text" name="cidadeFornecedor" id="cidadeFornecedor" class="form-control">
+					<br>
+				</div>
+				<div class="col-md-3">
+					<label for="bairroFornecedor">Bairro:</label>
+					<input type="text" name="bairroFornecedor" id="bairroFornecedor" class="form-control">
+					<br>
+				</div>
+
 			</div>
 			<h2>Documentação</h2>
 
@@ -306,17 +330,62 @@
 						<option value=""></option>
 						<option value="Documentação do Equipamento">Documentação do Equipamento</option>
 						<option value="Foto do Equipamento">Foto do Equipamento</option>
-						<option value="Documentação pra segurança">Documentação pra segurança</option>
+						<option value="Laudo Técnico">Laudo Técnico</option>
+						<option value="Plano de Manutenção">Plano de Manutenção</option>
+						<option value="ART">ART</option>
 					</select>
 					<button class="btn btn-info" id="btnAnexarDocumentacao">Anexar</button>
+					<input type="file" name="inputFile" id="inputFile" style="display: none;" multiple>
 				</div>
 			</div>
 			<br>
 			<b>Documentos anexados:</b>
 			<div>
-				<b>❌Documentação do Equipamento</b><br>
-				<b>❌Foto do Equipamento</b><br>
-				<b>❌Documentação pra segurança</b><br>
+				<div class="row">
+					<div class="col-md-2">
+						<span class="spanStatusAnexos">❌</span>
+						<b>Documentação do Equipamento: </b>
+					</div>
+					<div class="col-md-10">
+						<div id="divListaAnexosDocumentacaoEquipamento" style="display: flex;"></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<span class="spanStatusAnexos">❌</span>
+						<b>Foto do Equipamento: </b>
+					</div>
+					<div class="col-md-10">
+						<div id="divListaAnexosFotoEquipamento" style="display: flex;"></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<span class="spanStatusAnexos">❌</span>
+						<b>Laudo Técnico: </b>
+					</div>
+					<div class="col-md-10">
+						<div id="divListaAnexosLaudo" style="display: flex;"></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<span class="spanStatusAnexos">❌</span>
+						<b>Plano de Manutenção: </b>
+					</div>
+					<div class="col-md-10">
+						<div id="divListaAnexosPlanoManutencao" style="display: flex;"></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<span class="spanStatusAnexos">❌</span>
+						<b>ART: </b>
+					</div>
+					<div class="col-md-10">
+						<div id="divListaAnexosART" style="display: flex;"></div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</main>
