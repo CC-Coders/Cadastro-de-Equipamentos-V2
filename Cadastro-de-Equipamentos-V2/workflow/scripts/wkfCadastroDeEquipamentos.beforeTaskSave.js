@@ -21,8 +21,7 @@ function cadastraEquipamentoNoSisma() {
         var ds = DatasetFactory.getDataset("dsInsereEquipamentoSisma", null, [
             DatasetFactory.createConstraint("EQUIPAMENTO", JSON.stringify(equipamento), JSON.stringify(equipamento), ConstraintType.MUST),
             DatasetFactory.createConstraint("isPAouMA", isPAouMAouOutros, isPAouMAouOutros, ConstraintType.MUST),
-            DatasetFactory.createConstraint("CGCCFO", CGCCFO, CGCCFO
-                , ConstraintType.MUST),
+            DatasetFactory.createConstraint("CGCCFO", CGCCFO, CGCCFO, ConstraintType.MUST),
         ], null);
 
         if (ds.getValue(0, "STATUS") != "SUCCESS") {
@@ -43,7 +42,6 @@ function getDadosEquipamento() {
     var CODICLME = hAPI.getCardValue("CODICLME");
     var IDCLOP = hAPI.getCardValue("IDCLOP");
     var CODIFABR = hAPI.getCardValue("CODIFABR");
-    var CODIFABR = hAPI.getCardValue("CODIFABR");
     var CODIESPE = hAPI.getCardValue("CODIESPE");
     
     var ANOFABRI = hAPI.getCardValue("AnoFabricacao");
@@ -56,22 +54,21 @@ function getDadosEquipamento() {
     var POTENCIAHP_UNID = hAPI.getCardValue("tipoPotenciaMotor");
     var POTENCIAHP = hAPI.getCardValue("potenciaMotor");
     return {
-        CODCOLIGADA,
-        CODCCUSTO,
-        PREFIXO,
-        IDMODE,
-        CODICLME,
-        IDCLOP,
-        CODIFABR,
-        CODIFABR,
-        CODIESPE,
-        ANOFABRI,
-        ANOMODELO,
-        NUMECHAS,
-        ALUGUEL_CONTRATO,
-        DESCRICAO,
-        POTENCIAHP_UNID,
-        POTENCIAHP,
+        "CODCOLIGADA": CODCOLIGADA,
+        "CODCCUSTO": CODCCUSTO,
+        "PREFIXO": PREFIXO,
+        "IDMODE": IDMODE,
+        "CODICLME": CODICLME,
+        "IDCLOP": IDCLOP,
+        "CODIFABR": CODIFABR,
+        "CODIESPE": CODIESPE,
+        "ANOFABRI": ANOFABRI,
+        "ANOMODELO": ANOMODELO,
+        "NUMECHAS": NUMECHAS,
+        "ALUGUEL_CONTRATO": ALUGUEL_CONTRATO,
+        "DESCRICAO": DESCRICAO,
+        "POTENCIAHP_UNID": POTENCIAHP_UNID,
+        "POTENCIAHP": POTENCIAHP
     };
 
 }
