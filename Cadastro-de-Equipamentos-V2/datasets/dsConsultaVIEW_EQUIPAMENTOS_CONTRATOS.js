@@ -18,7 +18,7 @@ function createDataset(fields, constraints, sortFields) {
         if (i === 0) {
             myQuery = "SELECT * FROM VIEW_EQUIPAMENTOS_CONTRATOS";
         }
-        log.info("🔎 Query executada: " + myQuery);
+        log.info("?? Query executada: " + myQuery);
 
 
         var retorno = executaQuery(myQuery, [], "/jdbc/CastilhoCustom");
