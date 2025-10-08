@@ -5,7 +5,7 @@ var MyWidget = SuperWidget.extend({
 
     //método iniciado quando a widget é carregada
     init: function () {
-
+console.log("0")
         var dataAtual = moment().format('DD/MM/YYYY');
         $('.date').val(dataAtual);
         $('.date').daterangepicker({

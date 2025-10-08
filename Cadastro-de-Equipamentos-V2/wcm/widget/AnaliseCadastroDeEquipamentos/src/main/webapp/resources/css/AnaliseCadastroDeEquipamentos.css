@@ -22,3 +22,62 @@
  .panel-heading {
      user-select: none;
  }
+ 
+  /* Modal geral */
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+    background-color: #F7F8FA; /* Fundo geral */
+    padding: 15px;
+    background-color: #eaeaea;
+}
+
+/* Cada seção com fundo branco separado */
+.modal-section {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+/* Títulos das seções */
+.modal-section h5 {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    font-weight: bold;
+    color: #58595b;
+}
+
+/* Layout em duas colunas */
+.modal-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.modal-row div {
+    flex: 1 1 50%; /* duas colunas */
+    padding: 5px 10px;
+}
+
+/* Sub-seções (Fornecedor & Anexos) */
+.subsection {
+    margin-top: 10px;
+    padding: 10px;
+    border-left: 3px solid #58595b;
+    background-color: #f5f5f5;
+    border-radius: 3px;
+}
+
+
+#dataTableFilter thead tr,
+#dataTableFilter thead th {
+    background-color: #6c757d !important; /* cinza escuro */
+    color: white !important; /* texto branco */
+}
+
+#dataTableFilter tbody tr {
+    background-color: white !important;
+}

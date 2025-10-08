@@ -24,3 +24,26 @@
  .panel-heading {
          user-select: none;
  }
+
+/* Remove o efeito zebrado e força todas as linhas brancas */
+#dataTableFilter tbody tr,
+#dataTableFilter tbody tr:nth-child(even),
+#dataTableFilter tbody tr:nth-child(odd) {
+        background-color: #ffffff !important;
+}
+
+/* Mantém o cabeçalho como está */
+#dataTableFilter thead tr {
+        background-color: #f2f2f2 !important;
+        font-weight: bold;
+}
+
+/* Cor de fundo personalizada no corpo do modal */
+.modal.fade.in .modal-content {
+        background-color: #ffffff !important;
+}
+
+/* (Opcional) cor diferente só para o modal de anexos */
+.meu-modal-anexo .modal-content {
+        background-color: #f9f9f9 !important;
+}
