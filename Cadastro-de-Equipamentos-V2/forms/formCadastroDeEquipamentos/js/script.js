@@ -80,14 +80,21 @@ function bindings() {
         onChange: function(value){
             const [CODCOLIGADA, NOME] = value.split(" - ");
             preencheObras(CODCOLIGADA);
+            $("#CODCOLIGADA").val(CODCOLIGADA);
         }
     });
-    $("#obra").selectize();
+    $("#obra").selectize({
+        onChange: function(value){
+            const [CODCCUSTO, NOME] = value.split(" - ");
+            $("#CODCCUSTO").val(CODCCUSTO);
+        }
+    });
 
     $("#fornecedor").selectize({
         onChange: async function(value){
             const [CODCFO, CGCCFO] = value.split(" - ");
             var dadosFornecedor = await buscaEnderecoFornecedor(CGCCFO);
+            $("#CGCCFO").val(CGCCFO);
             $("#enderecoFornecedor").val(dadosFornecedor.RUA);
             $("#cidadeFornecedor").val(dadosFornecedor.CIDADE);
             $("#numeroFornecedor").val(dadosFornecedor.NUMERO);
@@ -102,7 +109,7 @@ function bindings() {
             $("#prefixo").val($("#prefixo").val().toUpperCase());
         }
     });
-    $("#placa").mask("AAA-AAAA", {
+    $("#placa").mask("AAAAAAA", {
         onKeyPress:function(){
             $("#placa").val($("#placa").val().toUpperCase());
         }
@@ -128,7 +135,7 @@ function bindings() {
     
     $("#potenciaMotor").mask("0#");
     $("#litrosTanque").mask("0#");
-    $("#consumoMedio").maskMoney({ thousands: '.', decimal: ',', suffix: 'km/l' });
+    $("#consumoMedio").maskMoney({ thousands: '', decimal: '.' });
 
     FLUIGC.calendar('#dataChegadaObra');
 }

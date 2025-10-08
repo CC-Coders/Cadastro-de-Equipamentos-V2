@@ -50,11 +50,10 @@ function preencheInformacoesDoModelo(ID_MODELO){
     $("#classOperacional").val(found.CLASSEOPERACIONAL);
     $("#potenciaMotor").val(found.POTENCIAHP);
 
-    $("#IDMODE").val(found.IDMODE);
-    $("#CODICLME").val(found.CODICLME);
-    $("#IDCLOP").val(found.IDCLOP);
-    $("#CODIFABR").val(found.CODIFABR);
-    $("#CODIFABR").val(found.CODIFABR);
+    $("#IDMODE").val(found.ID_MODELO);
+    $("#CODICLME").val(found.ID_CLASSEMECANICA);
+    $("#IDCLOP").val(found.ID_CLASSEOPERACIONAL);
+    $("#CODIFABR").val(found.ID_FABRICANTE);
     $("#CODIESPE").val(found.CODIESPE);
 }
 

@@ -44,10 +44,11 @@
         <input type="hidden" id="formMode" name="formMode" />
         <input type="hidden" id="userCode" name="userCode" />
         <input type="hidden" id="isMobile" name="isMobile" />
+        <input type="hidden" id="NUMPROCES" name="NUMPROCES" />
 
 		<!--  -->
-		<input type="hidden" name="CODCOLIGADA" id="">
-		<input type="hidden" name="CODCCUSTO" id="">
+		<input type="hidden" name="CODCOLIGADA" id="CODCOLIGADA">
+		<input type="hidden" name="CODCCUSTO" id="CODCCUSTO">
 		
 		<input type="hidden" name="CGCCFO" id="CGCCFO">
 		
@@ -61,6 +62,13 @@
 
 		<!-- Dados Solicitacao -->
         <input type="hidden" id="solicitante" name="solicitante" />
+
+		<!-- Anexos -->
+		<input type="hidden" name="anexosDocumentosEquipamento" id="anexosDocumentosEquipamento">
+		<input type="hidden" name="anexosFotosEquipamentos" id="anexosFotosEquipamentos">
+		<input type="hidden" name="anexosLaudoTecnico" id="anexosLaudoTecnico">
+		<input type="hidden" name="anexpsPlanoManutencao" id="anexpsPlanoManutencao">
+		<input type="hidden" name="anexosART" id="anexosART">
 	</div>
 
 
@@ -262,7 +270,18 @@
 			<div class="row">
 				<div class="col-md-4">
 					<label for="tipoCombustivel">Tipo de combustível:</label>
-					<select name="tipoCombustivel" id="tipoCombustivel" class="form-control"></select>
+					<select name="tipoCombustivel" id="tipoCombustivel" class="form-control">
+						<option value=""></option>
+						<option value="400">GASOLINA COMUM</option>
+						<option value="401">DIESEL S-10</option>
+						<option value="402">DIESEL S-500</option>
+						<option value="403">ETANOL COMUM</option>
+						<option value="404">GASOLINA ADITIVADA</option>
+						<option value="432">ELETRICIDADE</option>
+						<option value="476">OLEO QUEIMA OLEO DE XISTO - OTL - OTE</option>
+						<option value="486">AW HLP 46</option>
+						<option value="488">DIESEL DB5-S50</option>
+					</select>
 					<br>
 				</div>
 				<div class="col-md-4">
@@ -272,7 +291,13 @@
 				</div>
 				<div class="col-md-4">
 					<label for="consumoMedio">Consumo Médio:</label>
-					<input type="text" name="consumoMedio" id="consumoMedio" class="form-control">
+					<div class="flexInput">
+						<input type="text" name="consumoMedio" id="consumoMedio" class="form-control">
+						<select name="tipoConsumoMedio" id="tipoConsumoMedio" class="form-control">
+							<option value="km/L">km/L</option>
+							<option value="L/H">L/H</option>
+						</select>
+					</div>
 					<br>
 				</div>
 			</div>
