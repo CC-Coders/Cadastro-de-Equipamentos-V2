@@ -5,7 +5,7 @@ function createDataset(fields, constraints, sortFields) {
 
         var query = "";
         query += "SELECT ";
-        query += "   CODIMODE as ID_MODELO, ";
+        query += "   MODELO.IDMODE as ID_MODELO, ";
         query += "   DESCRRESUM as MODELO_RESUMIDO, ";
         query += "   DESCRCOMPL as MODELO, ";
         query += "   FABRICANTE.CODIFABR as ID_FABRICANTE, ";
