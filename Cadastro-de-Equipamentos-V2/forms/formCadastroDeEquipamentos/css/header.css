@@ -92,3 +92,14 @@
         flex-shrink: 0;
     }
 }
+
+
+select[readonly]{
+    background: #eee;
+    cursor:no-drop;
+    pointer-events: none;
+}
+
+select[readonly] option{
+    display:none;
+}

@@ -28,7 +28,7 @@
     <processDefinitionVersionPK>
       <companyId>1</companyId>
       <processId>Cadastro de Equipamentos</processId>
-      <version>18</version>
+      <version>23</version>
     </processDefinitionVersionPK>
     <versionDescription></versionDescription>
     <formId>29958</formId>
@@ -104,13 +104,15 @@
         <version>1</version>
         <sequence>5</sequence>
       </processStatePK>
-      <stateName>Cantral de Equipamentos</stateName>
-      <stateDescription>Cantral de Equipamentos</stateDescription>
+      <stateName>Central de Equipamentos</stateName>
+      <stateDescription>Central de Equipamentos</stateDescription>
       <instruction></instruction>
       <deadlineTime>0</deadlineTime>
       <deadlineFieldName></deadlineFieldName>
       <joint>false</joint>
       <agreementPercentage>0</agreementPercentage>
+      <engineAllocationId>Pool Grupo</engineAllocationId>
+      <engineAllocationConfiguration>&lt;AssignmentController&gt;&lt;Group&gt;Central de Equipamentos&lt;/Group&gt;&lt;/AssignmentController&gt;</engineAllocationConfiguration>
       <selectColleague>1</selectColleague>
       <initialState>false</initialState>
       <notifyAuthorityDelay>true</notifyAuthorityDelay>
@@ -161,6 +163,8 @@
       <deadlineFieldName></deadlineFieldName>
       <joint>false</joint>
       <agreementPercentage>0</agreementPercentage>
+      <engineAllocationId>Pool Grupo</engineAllocationId>
+      <engineAllocationConfiguration>&lt;AssignmentController&gt;&lt;Group&gt;QSST&lt;/Group&gt;&lt;/AssignmentController&gt;</engineAllocationConfiguration>
       <selectColleague>1</selectColleague>
       <initialState>false</initialState>
       <notifyAuthorityDelay>true</notifyAuthorityDelay>
@@ -326,7 +330,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>1</expressionOrder>
-        <version>18</version>
+        <version>23</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>true</condition>
@@ -470,6 +474,9 @@
       <automaticLink>false</automaticLink>
       <defaultLink>false</defaultLink>
       <type>0</type>
+      <movementTitle></movementTitle>
+      <movementDescription></movementDescription>
+      <movementAccessLinkDescription></movementAccessLinkDescription>
     </ProcessLink>
   </list>
   <list/>
@@ -496,10 +503,18 @@ function beforeTaskSave(colleagueId, nextSequenceId, userList) {&#xd;
             var WKNumProces = getValue(&quot;WKNumProces&quot;);&#xd;
             hAPI.setCardValue(&quot;NUMPROCES&quot;, WKNumProces);&#xd;
 &#xd;
+            insereHistorico(hAPI.getCardValue(&quot;observacoes&quot;), &quot;Inicio&quot;, &quot;Inicio&quot;);&#xd;
+&#xd;
+&#xd;
             var isPAouMAouOutros = hAPI.getCardValue(&quot;categoria&quot;);&#xd;
             if (isPAouMAouOutros == &quot;PA&quot; || isPAouMAouOutros == &quot;MA&quot;) {&#xd;
                 cadastraEquipamentoNoSisma();&#xd;
             }&#xd;
+        } else if(ATIVIDADE == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS){&#xd;
+            insereHistorico(hAPI.getCardValue(&quot;observacoes&quot;), hAPI.getCardValue(&quot;decisao&quot;), &quot;Central de Equipamentos&quot;);&#xd;
+        }&#xd;
+        else if(ATIVIDADE == ATIVIDADES.QSST){&#xd;
+            insereHistorico(hAPI.getCardValue(&quot;observacoes&quot;), hAPI.getCardValue(&quot;decisao&quot;), &quot;QSST&quot;);&#xd;
         }&#xd;
 &#xd;
 &#xd;
@@ -666,6 +681,47 @@ function moneyToFloat(val) {&#xd;
         return 0;&#xd;
     }&#xd;
     return val;&#xd;
+}&#xd;
+&#xd;
+function insereHistorico(observacao, acao, atividade) {&#xd;
+    var USER = getValue(&quot;WKUser&quot;);&#xd;
+    var DATA = getDateTimeNow();&#xd;
+&#xd;
+    var novaLinha = new java.util.HashMap();&#xd;
+    novaLinha.put(&quot;tableHistoricoUsuario&quot;, USER);&#xd;
+    novaLinha.put(&quot;tableHistoricoData&quot;, DATA);&#xd;
+    novaLinha.put(&quot;tableHistoricoAtividade&quot;, atividade);&#xd;
+    novaLinha.put(&quot;tableHistoricoObservacao&quot;, observacao);&#xd;
+    novaLinha.put(&quot;tableHistoricoAcao&quot;, acao);&#xd;
+&#xd;
+    hAPI.addCardChild(&quot;tableHistorico&quot;, novaLinha);&#xd;
+    hAPI.setCardValue(&quot;observacao&quot;, &quot;&quot;);&#xd;
+}&#xd;
+function getDateTimeNow() {&#xd;
+    var date = new Date();&#xd;
+    var dia = date.getDate();&#xd;
+    if (dia &lt; 10) {&#xd;
+        dia = &quot;0&quot; + dia;&#xd;
+    }&#xd;
+    var mes = date.getMonth() + 1;&#xd;
+    if (mes &lt; 10) {&#xd;
+        mes = &quot;0&quot; + mes;&#xd;
+    }&#xd;
+&#xd;
+    var ano = date.getFullYear();&#xd;
+&#xd;
+    var hora = date.getHours();&#xd;
+    if (hora &lt; 10) {&#xd;
+        hora = &quot;0&quot; + hora;&#xd;
+    }&#xd;
+&#xd;
+    var minutos = date.getMinutes();&#xd;
+    if (minutos &lt; 10) {&#xd;
+        minutos = &quot;0&quot; + minutos;&#xd;
+    }&#xd;
+&#xd;
+    var dateTime = [ano, mes, dia].join(&quot;-&quot;) + &quot; &quot; + hora + &quot;:&quot; + minutos;&#xd;
+    return dateTime&#xd;
 }</eventDescription>
     </WorkflowProcessEvent>
   </list>
@@ -727,7 +783,7 @@ function moneyToFloat(val) {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>18</version>
+        <version>23</version>
         <linkSequence>12</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -738,7 +794,7 @@ function moneyToFloat(val) {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>18</version>
+        <version>23</version>
         <linkSequence>9</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -749,7 +805,7 @@ function moneyToFloat(val) {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>18</version>
+        <version>23</version>
         <linkSequence>10</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -760,7 +816,7 @@ function moneyToFloat(val) {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>18</version>
+        <version>23</version>
         <linkSequence>13</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -771,7 +827,7 @@ function moneyToFloat(val) {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>18</version>
+        <version>23</version>
         <linkSequence>18</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>

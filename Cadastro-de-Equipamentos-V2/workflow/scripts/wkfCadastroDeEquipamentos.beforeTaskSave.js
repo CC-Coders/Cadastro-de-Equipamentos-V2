@@ -13,10 +13,17 @@ function beforeTaskSave(colleagueId, nextSequenceId, userList) {
             var WKNumProces = getValue("WKNumProces");
             hAPI.setCardValue("NUMPROCES", WKNumProces);
 
+            insereHistorico(hAPI.getCardValue("observacoes"), "Inicio", "Inicio");
+
             var isPAouMAouOutros = hAPI.getCardValue("categoria");
             if (isPAouMAouOutros == "PA" || isPAouMAouOutros == "MA") {
                 cadastraEquipamentoNoSisma();
             }
+        } else if(ATIVIDADE == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS){
+            insereHistorico(hAPI.getCardValue("observacoes"), hAPI.getCardValue("decisao"), "Central de Equipamentos");
+        }
+        else if(ATIVIDADE == ATIVIDADES.QSST){
+            insereHistorico(hAPI.getCardValue("observacoes"), hAPI.getCardValue("decisao"), "QSST");
         }
 
 
@@ -183,4 +190,45 @@ function moneyToFloat(val) {
         return 0;
     }
     return val;
+}
+
+function insereHistorico(observacao, acao, atividade) {
+    var USER = getValue("WKUser");
+    var DATA = getDateTimeNow();
+
+    var novaLinha = new java.util.HashMap();
+    novaLinha.put("tableHistoricoUsuario", USER);
+    novaLinha.put("tableHistoricoData", DATA);
+    novaLinha.put("tableHistoricoAtividade", atividade);
+    novaLinha.put("tableHistoricoObservacao", observacao);
+    novaLinha.put("tableHistoricoAcao", acao);
+
+    hAPI.addCardChild("tableHistorico", novaLinha);
+    hAPI.setCardValue("observacao", "");
+}
+function getDateTimeNow() {
+    var date = new Date();
+    var dia = date.getDate();
+    if (dia < 10) {
+        dia = "0" + dia;
+    }
+    var mes = date.getMonth() + 1;
+    if (mes < 10) {
+        mes = "0" + mes;
+    }
+
+    var ano = date.getFullYear();
+
+    var hora = date.getHours();
+    if (hora < 10) {
+        hora = "0" + hora;
+    }
+
+    var minutos = date.getMinutes();
+    if (minutos < 10) {
+        minutos = "0" + minutos;
+    }
+
+    var dateTime = [ano, mes, dia].join("-") + " " + hora + ":" + minutos;
+    return dateTime
 }

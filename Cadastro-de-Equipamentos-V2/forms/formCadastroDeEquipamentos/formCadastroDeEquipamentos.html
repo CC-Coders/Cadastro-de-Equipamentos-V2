@@ -52,6 +52,9 @@
 		
 		<input type="hidden" name="CGCCFO" id="CGCCFO">
 		
+		<input type="hidden" name="decisao" id="decisao">
+
+		
 
 		<!-- Dados Equipamento -->
 		 <input type="hidden" name="IDMODE" id="IDMODE">
@@ -69,6 +72,35 @@
 		<input type="hidden" name="anexosLaudoTecnico" id="anexosLaudoTecnico">
 		<input type="hidden" name="anexpsPlanoManutencao" id="anexpsPlanoManutencao">
 		<input type="hidden" name="anexosART" id="anexosART">
+
+		<!-- Tabela Historico -->
+		<div>
+			<table id="tableHistorico" tablename="tableHistorico" noaddbuttom="true" nodeletebuttom="true">
+				<thead>
+					<tr>
+						<th>Usuario</th>
+						<th>Data</th>
+						<th>Atividade</th>
+						<th>Observacao</th>
+						<th>Acao</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><input type="hidden" class="tableHistoricoUsuario" name="tableHistoricoUsuario"
+								id="tableHistoricoUsuario" /></td>
+						<td><input type="hidden" class="tableHistoricoData" name="tableHistoricoData" id="tableHistoricoData" />
+						</td>
+						<td><input type="hidden" class="tableHistoricoAtividade" name="tableHistoricoAtividade"
+								id="tableHistoricoAtividade" /></td>
+						<td><input type="hidden" class="tableHistoricoObservacao" name="tableHistoricoObservacao"
+								id="tableHistoricoObservacao" /></td>
+						<td><input type="hidden" class="tableHistoricoAcao" name="tableHistoricoAcao" id="tableHistoricoAcao" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 
 
@@ -139,19 +171,19 @@
 				</div>
 				<div class="col-md-6 inputGroup ">
 					<label for="fabricante">Fabricante:</label>
-					<input type="text" name="fabricante" id="fabricante" class="form-control inputPA inputMA">
+					<input type="text" name="fabricante" id="fabricante" class="form-control inputPA inputMA" readonly inert="inert">
 					<br>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-6 inputGroup">
 					<label for="classeMecanica">Classe Mecânica:</label>
-					<input type="text" name="classeMecanica" id="classeMecanica" class="form-control inputMA">
+					<input type="text" name="classeMecanica" id="classeMecanica" class="form-control inputMA" readonly inert="inert">
 					<br>
 				</div>
 				<div class="col-md-6 inputGroup">
 					<label for="classOperacional">Classe Operacional:</label>
-					<input type="text" name="classOperacional" id="classOperacional" class="form-control inputMA">
+					<input type="text" name="classOperacional" id="classOperacional" class="form-control inputMA" readonly inert="inert">
 					<br>
 				</div>
 			</div>
@@ -314,59 +346,61 @@
 			<div class="row">
 				<div class="col-md-6">
 					<label for="enderecoFornecedor">Endereço:</label>
-					<input type="text" name="enderecoFornecedor" id="enderecoFornecedor" class="form-control">
+					<input type="text" name="enderecoFornecedor" id="enderecoFornecedor" class="form-control" inert>
 					<br>
 				</div>
 				<div class="col-md-3">
 					<label for="numeroFornecedor">Número:</label>
-					<input type="text" name="numeroFornecedor" id="numeroFornecedor" class="form-control">
+					<input type="text" name="numeroFornecedor" id="numeroFornecedor" class="form-control" inert>
 					<br>
 				</div>
 				<div class="col-md-3">
 					<label for="cepFornecedor">CEP:</label>
-					<input type="text" name="cepFornecedor" id="cepFornecedor" class="form-control">
+					<input type="text" name="cepFornecedor" id="cepFornecedor" class="form-control" inert>
 					<br>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-3">
 					<label for="estadoFornecedor">Estado:</label>
-					<input type="text" name="estadoFornecedor" id="estadoFornecedor" class="form-control">
+					<input type="text" name="estadoFornecedor" id="estadoFornecedor" class="form-control" inert>
 					<br>
 				</div>
 				<div class="col-md-3">
 					<label for="cidadeFornecedor">Cidade:</label>
-					<input type="text" name="cidadeFornecedor" id="cidadeFornecedor" class="form-control">
+					<input type="text" name="cidadeFornecedor" id="cidadeFornecedor" class="form-control" inert>
 					<br>
 				</div>
 				<div class="col-md-3">
 					<label for="bairroFornecedor">Bairro:</label>
-					<input type="text" name="bairroFornecedor" id="bairroFornecedor" class="form-control">
+					<input type="text" name="bairroFornecedor" id="bairroFornecedor" class="form-control" inert>
 					<br>
 				</div>
 
 			</div>
 			<h2>Documentação</h2>
-
-			<label for="">Anexo:</label>
-			<div class="row">
-				<div class="col-md-6" style="display: flex;">
-					<select name="tipoAnexo" id="tipoAnexo" class="form-control">
-						<option value=""></option>
-						<option value="Documentação do Equipamento">Documentação do Equipamento</option>
-						<option value="Foto do Equipamento">Foto do Equipamento</option>
-						<option value="Laudo Técnico">Laudo Técnico</option>
-						<option value="Plano de Manutenção">Plano de Manutenção</option>
-						<option value="ART">ART</option>
-					</select>
-					<button class="btn btn-info" id="btnAnexarDocumentacao">Anexar</button>
-					<input type="file" name="inputFile" id="inputFile" style="display: none;" multiple>
+			<div id="divAnexar">
+				<label for="">Anexo:</label>
+				<div class="row">
+					<div class="col-md-6" style="display: flex;">
+						<select name="tipoAnexo" id="tipoAnexo" class="form-control">
+							<option value=""></option>
+							<option value="Documentação do Equipamento">Documentação do Equipamento</option>
+							<option value="Foto do Equipamento">Foto do Equipamento</option>
+							<option value="Laudo Técnico">Laudo Técnico</option>
+							<option value="Plano de Manutenção">Plano de Manutenção</option>
+							<option value="ART">ART</option>
+						</select>
+						<button class="btn btn-info" id="btnAnexarDocumentacao">Anexar</button>
+						<input type="file" name="inputFile" id="inputFile" style="display: none;" multiple>
+					</div>
 				</div>
+				<br>
 			</div>
-			<br>
+
 			<b>Documentos anexados:</b>
 			<div>
-				<div class="row">
+				<div class="row" style="margin-bottom: 10px;">
 					<div class="col-md-2">
 						<span class="spanStatusAnexos">❌</span>
 						<b>Documentação do Equipamento: </b>
@@ -375,7 +409,7 @@
 						<div id="divListaAnexosDocumentacaoEquipamento" style="display: flex;"></div>
 					</div>
 				</div>
-				<div class="row">
+				<div class="row" style="margin-bottom: 10px;">
 					<div class="col-md-2">
 						<span class="spanStatusAnexos">❌</span>
 						<b>Foto do Equipamento: </b>
@@ -384,7 +418,7 @@
 						<div id="divListaAnexosFotoEquipamento" style="display: flex;"></div>
 					</div>
 				</div>
-				<div class="row">
+				<div class="row" style="margin-bottom: 10px;">
 					<div class="col-md-2">
 						<span class="spanStatusAnexos">❌</span>
 						<b>Laudo Técnico: </b>
@@ -393,7 +427,7 @@
 						<div id="divListaAnexosLaudo" style="display: flex;"></div>
 					</div>
 				</div>
-				<div class="row">
+				<div class="row" style="margin-bottom: 10px;">
 					<div class="col-md-2">
 						<span class="spanStatusAnexos">❌</span>
 						<b>Plano de Manutenção: </b>
@@ -402,13 +436,48 @@
 						<div id="divListaAnexosPlanoManutencao" style="display: flex;"></div>
 					</div>
 				</div>
-				<div class="row">
+				<div class="row" style="margin-bottom: 10px;">
 					<div class="col-md-2">
 						<span class="spanStatusAnexos">❌</span>
 						<b>ART: </b>
 					</div>
 					<div class="col-md-10">
 						<div id="divListaAnexosART" style="display: flex;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="pagina" data-index="4" id="paginaHistorico">
+			<h2>Histórico</h2>
+			<div id="divOpcoesAprovacao" style="display: none;">
+				<div class="row">
+					<div class="col-md-3 col-xs-12"></div>
+		
+					<div class="col-md-3 col-xs-6">
+						<button class="btn btn-success btn-block" id="btnAprovar">Aprovar</button>
+					</div>
+					<div class="col-md-3 col-xs-6">
+						<button class="btn btn-danger btn-block" id="btnReprovar">Reprovar</button>
+					</div>
+				</div>
+			</div>
+			<div class="form-input">
+				<label> Observações: </label>
+				<textarea name="observacoes" id="observacoes" class="form-control" rows="4"></textarea>
+				<div></div>
+				<br />
+			</div>
+
+		
+			<div class="panel panel-default" id="historico">
+				<div class="panel-heading" style="background-color: #eaeaea">
+					<h4 class="panel-title" style="color: #58595b">Histórico</h4>
+				</div>
+				<div class="panel-body">
+					<div>
+						<div id="panelHistorico">
+							<div id="divLinhasHistorico"></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -425,6 +494,7 @@
 				<div class="pagination" data-index="1">Detalhes</div>
 				<div class="pagination" data-index="2">Operacional</div>
 				<div class="pagination" data-index="3">Fornecedor & Anexo</div>
+				<div class="pagination" data-index="4">Histórico e Decisão</div>
 			</div>
 	
 			<button id="btn-avancar">

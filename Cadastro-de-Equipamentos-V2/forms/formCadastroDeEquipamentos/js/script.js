@@ -16,19 +16,74 @@ $(document).ready(async function () {
     const atividadeAtual = $("#atividade").val();
     const formMode = $("#formMode").val();
 
-    if (formMode=="ADD" || atividadeAtual == INICIO || atividadeAtual == INICIO_0) {
+    if (formMode=="ADD" || atividadeAtual == ATIVIDADES.INICIO || atividadeAtual == ATIVIDADES.INICIO_0) {
         loadTelaInicio();
+    }
+    else if(atividadeAtual == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS){
+        loadTelaCentralDeEquipamentos();
+    }
+    else if(atividadeAtual == ATIVIDADES.QSST){
+        loadTelaQSST();
     }
 });
 
 async function loadTelaInicio(){
+    preenchePermissoesDoUsuario();
+    insereOptionsDosFornecedores();
     $(".inputPA, .inputOutros, .inputMA").closest("div.inputGroup").hide();
     modelos = await promiseBuscaModelosDeEquipamentosDoSisma();
     preencheOptionsDosModelos();
-    preenchePermissoesDoUsuario();
-    insereOptionsDosFornecedores();
+    $("#historico").hide();
+    FLUIGC.calendar('#dataChegadaObra');
+    $("#valorMobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
+    $("#valorExtra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
+    $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
+    $("#valorMaoDeObra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
+    $("#consumoMedio").maskMoney({ thousands: '', decimal: '.' });
+
 }
 
+async function loadTelaCentralDeEquipamentos() {
+    modelos = await promiseBuscaModelosDeEquipamentosDoSisma();
+    preencheOptionsDosModelos();
+    insereOptionsDosFornecedores();
+    preenchePermissoesDoUsuario(true);
+    asyncMontaHistorico();
+
+    preencheObras($("#CODCOLIGADA").val());
+    geraAnexos();
+    $("#divOpcoesAprovacao").show();
+    $("#divAnexar").hide();        
+    FLUIGC.calendar('#dataChegadaObra');
+    $("#valorMobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
+    $("#valorExtra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
+    $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
+    $("#valorMaoDeObra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
+    $("#consumoMedio").maskMoney({ thousands: '', decimal: '.' });
+
+}
+
+async function loadTelaQSST() {
+    asyncMontaHistorico();
+    geraAnexos();
+    $("#divOpcoesAprovacao").show();
+    $("#divAnexar").hide();
+    bloqueiaCampos();
+}
+
+
+function bloqueiaCampos(){
+    $("#coligada")[0].selectize.lock();
+    $("#obra")[0].selectize.lock();
+    $("#descricaoEquipamento, #prefixo, #categoria, #AnoFabricacao, #AnoModelo, #placa, #chassi, #potenciaMotor, #tipoPotenciaMotor").attr("readonly", "readonly");
+    $("#valorMobilizacao, #tipoValorMobilizacao, #valorExtra, #tipoValorExtra, #valorLocacao").attr("readonly", "readonly");
+    $("#checkboxTemMaoDeObra").closest("div").attr("inert","inert");
+    $("#checkboxTemMaoDeObra").attr("readonly","readonly");
+    $("#valorMaoDeObra").attr("readonly","readonly");
+    $("#dataChegadaObra").attr("readonly","readonly");
+    $("#kmChegadaObra, #tipoKmChegadaObra, #tipoCombustivel, #litrosTanque,#consumoMedio,#tipoConsumoMedio").attr("readonly","readonly");
+    $("#fornecedor")[0].selectize.lock();
+}
 
 
 
@@ -92,15 +147,29 @@ function bindings() {
 
     $("#fornecedor").selectize({
         onChange: async function(value){
-            const [CODCFO, CGCCFO] = value.split(" - ");
-            var dadosFornecedor = await buscaEnderecoFornecedor(CGCCFO);
-            $("#CGCCFO").val(CGCCFO);
-            $("#enderecoFornecedor").val(dadosFornecedor.RUA);
-            $("#cidadeFornecedor").val(dadosFornecedor.CIDADE);
-            $("#numeroFornecedor").val(dadosFornecedor.NUMERO);
-            $("#cepFornecedor").val(dadosFornecedor.CEP);
-            $("#estadoFornecedor").val(dadosFornecedor.CODETD);
-            $("#bairroFornecedor").val(dadosFornecedor.BAIRRO);
+            try {
+                if (value == "") {
+                    throw "";
+                }
+                
+                const [CODCFO, CGCCFO] = value.split(" - ");
+                var dadosFornecedor = await buscaEnderecoFornecedor(CGCCFO);
+                $("#CGCCFO").val(CGCCFO);
+                $("#enderecoFornecedor").val(dadosFornecedor.RUA);
+                $("#cidadeFornecedor").val(dadosFornecedor.CIDADE);
+                $("#numeroFornecedor").val(dadosFornecedor.NUMERO);
+                $("#cepFornecedor").val(dadosFornecedor.CEP);
+                $("#estadoFornecedor").val(dadosFornecedor.CODETD);
+                $("#bairroFornecedor").val(dadosFornecedor.BAIRRO);
+            } catch (e) {
+                $("#CGCCFO").val("");
+                $("#enderecoFornecedor").val("");
+                $("#cidadeFornecedor").val("");
+                $("#numeroFornecedor").val("");
+                $("#cepFornecedor").val("");
+                $("#estadoFornecedor").val("");
+                $("#bairroFornecedor").val("");
+            }
         }
     });
 
@@ -128,14 +197,18 @@ function bindings() {
     $("#AnoFabricacao").mask("9999");
     $("#AnoModelo").mask("9999");
 
-    $("#valorMobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
-    $("#valorExtra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
-    $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
-    $("#valorMaoDeObra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     
     $("#potenciaMotor").mask("0#");
     $("#litrosTanque").mask("0#");
-    $("#consumoMedio").maskMoney({ thousands: '', decimal: '.' });
 
-    FLUIGC.calendar('#dataChegadaObra');
+    $("#btnAprovar").on("click", function () {
+        $("#decisao").val("Aprovado");
+        parent.$("#send-process-button").click();
+
+    });
+    $("#btnReprovar").on("click", function () {
+        $("#decisao").val("Reprovado");
+        parent.$("#send-process-button").click();
+    });
+
 }
