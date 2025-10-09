@@ -63,6 +63,12 @@ async function loadTelaAjuste() {
     preencheObras($("#CODCOLIGADA").val());
     geraAnexos();
 
+    
+    
+        
+        alteraCategoriaDaSolicitacao($("#categoria").val());
+    
+
     if ($("#checkboxTemMaoDeObra").is(":checked")) {
         $("#divValorMaoDeObra").show();
     }
@@ -75,6 +81,7 @@ async function loadTelaCentralDeEquipamentos() {
     preenchePermissoesDoUsuario(true);
     asyncMontaHistorico();
 
+    alteraCategoriaDaSolicitacao($("#categoria").val());
     preencheObras($("#CODCOLIGADA").val());
     geraAnexos();
     $("#divOpcoesAprovacao").show();
@@ -94,6 +101,9 @@ async function loadTelaCentralDeEquipamentos() {
 async function loadTelaQSST() {
     asyncMontaHistorico();
     geraAnexos();
+    modelos = await promiseBuscaModelosDeEquipamentosDoSisma();
+    preencheOptionsDosModelos();
+    alteraCategoriaDaSolicitacao($("#categoria").val());
     $("#divOpcoesAprovacao").show();
     $("#divAnexar").hide();
     bloqueiaCampos();
@@ -106,6 +116,7 @@ async function loadTelaQSST() {
 function bloqueiaCampos(){
     $("#coligada")[0].selectize.lock();
     $("#obra")[0].selectize.lock();
+    $("#modelo")[0].selectize.lock();
     $("#descricaoEquipamento, #prefixo, #categoria, #AnoFabricacao, #AnoModelo, #placa, #chassi, #potenciaMotor, #tipoPotenciaMotor").attr("readonly", "readonly");
     $("#valorMobilizacao, #tipoValorMobilizacao, #valorExtra, #tipoValorExtra, #valorLocacao").attr("readonly", "readonly");
     $("#checkboxTemMaoDeObra").closest("div").attr("inert","inert");
@@ -141,21 +152,7 @@ function bindings() {
 
     $("#categoria").on("change", function () {
         var categoria = $(this).val();
-        if (categoria == "") {
-            $(".inputPA, .inputOutros, .inputMA").closest("div.inputGroup").hide();
-        }
-        if (categoria == "MA") {
-            $(".inputPA, .inputOutros").closest("div.inputGroup").hide();
-            $(".inputMA").closest("div.inputGroup").show();
-        }
-        if (categoria == "PA") {
-            $(".inputMA, .inputOutros").closest("div.inputGroup").hide();
-            $(".inputPA").closest("div.inputGroup").show();
-        }
-        if (categoria == "Outros") {
-            $(".inputMA, .inputPA").closest("div.inputGroup").hide();
-            $(".inputOutros").closest("div.inputGroup").show();
-        }
+        alteraCategoriaDaSolicitacao(categoria);
     });
 
     $("#modelo").on("change", function () {

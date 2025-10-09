@@ -838,10 +838,3 @@ function getDateTimeNow() {
     var dateTime = [ano, mes, dia].join("-") + " " + hora + ":" + minutos;
     return dateTime
 }
-
-/*
-var prefixo = "MA01.979";
-var ds = DatasetFactory.getDataset("dsInsereEquipamentoSisma",null,[
-    DatasetFactory.createConstraint("PREFIXO", prefixo, prefixo, ConstraintType.MUST)
-],null)
-*/

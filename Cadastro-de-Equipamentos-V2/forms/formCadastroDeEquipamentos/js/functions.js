@@ -26,7 +26,7 @@ function preencheOptionsDosModelos(){
         }
     });
 }
-function preencheInformacoesDoModelo(ID_MODELO){
+async function preencheInformacoesDoModelo(ID_MODELO){
     if (!ID_MODELO) {
         $("#fabricante").val("");
         $("#classeMecanica").val("");
@@ -57,6 +57,24 @@ function preencheInformacoesDoModelo(ID_MODELO){
     $("#IDCLOP").val(found.ID_CLASSEOPERACIONAL);
     $("#CODIFABR").val(found.ID_FABRICANTE);
     $("#CODIESPE").val(found.CODIESPE);
+
+    var caracteristicasTecnicas = await promiseConsultaCaracteristicasTecnicas(found.ID_MODELO);
+    $("#tableCaracteristicasTecnicas>tbody").html("");
+    for (const item of caracteristicasTecnicas) {
+        $("#tableCaracteristicasTecnicas>tbody").append(htmlItemCaracTec(item));
+    }
+
+    function htmlItemCaracTec(data){
+        var html = 
+        `<tr>
+            <td><input class="form-control" value="${data.DESCRICAO}" readonly /></td>
+            <td><input class="form-control" value="${data.DESC_ITEM}" readonly /></td>
+            <td><input class="form-control" value="${data.VALOR}" /></td>
+            <td><input class="form-control" value="${data.SIGLA}" readonly /></td>
+        </tr>`
+        return html;
+    }
+
 }
 
 
@@ -118,6 +136,43 @@ function buscaEnderecoFornecedor(CGCCFO){
             }
         });
     });
+}
+
+function alteraCategoriaDaSolicitacao(categoria) {
+    if (categoria == "") {
+        $(".inputPA, .inputOutros, .inputMA").closest("div.inputGroup").hide();
+    }
+    if (categoria == "MA") {
+        $(".inputPA, .inputOutros").closest("div.inputGroup").hide();
+        $(".inputMA").closest("div.inputGroup").show();
+    }
+    if (categoria == "PA") {
+        $(".inputMA, .inputOutros").closest("div.inputGroup").hide();
+        $(".inputPA").closest("div.inputGroup").show();
+    }
+    if (categoria == "Outros") {
+        $(".inputMA, .inputPA").closest("div.inputGroup").hide();
+        $(".inputOutros").closest("div.inputGroup").show();
+    }
+}
+
+
+function promiseConsultaCaracteristicasTecnicas(IDMODE){
+    return new Promise((resolve, reject)=>{
+        DatasetFactory.getDataset("dsConsultaCaracteriticasTecnicasDoModelo",null,[
+            DatasetFactory.createConstraint("IDMODE", IDMODE, IDMODE, ConstraintType.MUST)
+        ],null,{
+            success:(ds=>{
+                if (ds.values[0].STATUS != "SUCCESS") {
+                    reject(ds.values[0].MENSAGEM);
+                }else{
+                    var retorno = JSON.parse(ds.values[0].RESULT);
+                    resolve(retorno);
+                }
+            }),
+            error:(e=>reject(error))
+        });
+    })
 }
 
 // Anexos
