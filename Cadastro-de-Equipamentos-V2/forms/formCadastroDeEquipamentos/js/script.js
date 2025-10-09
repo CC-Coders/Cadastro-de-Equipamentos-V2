@@ -12,12 +12,15 @@ const env = getServerURL() == "http://fluig.castilho.com.br:1010" ? "PRODUCAO" :
 
 $(document).ready(async function () {
     bindings();
-
+    
     const atividadeAtual = $("#atividade").val();
     const formMode = $("#formMode").val();
 
-    if (formMode=="ADD" || atividadeAtual == ATIVIDADES.INICIO || atividadeAtual == ATIVIDADES.INICIO_0) {
+    if (formMode=="ADD") {
         loadTelaInicio();
+    }
+    else if(atividadeAtual == ATIVIDADES.INICIO || atividadeAtual == ATIVIDADES.INICIO_0){
+        loadTelaAjuste();
     }
     else if(atividadeAtual == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS){
         loadTelaCentralDeEquipamentos();
@@ -43,6 +46,28 @@ async function loadTelaInicio(){
 
 }
 
+async function loadTelaAjuste() {
+    preenchePermissoesDoUsuario();
+    insereOptionsDosFornecedores();
+    asyncMontaHistorico();
+
+    modelos = await promiseBuscaModelosDeEquipamentosDoSisma();
+    preencheOptionsDosModelos();
+    FLUIGC.calendar('#dataChegadaObra');
+    $("#valorMobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
+    $("#valorExtra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
+    $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
+    $("#valorMaoDeObra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
+    $("#consumoMedio").maskMoney({ thousands: '', decimal: '.' });
+
+    preencheObras($("#CODCOLIGADA").val());
+    geraAnexos();
+
+    if ($("#checkboxTemMaoDeObra").is(":checked")) {
+        $("#divValorMaoDeObra").show();
+    }
+}
+
 async function loadTelaCentralDeEquipamentos() {
     modelos = await promiseBuscaModelosDeEquipamentosDoSisma();
     preencheOptionsDosModelos();
@@ -61,6 +86,9 @@ async function loadTelaCentralDeEquipamentos() {
     $("#valorMaoDeObra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#consumoMedio").maskMoney({ thousands: '', decimal: '.' });
 
+    if ($("#checkboxTemMaoDeObra").is(":checked")) {
+        $("#divValorMaoDeObra").show();
+    }
 }
 
 async function loadTelaQSST() {
@@ -69,6 +97,9 @@ async function loadTelaQSST() {
     $("#divOpcoesAprovacao").show();
     $("#divAnexar").hide();
     bloqueiaCampos();
+    if ($("#checkboxTemMaoDeObra").is(":checked")) {
+        $("#divValorMaoDeObra").show();
+    }
 }
 
 
@@ -202,12 +233,23 @@ function bindings() {
     $("#litrosTanque").mask("0#");
 
     $("#btnAprovar").on("click", function () {
-        $("#decisao").val("Aprovado");
+        if ($("#atividade").val() == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS) {
+            $("#decisaoCentral").val("Aprovado");
+        }
+        else if ($("#atividade").val() == ATIVIDADES.QSST) {
+            $("#decisaoSeguranca").val("Aprovado");
+        }
+        
         parent.$("#send-process-button").click();
 
     });
     $("#btnReprovar").on("click", function () {
-        $("#decisao").val("Reprovado");
+        if ($("#atividade").val() == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS) {
+            $("#decisaoCentral").val("Reprovado");
+        }
+        else if ($("#atividade").val() == ATIVIDADES.QSST) {
+            $("#decisaoSeguranca").val("Reprovado");
+        }
         parent.$("#send-process-button").click();
     });
 

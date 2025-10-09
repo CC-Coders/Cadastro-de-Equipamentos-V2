@@ -172,7 +172,7 @@ async function loadFile(file) {
                 labelNo: 'Não'
             }, function (result, el, ev) {
                 if (result) {
-                    $(target).closest(".btnAnexo").remove();
+                    removerAnexos(target);
                 }
             });
         });
@@ -205,7 +205,7 @@ async function loadFile(file) {
         }
 
 
-        var val = $(divTarget).val()
+        var val = $(divTarget).val();
         if (val == "") {
             val = [];
         }else{
@@ -220,7 +220,7 @@ async function htmlNovoAnexo(documentId, documentName, permiteExclusao){
     `<div class="btn btn-default btnAnexo">
         <b><a target="_blank" href=${documentId == "#"? "#": await promiseBuscaDownloadUrlDocumentoNoFLuig(documentId)}>${documentName}</a></b>
         ${!permiteExclusao ? "" :
-            `<button class="btn btnDeletarAnexo">
+            `<button class="btn btnDeletarAnexo" data-documentId="${documentId}">
                 <i class="flaticon flaticon-close icon-sm" aria-hidden="true"></i>
             </button>`}
     </div>`;
@@ -251,6 +251,10 @@ async function geraAnexos() {
                 }
                 
             }
+            else if($("#atividade").val() == ATIVIDADES.INICIO || $("#atividade").val() == ATIVIDADES.INICIO_0){
+                permiteExclusao = true;
+            }
+
             for (const documentId of documentList) {
                 var html = await htmlNovoAnexo(documentId,await promiseGetDocumentDescription(documentId),permiteExclusao);
                 $(target).append(html);
@@ -264,6 +268,7 @@ async function geraAnexos() {
                             labelNo: 'Não'
                         }, function (result, el, ev) {
                             if (result) {
+                                removerAnexos(target);
                                 $(target).closest(".btnAnexo").remove();
                             }
                         });
@@ -271,13 +276,46 @@ async function geraAnexos() {
                 }
             }
 
-                  if($(target).find(".btnAnexo").length > 0){
-                    $(target).closest(".row").find(".spanStatusAnexos").text("✅");
-                }else{
-                    $(target).closest(".row").siblings(".spanStatusAnexos").text("❌");
-                }
+            if($(target).find(".btnAnexo").length > 0){
+                $(target).closest(".row").find(".spanStatusAnexos").text("✅");
+            }else{
+                $(target).closest(".row").siblings(".spanStatusAnexos").text("❌");
+            }
         }
     }
+}
+function removerAnexos(target){
+    var documentId = $(target).attr("data-documentId");
+    var divTarget = $(target).closest(".divListaAnexos").attr("id");
+
+        var inputTarget;
+        
+        if (divTarget == "divListaAnexosDocumentacaoEquipamento") {
+            inputTarget = "#anexosDocumentosEquipamento";
+        }
+        else if (divTarget == "divListaAnexosFotoEquipamento") {
+            inputTarget = "#anexosFotosEquipamentos";
+        }
+        else if (divTarget == "divListaAnexosLaudo") {
+            inputTarget = "#anexosLaudoTecnico";
+        }
+        else if (divTarget == "divListaAnexosPlanoManutencao") {
+            inputTarget = "#anexpsPlanoManutencao";
+        }
+        else if (divTarget == "divListaAnexosART") {
+            inputTarget = "#anexosART";
+        }
+
+        
+        var list = $(inputTarget).val().split(",");
+        list = list.filter(e=> e != documentId);
+        $(inputTarget).val(list.join(","));
+
+
+
+
+    $(target).closest(".btnAnexo").remove();
+
 }
 
 // Historico
