@@ -1,36 +1,31 @@
 function createDataset(fields, constraints, sortFields) {
     try {
         var constraints = getConstraints(constraints);
-        lancaErroSeConstraintsObrigatoriasNaoInformadas(constraints, []);
+        lancaErroSeConstraintsObrigatoriasNaoInformadas(constraints, ["IDMODE"]);
 
         var query = "";
         query += "SELECT ";
-        query += "   MODELO.IDMODE as ID_MODELO, ";
-        query += "   DESCRRESUM as MODELO_RESUMIDO, ";
-        query += "   DESCRCOMPL as MODELO, ";
-        query += "   FABRICANTE.CODIFABR as ID_FABRICANTE, ";
-        query += "   FABRICANTE.DESCRICAO as FABRICANTE, ";
-        query += "   CLASSMECAN.CODICLME as ID_CLASSEMECANICA, ";
-        query += "   CLASSMECAN.DESCRICAO as CLASSEMECANICA, ";
-        query += "   CLASSOPERA.IDCLOP as ID_CLASSEOPERACIONAL, ";
-        query += "   CLASSOPERA.DESCRICAO as CLASSEOPERACIONAL, ";
-        query += "   POTENCIAHP,";
-		query += "   ITEMCARACTEC.DESCRICAO,";
-		query += "   UNIDADE.DESCRICAO as UNIDADE, ";
-		query += "   MODELO.CODIESPE as CODIESPE ";
-        query += "FROM ";
-        query += "   MODELO ";
-        query += "   INNER JOIN FABRICANTE ON FABRICANTE.CODIFABR = MODELO.CODIFABR ";
-        query += "   INNER JOIN CLASSMECAN ON CLASSMECAN.CODICLME = MODELO.CODICLME ";
-        query += "   INNER JOIN CLASSOPERA ON CLASSOPERA.IDCLOP = MODELO.IDCLOP";
-		query += "   INNER JOIN ITEMMODCARTEC ON MODELO.IDMODE = ITEMMODCARTEC.IDMODE";
-		query += "   INNER JOIN ITEMCARACTEC ON ITEMCARACTEC.ITEM = ITEMMODCARTEC.ITEM";
-		query += "   INNER JOIN UNIDADE ON ITEMCARACTEC.CODIUNID = UNIDADE.CODIUNID ";
+        query += "    ITEMMODCARTEC.TIPOCARAC, ";
+        query += "    ITEMMODCARTEC.CODICATC, ";
+        query += "    ITEMMODCARTEC.ITEM, ";
+        query += "    ITEMMODCARTEC.VALOR, ";
+        query += "    ITEMCARACTEC.DESCRICAO, ";
+        query += "    ITEMCARACTEC.CODIUNID, ";
+        query += "    UNIDADE.SIGLA, ";
+        query += "    ITEMCARACTEC.DESCRICAO as DESC_ITEM, ";
+        query += "    CARACTECNICA.DESCRICAO ";
+        query += "FROM ITEMMODCARTEC ";
+        query += "    INNER JOIN ITEMCARACTEC ON ITEMCARACTEC.ITEM = ITEMMODCARTEC.ITEM ";
+        query += "    INNER JOIN CARACTECNICA ON ITEMMODCARTEC.CODICATC = CARACTECNICA.CODICATC AND ITEMMODCARTEC.TIPOCARAC = CARACTECNICA.TIPOCARAC ";
+        query += "    INNER JOIN UNIDADE ON ITEMCARACTEC.CODIUNID = UNIDADE.CODIUNID ";
         query += "WHERE ";
-        query += "   MODELO.CODIINES = 0;";
+        query += "ITEMMODCARTEC.IDMODE = ?";
 
-        var retorno = executaQuery(query, [], "/jdbc/Sisma");
-        return returnDataset("SUCCESS","",JSON.stringify(retorno));
+        var retorno = executaQuery(query, [
+            {type: "int", value:constraints.IDMODE}
+        ], "/jdbc/Sisma");
+
+        return returnDataset("SUCCESS", "", JSON.stringify(retorno));
 
     } catch (error) {
         if (typeof error == "object") {
@@ -86,9 +81,9 @@ function lancaErroSeConstraintsObrigatoriasNaoInformadas(constraints, listConstr
         throw error;
     }
 }
-function executaQuery(query, constraints, dataSorce) {
+function executaQuery(query, constraints, dataSource) {
     try {
-        var dataSource = dataSorce;
+        var dataSource = dataSource;
         var ic = new javax.naming.InitialContext();
         var ds = ic.lookup(dataSource);
 
