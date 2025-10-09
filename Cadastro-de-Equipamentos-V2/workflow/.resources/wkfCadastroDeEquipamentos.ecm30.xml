@@ -28,7 +28,7 @@
     <processDefinitionVersionPK>
       <companyId>1</companyId>
       <processId>Cadastro de Equipamentos</processId>
-      <version>23</version>
+      <version>25</version>
     </processDefinitionVersionPK>
     <versionDescription></versionDescription>
     <formId>29958</formId>
@@ -330,12 +330,40 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>1</expressionOrder>
-        <version>23</version>
+        <version>25</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
-      <condition>true</condition>
+      <condition></condition>
       <destinationSequenceId>15</destinationSequenceId>
-      <conditionType>0</conditionType>
+      <conditionType>1</conditionType>
+    </ConditionProcessState>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>2</expressionOrder>
+        <version>25</version>
+        <sequence>14</sequence>
+      </conditionProcessStatePK>
+      <condition></condition>
+      <destinationSequenceId>4</destinationSequenceId>
+      <engineAllocationConfiguration>&lt;AssignmentController&gt;&lt;BaseActivity&gt;4&lt;/BaseActivity&gt;&lt;Returns&gt;Last&lt;/Returns&gt;&lt;/AssignmentController&gt;</engineAllocationConfiguration>
+      <engineAllocationId>Executor Atividade</engineAllocationId>
+      <conditionType>1</conditionType>
+    </ConditionProcessState>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>3</expressionOrder>
+        <version>25</version>
+        <sequence>14</sequence>
+      </conditionProcessStatePK>
+      <condition></condition>
+      <destinationSequenceId>4</destinationSequenceId>
+      <engineAllocationConfiguration>&lt;AssignmentController&gt;&lt;BaseActivity&gt;4&lt;/BaseActivity&gt;&lt;Returns&gt;Last&lt;/Returns&gt;&lt;/AssignmentController&gt;</engineAllocationConfiguration>
+      <engineAllocationId>Executor Atividade</engineAllocationId>
+      <conditionType>1</conditionType>
     </ConditionProcessState>
   </list>
   <list>
@@ -489,10 +517,10 @@
         <version>1</version>
       </workflowProcessEventPK>
       <eventDescription>var ATIVIDADES = {&#xd;
-    INICIO_0 : 0,&#xd;
-    INICIO : 4,&#xd;
-    CENTRAL_EQUIPAMENTOS : 5,&#xd;
-    QSST : 8,&#xd;
+    INICIO:4,&#xd;
+    INICIO_0:0,&#xd;
+    CENTRAL_DE_EQUIPAMENTOS:5,&#xd;
+    QSST:8,&#xd;
 }&#xd;
 &#xd;
 function beforeTaskSave(colleagueId, nextSequenceId, userList) {&#xd;
@@ -503,18 +531,17 @@ function beforeTaskSave(colleagueId, nextSequenceId, userList) {&#xd;
             var WKNumProces = getValue(&quot;WKNumProces&quot;);&#xd;
             hAPI.setCardValue(&quot;NUMPROCES&quot;, WKNumProces);&#xd;
 &#xd;
-            insereHistorico(hAPI.getCardValue(&quot;observacoes&quot;), &quot;Inicio&quot;, &quot;Inicio&quot;);&#xd;
-&#xd;
-&#xd;
+            insereHistorico(hAPI.getCardValue(&quot;observacoes&quot;), &quot;Inicio&quot;, &quot;Inicio&quot;);      &#xd;
+        } else if (ATIVIDADE == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS) {&#xd;
+            insereHistorico(hAPI.getCardValue(&quot;observacoes&quot;), hAPI.getCardValue(&quot;decisao&quot;), &quot;Central de Equipamentos&quot;);&#xd;
+        }&#xd;
+        else if (ATIVIDADE == ATIVIDADES.QSST) {&#xd;
+            insereHistorico(hAPI.getCardValue(&quot;observacoes&quot;), hAPI.getCardValue(&quot;decisao&quot;), &quot;QSST&quot;);&#xd;
+        }else if(ATIVIDADE == 15){&#xd;
             var isPAouMAouOutros = hAPI.getCardValue(&quot;categoria&quot;);&#xd;
             if (isPAouMAouOutros == &quot;PA&quot; || isPAouMAouOutros == &quot;MA&quot;) {&#xd;
                 cadastraEquipamentoNoSisma();&#xd;
             }&#xd;
-        } else if(ATIVIDADE == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS){&#xd;
-            insereHistorico(hAPI.getCardValue(&quot;observacoes&quot;), hAPI.getCardValue(&quot;decisao&quot;), &quot;Central de Equipamentos&quot;);&#xd;
-        }&#xd;
-        else if(ATIVIDADE == ATIVIDADES.QSST){&#xd;
-            insereHistorico(hAPI.getCardValue(&quot;observacoes&quot;), hAPI.getCardValue(&quot;decisao&quot;), &quot;QSST&quot;);&#xd;
         }&#xd;
 &#xd;
 &#xd;
@@ -547,11 +574,12 @@ function cadastraEquipamentoNoSisma() {&#xd;
 &#xd;
         return true;&#xd;
     } catch (error) {&#xd;
-   if (error instanceof Error) {&#xd;
-        throw error;&#xd;
-    } else {&#xd;
-        throw new Error(typeof error === &quot;string&quot; ? error : JSON.stringify(error));&#xd;
-    }    }&#xd;
+        if (error instanceof Error) {&#xd;
+            throw error;&#xd;
+        } else {&#xd;
+            throw new Error(typeof error === &quot;string&quot; ? error : JSON.stringify(error));&#xd;
+        }&#xd;
+    }&#xd;
 }&#xd;
 &#xd;
 function getDadosEquipamento() {&#xd;
@@ -563,15 +591,15 @@ function getDadosEquipamento() {&#xd;
     var IDCLOP = hAPI.getCardValue(&quot;IDCLOP&quot;);&#xd;
     var CODIFABR = hAPI.getCardValue(&quot;CODIFABR&quot;);&#xd;
     var CODIESPE = hAPI.getCardValue(&quot;CODIESPE&quot;);&#xd;
-    &#xd;
+&#xd;
     var ANOFABRI = hAPI.getCardValue(&quot;AnoFabricacao&quot;);&#xd;
     var ANOMODELO = hAPI.getCardValue(&quot;AnoModelo&quot;);&#xd;
     var NUMECHAS = hAPI.getCardValue(&quot;chassi&quot;);&#xd;
     var PLACA = hAPI.getCardValue(&quot;placa&quot;);&#xd;
     var ALUGUEL_CONTRATO = moneyToFloat(hAPI.getCardValue(&quot;valorLocacao&quot;));&#xd;
-    &#xd;
+&#xd;
     var DESCRICAO = hAPI.getCardValue(&quot;descricaoEquipamento&quot;);&#xd;
-    &#xd;
+&#xd;
     var POTENCIAHP_UNID = hAPI.getCardValue(&quot;tipoPotenciaMotor&quot;);&#xd;
     var POTENCIAHP = hAPI.getCardValue(&quot;potenciaMotor&quot;);&#xd;
 &#xd;
@@ -579,16 +607,16 @@ function getDadosEquipamento() {&#xd;
 &#xd;
 &#xd;
     var VALOR_MOBILIZADO = moneyToFloat(hAPI.getCardValue(&quot;valorMobilizacao&quot;));&#xd;
-    var TIPO_VALOR_MOBILIZADO =hAPI.getCardValue(&quot;tipoValorMobilizacao&quot;);&#xd;
-    &#xd;
+    var TIPO_VALOR_MOBILIZADO = hAPI.getCardValue(&quot;tipoValorMobilizacao&quot;);&#xd;
+&#xd;
     var VALOR_EXTRA = moneyToFloat(hAPI.getCardValue(&quot;valorExtra&quot;));&#xd;
-    var TIPO_VALOR_EXTRA =hAPI.getCardValue(&quot;tipoValorExtra&quot;);&#xd;
-    &#xd;
+    var TIPO_VALOR_EXTRA = hAPI.getCardValue(&quot;tipoValorExtra&quot;);&#xd;
+&#xd;
     var VALOR_MAODEOBRA = moneyToFloat(hAPI.getCardValue(&quot;valorMaoDeObra&quot;));&#xd;
 &#xd;
 &#xd;
     var tipoKmChegadaObra = hAPI.getCardValue(&quot;tipoKmChegadaObra&quot;);&#xd;
-    var valorChegadaObra = hAPI.getCardValue(&quot;kmChegadaObra&quot;).replace(&quot;.&quot;,&quot;&quot;);&#xd;
+    var valorChegadaObra = hAPI.getCardValue(&quot;kmChegadaObra&quot;).replace(&quot;.&quot;, &quot;&quot;);&#xd;
 &#xd;
     var INI_HODOMETRO = tipoKmChegadaObra == &quot;KM&quot; ? valorChegadaObra : &quot;&quot;;&#xd;
     var INI_HORIMETRO = tipoKmChegadaObra == &quot;Horas&quot; ? valorChegadaObra : &quot;&quot;;&#xd;
@@ -603,10 +631,10 @@ function getDadosEquipamento() {&#xd;
     var CONSUMO_HORA = tipoConsumoMedio == &quot;L/H&quot; ? consumoMedio : &quot;&quot;;&#xd;
 &#xd;
     var CAPATANQ_ABAST = hAPI.getCardValue(&quot;litrosTanque&quot;);&#xd;
-    &#xd;
-    var CODIUNID_CAPACIDADE_COMBUSTIVEL = tipoConsumoMedio == &quot;km/L&quot; ? 5:6;&#xd;
-    &#xd;
-    &#xd;
+&#xd;
+    var CODIUNID_CAPACIDADE_COMBUSTIVEL = tipoConsumoMedio == &quot;km/L&quot; ? 5 : 6;&#xd;
+&#xd;
+&#xd;
     var ANEXOS_DOCUMENTACAO = hAPI.getCardValue(&quot;anexosDocumentosEquipamento&quot;);&#xd;
     var ANEXOS_FOTOS = hAPI.getCardValue(&quot;anexosFotosEquipamentos&quot;);&#xd;
     var ANEXOS_LAUDO = hAPI.getCardValue(&quot;anexosLaudoTecnico&quot;);&#xd;
@@ -626,36 +654,36 @@ function getDadosEquipamento() {&#xd;
         &quot;ANOFABRI&quot;: ANOFABRI,&#xd;
         &quot;ANOMODELO&quot;: ANOMODELO,&#xd;
         &quot;NUMECHAS&quot;: NUMECHAS,&#xd;
-        &quot;PLACA&quot;:PLACA,&#xd;
+        &quot;PLACA&quot;: PLACA,&#xd;
         &quot;ALUGUEL_CONTRATO&quot;: ALUGUEL_CONTRATO,&#xd;
         &quot;DESCRICAO&quot;: DESCRICAO,&#xd;
         &quot;POTENCIAHP_UNID&quot;: POTENCIAHP_UNID,&#xd;
         &quot;POTENCIAHP&quot;: POTENCIAHP,&#xd;
-        &quot;DATACHEGADA&quot;:DATACHEGADA,&#xd;
+        &quot;DATACHEGADA&quot;: DATACHEGADA,&#xd;
 &#xd;
-        &quot;VALOR_MOBILIZADO&quot;:VALOR_MOBILIZADO,&#xd;
-        &quot;TIPO_VALOR_MOBILIZADO&quot;:TIPO_VALOR_MOBILIZADO,&#xd;
+        &quot;VALOR_MOBILIZADO&quot;: VALOR_MOBILIZADO,&#xd;
+        &quot;TIPO_VALOR_MOBILIZADO&quot;: TIPO_VALOR_MOBILIZADO,&#xd;
 &#xd;
-        &quot;VALOR_EXTRA&quot;:VALOR_EXTRA,&#xd;
-        &quot;TIPO_VALOR_EXTRA&quot;:TIPO_VALOR_EXTRA,&#xd;
+        &quot;VALOR_EXTRA&quot;: VALOR_EXTRA,&#xd;
+        &quot;TIPO_VALOR_EXTRA&quot;: TIPO_VALOR_EXTRA,&#xd;
 &#xd;
-        &quot;VALOR_MAODEOBRA&quot;:VALOR_MAODEOBRA,&#xd;
+        &quot;VALOR_MAODEOBRA&quot;: VALOR_MAODEOBRA,&#xd;
 &#xd;
-        INI_HODOMETRO:INI_HODOMETRO,&#xd;
-        INI_HORIMETRO:INI_HORIMETRO,&#xd;
-        CODIMATE_COMBUSTIVEL:tipoCombustivel,&#xd;
+        INI_HODOMETRO: INI_HODOMETRO,&#xd;
+        INI_HORIMETRO: INI_HORIMETRO,&#xd;
+        CODIMATE_COMBUSTIVEL: tipoCombustivel,&#xd;
 &#xd;
-        CONSUMO_HORA:CONSUMO_HORA,&#xd;
-        CONSUMO_KM:CONSUMO_KM,&#xd;
+        CONSUMO_HORA: CONSUMO_HORA,&#xd;
+        CONSUMO_KM: CONSUMO_KM,&#xd;
 &#xd;
-        CAPATANQ_ABAST:CAPATANQ_ABAST,&#xd;
-        CODIUNID_CAPACIDADE_COMBUSTIVEL:CODIUNID_CAPACIDADE_COMBUSTIVEL,&#xd;
+        CAPATANQ_ABAST: CAPATANQ_ABAST,&#xd;
+        CODIUNID_CAPACIDADE_COMBUSTIVEL: CODIUNID_CAPACIDADE_COMBUSTIVEL,&#xd;
 &#xd;
-        ANEXOS_DOCUMENTACAO:ANEXOS_DOCUMENTACAO,&#xd;
-        ANEXOS_FOTOS:ANEXOS_FOTOS,&#xd;
-        ANEXOS_LAUDO:ANEXOS_LAUDO,&#xd;
-        ANEXOS_PLANO_MANUTENCAO:ANEXOS_PLANO_MANUTENCAO,&#xd;
-        ANEXOS_ART:ANEXOS_ART,&#xd;
+        ANEXOS_DOCUMENTACAO: ANEXOS_DOCUMENTACAO,&#xd;
+        ANEXOS_FOTOS: ANEXOS_FOTOS,&#xd;
+        ANEXOS_LAUDO: ANEXOS_LAUDO,&#xd;
+        ANEXOS_PLANO_MANUTENCAO: ANEXOS_PLANO_MANUTENCAO,&#xd;
+        ANEXOS_ART: ANEXOS_ART,&#xd;
 &#xd;
 &#xd;
 &#xd;
@@ -783,7 +811,7 @@ function getDateTimeNow() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>23</version>
+        <version>25</version>
         <linkSequence>12</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -794,7 +822,7 @@ function getDateTimeNow() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>23</version>
+        <version>25</version>
         <linkSequence>9</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -805,7 +833,7 @@ function getDateTimeNow() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>23</version>
+        <version>25</version>
         <linkSequence>10</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -816,7 +844,7 @@ function getDateTimeNow() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>23</version>
+        <version>25</version>
         <linkSequence>13</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -827,7 +855,7 @@ function getDateTimeNow() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>23</version>
+        <version>25</version>
         <linkSequence>18</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -842,5 +870,42 @@ function getDateTimeNow() {&#xd;
   <list/>
   <list/>
   <list/>
-  <list/>
+  <list>
+    <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
+      <expressionOrder>1</expressionOrder>
+      <ruleOrder>1</ruleOrder>
+      <field>decisaoCentral</field>
+      <value>Aprovado</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
+      <expressionOrder>1</expressionOrder>
+      <ruleOrder>2</ruleOrder>
+      <field>decisaoSeguranca</field>
+      <value>Aprovado</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
+      <expressionOrder>2</expressionOrder>
+      <ruleOrder>1</ruleOrder>
+      <field>decisaoCentral</field>
+      <value>Reprovado</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
+      <expressionOrder>3</expressionOrder>
+      <ruleOrder>1</ruleOrder>
+      <field>decisaoSeguranca</field>
+      <value>Reprovado</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+  </list>
 </list>

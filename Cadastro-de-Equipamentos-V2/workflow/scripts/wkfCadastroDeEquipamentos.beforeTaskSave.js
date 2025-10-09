@@ -1,8 +1,8 @@
 var ATIVIDADES = {
-    INICIO_0 : 0,
-    INICIO : 4,
-    CENTRAL_EQUIPAMENTOS : 5,
-    QSST : 8,
+    INICIO:4,
+    INICIO_0:0,
+    CENTRAL_DE_EQUIPAMENTOS:5,
+    QSST:8,
 }
 
 function beforeTaskSave(colleagueId, nextSequenceId, userList) {
@@ -13,17 +13,17 @@ function beforeTaskSave(colleagueId, nextSequenceId, userList) {
             var WKNumProces = getValue("WKNumProces");
             hAPI.setCardValue("NUMPROCES", WKNumProces);
 
-            insereHistorico(hAPI.getCardValue("observacoes"), "Inicio", "Inicio");
-
+            insereHistorico(hAPI.getCardValue("observacoes"), "Inicio", "Inicio");      
+        } else if (ATIVIDADE == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS) {
+            insereHistorico(hAPI.getCardValue("observacoes"), hAPI.getCardValue("decisao"), "Central de Equipamentos");
+        }
+        else if (ATIVIDADE == ATIVIDADES.QSST) {
+            insereHistorico(hAPI.getCardValue("observacoes"), hAPI.getCardValue("decisao"), "QSST");
+        }else if(ATIVIDADE == 15){
             var isPAouMAouOutros = hAPI.getCardValue("categoria");
             if (isPAouMAouOutros == "PA" || isPAouMAouOutros == "MA") {
                 cadastraEquipamentoNoSisma();
             }
-        } else if(ATIVIDADE == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS){
-            insereHistorico(hAPI.getCardValue("observacoes"), hAPI.getCardValue("decisao"), "Central de Equipamentos");
-        }
-        else if(ATIVIDADE == ATIVIDADES.QSST){
-            insereHistorico(hAPI.getCardValue("observacoes"), hAPI.getCardValue("decisao"), "QSST");
         }
 
 
@@ -56,11 +56,12 @@ function cadastraEquipamentoNoSisma() {
 
         return true;
     } catch (error) {
-   if (error instanceof Error) {
-        throw error;
-    } else {
-        throw new Error(typeof error === "string" ? error : JSON.stringify(error));
-    }    }
+        if (error instanceof Error) {
+            throw error;
+        } else {
+            throw new Error(typeof error === "string" ? error : JSON.stringify(error));
+        }
+    }
 }
 
 function getDadosEquipamento() {
@@ -72,15 +73,15 @@ function getDadosEquipamento() {
     var IDCLOP = hAPI.getCardValue("IDCLOP");
     var CODIFABR = hAPI.getCardValue("CODIFABR");
     var CODIESPE = hAPI.getCardValue("CODIESPE");
-    
+
     var ANOFABRI = hAPI.getCardValue("AnoFabricacao");
     var ANOMODELO = hAPI.getCardValue("AnoModelo");
     var NUMECHAS = hAPI.getCardValue("chassi");
     var PLACA = hAPI.getCardValue("placa");
     var ALUGUEL_CONTRATO = moneyToFloat(hAPI.getCardValue("valorLocacao"));
-    
+
     var DESCRICAO = hAPI.getCardValue("descricaoEquipamento");
-    
+
     var POTENCIAHP_UNID = hAPI.getCardValue("tipoPotenciaMotor");
     var POTENCIAHP = hAPI.getCardValue("potenciaMotor");
 
@@ -88,16 +89,16 @@ function getDadosEquipamento() {
 
 
     var VALOR_MOBILIZADO = moneyToFloat(hAPI.getCardValue("valorMobilizacao"));
-    var TIPO_VALOR_MOBILIZADO =hAPI.getCardValue("tipoValorMobilizacao");
-    
+    var TIPO_VALOR_MOBILIZADO = hAPI.getCardValue("tipoValorMobilizacao");
+
     var VALOR_EXTRA = moneyToFloat(hAPI.getCardValue("valorExtra"));
-    var TIPO_VALOR_EXTRA =hAPI.getCardValue("tipoValorExtra");
-    
+    var TIPO_VALOR_EXTRA = hAPI.getCardValue("tipoValorExtra");
+
     var VALOR_MAODEOBRA = moneyToFloat(hAPI.getCardValue("valorMaoDeObra"));
 
 
     var tipoKmChegadaObra = hAPI.getCardValue("tipoKmChegadaObra");
-    var valorChegadaObra = hAPI.getCardValue("kmChegadaObra").replace(".","");
+    var valorChegadaObra = hAPI.getCardValue("kmChegadaObra").replace(".", "");
 
     var INI_HODOMETRO = tipoKmChegadaObra == "KM" ? valorChegadaObra : "";
     var INI_HORIMETRO = tipoKmChegadaObra == "Horas" ? valorChegadaObra : "";
@@ -112,10 +113,10 @@ function getDadosEquipamento() {
     var CONSUMO_HORA = tipoConsumoMedio == "L/H" ? consumoMedio : "";
 
     var CAPATANQ_ABAST = hAPI.getCardValue("litrosTanque");
-    
-    var CODIUNID_CAPACIDADE_COMBUSTIVEL = tipoConsumoMedio == "km/L" ? 5:6;
-    
-    
+
+    var CODIUNID_CAPACIDADE_COMBUSTIVEL = tipoConsumoMedio == "km/L" ? 5 : 6;
+
+
     var ANEXOS_DOCUMENTACAO = hAPI.getCardValue("anexosDocumentosEquipamento");
     var ANEXOS_FOTOS = hAPI.getCardValue("anexosFotosEquipamentos");
     var ANEXOS_LAUDO = hAPI.getCardValue("anexosLaudoTecnico");
@@ -135,36 +136,36 @@ function getDadosEquipamento() {
         "ANOFABRI": ANOFABRI,
         "ANOMODELO": ANOMODELO,
         "NUMECHAS": NUMECHAS,
-        "PLACA":PLACA,
+        "PLACA": PLACA,
         "ALUGUEL_CONTRATO": ALUGUEL_CONTRATO,
         "DESCRICAO": DESCRICAO,
         "POTENCIAHP_UNID": POTENCIAHP_UNID,
         "POTENCIAHP": POTENCIAHP,
-        "DATACHEGADA":DATACHEGADA,
+        "DATACHEGADA": DATACHEGADA,
 
-        "VALOR_MOBILIZADO":VALOR_MOBILIZADO,
-        "TIPO_VALOR_MOBILIZADO":TIPO_VALOR_MOBILIZADO,
+        "VALOR_MOBILIZADO": VALOR_MOBILIZADO,
+        "TIPO_VALOR_MOBILIZADO": TIPO_VALOR_MOBILIZADO,
 
-        "VALOR_EXTRA":VALOR_EXTRA,
-        "TIPO_VALOR_EXTRA":TIPO_VALOR_EXTRA,
+        "VALOR_EXTRA": VALOR_EXTRA,
+        "TIPO_VALOR_EXTRA": TIPO_VALOR_EXTRA,
 
-        "VALOR_MAODEOBRA":VALOR_MAODEOBRA,
+        "VALOR_MAODEOBRA": VALOR_MAODEOBRA,
 
-        INI_HODOMETRO:INI_HODOMETRO,
-        INI_HORIMETRO:INI_HORIMETRO,
-        CODIMATE_COMBUSTIVEL:tipoCombustivel,
+        INI_HODOMETRO: INI_HODOMETRO,
+        INI_HORIMETRO: INI_HORIMETRO,
+        CODIMATE_COMBUSTIVEL: tipoCombustivel,
 
-        CONSUMO_HORA:CONSUMO_HORA,
-        CONSUMO_KM:CONSUMO_KM,
+        CONSUMO_HORA: CONSUMO_HORA,
+        CONSUMO_KM: CONSUMO_KM,
 
-        CAPATANQ_ABAST:CAPATANQ_ABAST,
-        CODIUNID_CAPACIDADE_COMBUSTIVEL:CODIUNID_CAPACIDADE_COMBUSTIVEL,
+        CAPATANQ_ABAST: CAPATANQ_ABAST,
+        CODIUNID_CAPACIDADE_COMBUSTIVEL: CODIUNID_CAPACIDADE_COMBUSTIVEL,
 
-        ANEXOS_DOCUMENTACAO:ANEXOS_DOCUMENTACAO,
-        ANEXOS_FOTOS:ANEXOS_FOTOS,
-        ANEXOS_LAUDO:ANEXOS_LAUDO,
-        ANEXOS_PLANO_MANUTENCAO:ANEXOS_PLANO_MANUTENCAO,
-        ANEXOS_ART:ANEXOS_ART,
+        ANEXOS_DOCUMENTACAO: ANEXOS_DOCUMENTACAO,
+        ANEXOS_FOTOS: ANEXOS_FOTOS,
+        ANEXOS_LAUDO: ANEXOS_LAUDO,
+        ANEXOS_PLANO_MANUTENCAO: ANEXOS_PLANO_MANUTENCAO,
+        ANEXOS_ART: ANEXOS_ART,
 
 
 
