@@ -105,10 +105,15 @@ function getDadosEquipamento() {
     var CONSUMO_HORA = tipoConsumoMedio == "L/H" ? consumoMedio : "";
 
     var CAPATANQ_ABAST = hAPI.getCardValue("litrosTanque");
-
+    
     var CODIUNID_CAPACIDADE_COMBUSTIVEL = tipoConsumoMedio == "km/L" ? 5:6;
-
-
+    
+    
+    var ANEXOS_DOCUMENTACAO = hAPI.getCardValue("anexosDocumentosEquipamento");
+    var ANEXOS_FOTOS = hAPI.getCardValue("anexosFotosEquipamentos");
+    var ANEXOS_LAUDO = hAPI.getCardValue("anexosLaudoTecnico");
+    var ANEXOS_PLANO_MANUTENCAO = hAPI.getCardValue("anexpsPlanoManutencao");
+    var ANEXOS_ART = hAPI.getCardValue("anexosART");
 
 
     return {
@@ -147,6 +152,13 @@ function getDadosEquipamento() {
 
         CAPATANQ_ABAST:CAPATANQ_ABAST,
         CODIUNID_CAPACIDADE_COMBUSTIVEL:CODIUNID_CAPACIDADE_COMBUSTIVEL,
+
+        ANEXOS_DOCUMENTACAO:ANEXOS_DOCUMENTACAO,
+        ANEXOS_FOTOS:ANEXOS_FOTOS,
+        ANEXOS_LAUDO:ANEXOS_LAUDO,
+        ANEXOS_PLANO_MANUTENCAO:ANEXOS_PLANO_MANUTENCAO,
+        ANEXOS_ART:ANEXOS_ART,
+
 
 
     };

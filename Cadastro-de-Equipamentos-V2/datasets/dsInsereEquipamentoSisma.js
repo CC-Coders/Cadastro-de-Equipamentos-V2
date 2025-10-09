@@ -63,7 +63,7 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
         var query = "";
         query += "INSERT INTO EQUIPAMENTO ";
         query += "(IDEQUI, ";//PK dos equipamentos, não é auto increment...
-        query += " CODITERC, ";//Id do Fornecedor quando PA
+        query += " CODIPROP, ";//Id do Fornecedor quando PA
         query += " CODIESPE, ";//ID da Especie
         query += " NUMEEQUI, ";//Prefixo
         query += " CODIDIV2, ";//CODCOLIGADA
@@ -85,7 +85,7 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
         query += " CODICCUSTOOP, ";//CCUSTO
         query += " NUMEBEM, ";//ID da Solicitacao
         query += " POTENCIAHP, ";//Potencia
-        query += " CODIPROP, ";//ID do Fornecedor quando MA
+        query += " CODITERC, ";//ID do Fornecedor quando MA
         query += " DESCRICAO, ";//Descricao
         query += " ALUGUEL_CONTRATO, "//Valor de Locação
         query += " NUMSERIE,"//Numero de Serie
@@ -145,7 +145,7 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
 
         var retorno = executeInsert(query, [
             { type: "int", value: IDEQUI },//IDEQUI
-            { type: "int", value: parseInt(isPAouMA == "PA" ? fornecedor.CODIPROP : 0) },//CODITERC
+            { type: "int", value: parseInt(isPAouMA == "MA" ? fornecedor.CODIPROP : 0) },//CODITERC
             { type: "int", value: EQUIPAMENTO.CODIESPE },//CODIESPE
             { type: "varchar", value: EQUIPAMENTO.PREFIXO },//Prefixo
             { type: "int", value: "2" },//CODIDIV2
@@ -167,7 +167,7 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
             { type: "varchar", value: EQUIPAMENTO.CODCCUSTO },//CODICCUSTOOP
             { type: "int", value: NUMPROCESS },//NUMEBEM
             { type: "int", value: EQUIPAMENTO.POTENCIAHP },//POTENCIAHP
-            { type: "int", value: isPAouMA == "MA" ? fornecedor.CODITERC : 0 },//CODIPROP
+            { type: "int", value: isPAouMA == "PA" ? fornecedor.CODITERC : 0 },//CODIPROP
             { type: "varchar", value: EQUIPAMENTO.DESCRICAO },//DESCRICAO
             { type: "float", value: EQUIPAMENTO.ALUGUEL_CONTRATO },//ALUGUEL_CONTRATO
             { type: "varchar", value: "123456" },//NUMSERIE
@@ -520,9 +520,9 @@ function insereFiltros(IDEQUI) {
 function insereCadastroAuxiliar(EQUIPAMENTO){
     try {
         var query = "INSERT INTO ";
-        query += "    EQUIPAMENTOS_CONTRATOS_AUXILIAR (PREFIXO, VALOR_MOBILIZADO, UN_MOBILIZADO, VALOR_EXTRA, UN_EXTRA, STATUS, MAODEOBRA) ";
+        query += "    EQUIPAMENTOS_CONTRATOS_AUXILIAR (PREFIXO, VALOR_MOBILIZADO, UN_MOBILIZADO, VALOR_EXTRA, UN_EXTRA, STATUS, MAODEOBRA, ANEXOS_DOCUMENTACAO, ANEXOS_FOTOS, ANEXOS_LAUDO, ANEXOS_PLANO_MANUTENCAO, ANEXOS_ART) ";
         query += "VALUES ";
-        query += "    (?,?,?,?,?,?,?) ";
+        query += "    (?,?,?,?,?,?,?,?,?,?,?,?) ";
 
         return executeInsert(query, [
             {type:"varchar", value:EQUIPAMENTO.PREFIXO},//PREFIXO
@@ -532,6 +532,11 @@ function insereCadastroAuxiliar(EQUIPAMENTO){
             {type:"varchar", value:EQUIPAMENTO.TIPO_VALOR_EXTRA},//UN_EXTRA
             {type:"int", value:1},//STATUS
             {type:"float", value:EQUIPAMENTO.VALOR_MAODEOBRA},//MAODEOBRA
+            {type:"varchar", value:EQUIPAMENTO.ANEXOS_DOCUMENTACAO},//ANEXOS_DOCUMENTACAO
+            {type:"varchar", value:EQUIPAMENTO.ANEXOS_FOTOS},//ANEXOS_FOTOS
+            {type:"varchar", value:EQUIPAMENTO.ANEXOS_LAUDO},//ANEXOS_LAUDO
+            {type:"varchar", value:EQUIPAMENTO.ANEXOS_PLANO_MANUTENCAO},//ANEXOS_PLANO_MANUTENCAO
+            {type:"varchar", value:EQUIPAMENTO.ANEXOS_ART},//ANEXOS_ART
         ], "/jdbc/CastilhoCustom");  
 
     } catch (error) {
@@ -562,7 +567,7 @@ function insereCadastroAuxiliar(EQUIPAMENTO){
 
 function getFornecedorPorCNPJ(isPAouMA, CNPJ) {
     try {
-        if (isPAouMA == "MA") {
+        if (isPAouMA == "PA") {
             var query = "SELECT CODITERC FROM TERCEIRO WHERE INSCFEDERAL = ?";
 
             return executaQuery(query, [
@@ -570,7 +575,7 @@ function getFornecedorPorCNPJ(isPAouMA, CNPJ) {
             ], "/jdbc/Sisma");
 
         }
-        else if (isPAouMA == "PA") {
+        else if (isPAouMA == "MA") {
             var query = "SELECT CODIPROP FROM PROPRIETARIO WHERE INSCFEDERAL = ?";
             return executaQuery(query, [
                 { type: "varchar", value: CNPJ }

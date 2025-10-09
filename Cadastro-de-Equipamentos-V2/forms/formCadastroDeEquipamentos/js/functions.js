@@ -116,7 +116,6 @@ function buscaEnderecoFornecedor(CGCCFO){
 function anexarDocumento(){
     $("#inputFile").click();
 }
-
 async function loadFile(file) {
     try {
         const tipoAnexo = $("#tipoAnexo").val();
@@ -143,6 +142,7 @@ async function loadFile(file) {
         const name = file.name;
         const documentId = await promiseCriaDocFluig_retornaDocumentId(file, parentId);
 
+        salvaIdAnexo(tipoAnexo, documentId);
 
         $(divTarget).append(await htmlNovoAnexo(documentId, name));
         
@@ -176,9 +176,37 @@ async function loadFile(file) {
         $(divTarget).append(await htmlNovoAnexo("#", "Carregando..."));
         return $(divTarget).find(".btnAnexo:last");
     }
+
+    function salvaIdAnexo(tipo, documentId){
+        var divTarget;
+        
+        if (tipo == "Documentação do Equipamento") {
+            divTarget = "#anexosDocumentosEquipamento";
+        }
+        else if (tipo == "Foto do Equipamento") {
+            divTarget = "#anexosFotosEquipamentos";
+        }
+        else if (tipo == "Laudo Técnico") {
+            divTarget = "#anexosLaudoTecnico";
+        }
+        else if (tipo == "Plano de Manutenção") {
+            divTarget = "#anexpsPlanoManutencao";
+        }
+        else if (tipo == "ART") {
+            divTarget = "#anexosART";
+        }
+
+
+        var val = $(divTarget).val()
+        if (val == "") {
+            val = [];
+        }else{
+            val=val.split(",");
+        }
+        val.push(documentId);
+        $(divTarget).val(val.join(","));
+    }
 }
-
-
 async function htmlNovoAnexo(documentId, documentName){
     var html = 
     `<div class="btn btn-default btnAnexo">

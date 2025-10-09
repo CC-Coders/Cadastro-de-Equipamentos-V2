@@ -28,7 +28,7 @@
     <processDefinitionVersionPK>
       <companyId>1</companyId>
       <processId>Cadastro de Equipamentos</processId>
-      <version>16</version>
+      <version>18</version>
     </processDefinitionVersionPK>
     <versionDescription></versionDescription>
     <formId>29958</formId>
@@ -326,7 +326,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>1</expressionOrder>
-        <version>16</version>
+        <version>18</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>true</condition>
@@ -588,10 +588,15 @@ function getDadosEquipamento() {&#xd;
     var CONSUMO_HORA = tipoConsumoMedio == &quot;L/H&quot; ? consumoMedio : &quot;&quot;;&#xd;
 &#xd;
     var CAPATANQ_ABAST = hAPI.getCardValue(&quot;litrosTanque&quot;);&#xd;
-&#xd;
+    &#xd;
     var CODIUNID_CAPACIDADE_COMBUSTIVEL = tipoConsumoMedio == &quot;km/L&quot; ? 5:6;&#xd;
-&#xd;
-&#xd;
+    &#xd;
+    &#xd;
+    var ANEXOS_DOCUMENTACAO = hAPI.getCardValue(&quot;anexosDocumentosEquipamento&quot;);&#xd;
+    var ANEXOS_FOTOS = hAPI.getCardValue(&quot;anexosFotosEquipamentos&quot;);&#xd;
+    var ANEXOS_LAUDO = hAPI.getCardValue(&quot;anexosLaudoTecnico&quot;);&#xd;
+    var ANEXOS_PLANO_MANUTENCAO = hAPI.getCardValue(&quot;anexpsPlanoManutencao&quot;);&#xd;
+    var ANEXOS_ART = hAPI.getCardValue(&quot;anexosART&quot;);&#xd;
 &#xd;
 &#xd;
     return {&#xd;
@@ -630,6 +635,13 @@ function getDadosEquipamento() {&#xd;
 &#xd;
         CAPATANQ_ABAST:CAPATANQ_ABAST,&#xd;
         CODIUNID_CAPACIDADE_COMBUSTIVEL:CODIUNID_CAPACIDADE_COMBUSTIVEL,&#xd;
+&#xd;
+        ANEXOS_DOCUMENTACAO:ANEXOS_DOCUMENTACAO,&#xd;
+        ANEXOS_FOTOS:ANEXOS_FOTOS,&#xd;
+        ANEXOS_LAUDO:ANEXOS_LAUDO,&#xd;
+        ANEXOS_PLANO_MANUTENCAO:ANEXOS_PLANO_MANUTENCAO,&#xd;
+        ANEXOS_ART:ANEXOS_ART,&#xd;
+&#xd;
 &#xd;
 &#xd;
     };&#xd;
@@ -715,7 +727,7 @@ function moneyToFloat(val) {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>16</version>
+        <version>18</version>
         <linkSequence>12</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -726,7 +738,7 @@ function moneyToFloat(val) {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>16</version>
+        <version>18</version>
         <linkSequence>9</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -737,7 +749,7 @@ function moneyToFloat(val) {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>16</version>
+        <version>18</version>
         <linkSequence>10</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -748,7 +760,7 @@ function moneyToFloat(val) {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>16</version>
+        <version>18</version>
         <linkSequence>13</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -759,7 +771,7 @@ function moneyToFloat(val) {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>16</version>
+        <version>18</version>
         <linkSequence>18</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
