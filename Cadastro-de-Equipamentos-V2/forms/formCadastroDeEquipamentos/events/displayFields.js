@@ -8,6 +8,7 @@ function displayFields(form, customHTML) {
 		form.setValue("solicitante", getValue("WKUser"));
 	}
 
+	form.setValue("observacoes", "");
 
 	form.setHidePrintLink(true);
 }

@@ -38,7 +38,6 @@ async function preencheInformacoesDoModelo(ID_MODELO){
         $("#IDCLOP").val("");
         $("#CODIFABR").val("");
         $("#CODIFABR").val("");
-        $("#CODIESPE").val("");
     }
 
     var found = modelos.find(e=> e.ID_MODELO == ID_MODELO);
@@ -56,7 +55,12 @@ async function preencheInformacoesDoModelo(ID_MODELO){
     $("#CODICLME").val(found.ID_CLASSEMECANICA);
     $("#IDCLOP").val(found.ID_CLASSEOPERACIONAL);
     $("#CODIFABR").val(found.ID_FABRICANTE);
-    $("#CODIESPE").val(found.CODIESPE);
+
+    var combustivel = await promiseConsultaCombustivelPorModelo(found.ID_MODELO);
+    $("#tipoCombustivel").html("<option></option>");
+    for (const item of combustivel) {
+        $("#tipoCombustivel").append(`<option value="${item.CODIMATE}">${item.DESCRICAO}</option>`);
+    }
 
     var caracteristicasTecnicas = await promiseConsultaCaracteristicasTecnicas(found.ID_MODELO);
     $("#tableCaracteristicasTecnicas>tbody").html("");
@@ -64,19 +68,21 @@ async function preencheInformacoesDoModelo(ID_MODELO){
         $("#tableCaracteristicasTecnicas>tbody").append(htmlItemCaracTec(item));
     }
 
+
+
+}
     function htmlItemCaracTec(data){
         var html = 
         `<tr>
-            <td><input class="form-control" value="${data.DESCRICAO}" readonly /></td>
-            <td><input class="form-control" value="${data.DESC_ITEM}" readonly /></td>
-            <td><input class="form-control" value="${data.VALOR}" /></td>
-            <td><input class="form-control" value="${data.SIGLA}" readonly /></td>
-        </tr>`
+            <input type="hidden" class="TIPOCARAC" value="${data.TIPOCARAC}"/>
+            <input type="hidden" class="CODICATC" value="${data.CODICATC}"/>
+            <td><input class="form-control DESCRICAO" value="${data.DESCRICAO}" readonly /></td>
+            <td><input class="form-control VALOR_PADRAO" value="${data.VALOR}" readonly /></td>
+            <td><input class="form-control VALOR" value="${data.VALOR}" /></td>
+            <td><input class="form-control SIGLA" value="${data.SIGLA}" readonly /></td>
+        </tr>`;
         return html;
     }
-
-}
-
 
 function preenchePermissoesDoUsuario(permissaoGeral = null){
     permissoes = buscaObrasPorPermissaoDoUsuario($("#userCode").val(), permissaoGeral);
@@ -94,6 +100,14 @@ function preencheObras(CODCOLIGADA){
     $("#obra")[0].selectize.setValue(previousValue);
 }
 
+function geraTabelaCaracteristicasTecnicas(){
+    var json = JSON.parse($("#JSONCARACTERISTICASTECNICAS").val());
+    
+    $("#tableCaracteristicasTecnicas>tbody").html("");
+    for (const item of json) {
+        $("#tableCaracteristicasTecnicas>tbody").append(htmlItemCaracTec(item));
+    }
+}
 
 function buscaFornecedores(){
     return new Promise((resolve, reject)=>{
@@ -145,10 +159,12 @@ function alteraCategoriaDaSolicitacao(categoria) {
     if (categoria == "MA") {
         $(".inputPA, .inputOutros").closest("div.inputGroup").hide();
         $(".inputMA").closest("div.inputGroup").show();
+        $("#CODIESPE").val(1);
     }
     if (categoria == "PA") {
         $(".inputMA, .inputOutros").closest("div.inputGroup").hide();
         $(".inputPA").closest("div.inputGroup").show();
+        $("#CODIESPE").val(5);
     }
     if (categoria == "Outros") {
         $(".inputMA, .inputPA").closest("div.inputGroup").hide();
@@ -160,6 +176,23 @@ function alteraCategoriaDaSolicitacao(categoria) {
 function promiseConsultaCaracteristicasTecnicas(IDMODE){
     return new Promise((resolve, reject)=>{
         DatasetFactory.getDataset("dsConsultaCaracteriticasTecnicasDoModelo",null,[
+            DatasetFactory.createConstraint("IDMODE", IDMODE, IDMODE, ConstraintType.MUST)
+        ],null,{
+            success:(ds=>{
+                if (ds.values[0].STATUS != "SUCCESS") {
+                    reject(ds.values[0].MENSAGEM);
+                }else{
+                    var retorno = JSON.parse(ds.values[0].RESULT);
+                    resolve(retorno);
+                }
+            }),
+            error:(e=>reject(error))
+        });
+    })
+}
+function promiseConsultaCombustivelPorModelo(IDMODE){
+      return new Promise((resolve, reject)=>{
+        DatasetFactory.getDataset("dsConsultaCombustivelPorModelo",null,[
             DatasetFactory.createConstraint("IDMODE", IDMODE, IDMODE, ConstraintType.MUST)
         ],null,{
             success:(ds=>{

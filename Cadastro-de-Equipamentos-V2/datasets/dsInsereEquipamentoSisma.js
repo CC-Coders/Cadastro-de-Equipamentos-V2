@@ -8,9 +8,10 @@ function createDataset(fields, constraints, sortFields) {
         insereEquipamento(IDEQUI, JSON.parse(constraints.EQUIPAMENTO), constraints.NUMPROCESS, constraints.isPAouMA, constraints.CGCCFO);
         insereTransfdiv3(IDEQUI);
         insereCombustivel(IDEQUI, JSON.parse(constraints.EQUIPAMENTO));
-        insereTanqueCombustivel(IDEQUI);
+        insereTanqueCombustivel(IDEQUI, JSON.parse(constraints.EQUIPAMENTO));
         insereCompartimento(IDEQUI);
         insereFiltros(IDEQUI);
+        insereCaracteristicasTecnicas(IDEQUI, JSON.parse(constraints.CARCTERISTICAS));
 
         insereCadastroAuxiliar(JSON.parse(constraints.EQUIPAMENTO));
 
@@ -247,8 +248,12 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
             throw "Erro ao executar Dataset: " + msg;
     }
 }
-function insereTransfdiv3(IDEQUI) {
+function insereTransfdiv3(IDEQUI, EQUIPAMENTO) {
     try {
+        var obra = getObra(EQUIPAMENTO.CODCOLIGADA, EQUIPAMENTO.CODCCUSTO)[0];
+        log.info("dsInsereEquipamentoSisma obra:");
+        log.dir(obra);
+
         var query = "";
         query += "INSERT INTO TRANSFDIV3 ";
         query += "(IDEQUI, DATAHORA, NUMEDOCU, CODIDIV3, INSTDIG, CODIUSU_DIG) ";
@@ -257,10 +262,10 @@ function insereTransfdiv3(IDEQUI) {
 
         executeInsert(query, [
             { type: "int", value: IDEQUI },
-            { type: "datetime", value: "2025-10-01 00:00:00.000" },
+            { type: "datetime", value: getDateTimeNow() },
             { type: "int", value: "0" },
-            { type: "int", value: "104" },
-            { type: "datetime", value: "2025-10-01 13:06:55.000" },
+            { type: "int", value: obra.CODIDIV3 },
+            { type: "datetime", value: getDateTimeNow() },
             { type: "int", value: "56" },
         ], "/jdbc/Sisma");
     } catch (error) {
@@ -335,24 +340,21 @@ function insereCombustivel(IDEQUI, EQUIPAMENTO) {
             throw "Erro ao executar Dataset: " + msg;
     }
 }
-function insereTanqueCombustivel(IDEQUI) {
+function insereTanqueCombustivel(IDEQUI, EQUIPAMENTO) {
     try {
-
-
         var query = "";
         query += "INSERT INTO EQUIPTANQ ";
         query += "(IDEQUI, CODITANQ, DATA, ATUAL, CAPATANQ_ABAST, CAPATANQ_CONV)"
         query += " VALUES "
         query += "(?,?,?,?,?,?)";
 
-
         executeInsert(query, [
             { type: "int", value: IDEQUI },
             { type: "int", value: "1" },
-            { type: "datetime", value: "2025-10-01 00:00:00.000" },
+            { type: "datetime", value: getDateTimeNow() },
             { type: "int", value: "1" },
-            { type: "float", value: "250.00" },
-            { type: "float", value: "250.00" },
+            { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST },
+            { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST },
         ], "/jdbc/Sisma");
     } catch (error) {
         if (error instanceof Error) {
@@ -362,10 +364,8 @@ function insereTanqueCombustivel(IDEQUI) {
         }
     }
 }
-function insereCompartimento(IDEQUI) {
+function insereCompartimento(IDEQUI, EQUIPAMENTO) {
     try {
-
-
         var query = "";
         query += "INSERT INTO "
         query += "EQUIPCOMPA ( "
@@ -373,15 +373,6 @@ function insereCompartimento(IDEQUI) {
         query += "    CODICOMP, "
         query += "    CODIINES, "
         query += "    CODIMATE, "
-        query += "    PERIINI_TROC_KM, "
-        query += "    DATAINI_TROC_KM, "
-        query += "    PERIINI_TROC_HORA, "
-        query += "    PERIINI_TROC_QUANT, "
-        query += "    PERIINI_AMOS_KM, "
-        query += "    DATAINI_AMOS_KM, "
-        query += "    PERIINI_AMOS_HORA, "
-        query += "    PERIINI_AMOS_QUANT, "
-        query += "    QUANT_TROC_SUG, "
         query += "    CAPACOMP, "
         query += "    PORCREMO, "
         query += "    PERITROC_KM, "
@@ -390,49 +381,33 @@ function insereCompartimento(IDEQUI) {
         query += "    PERIAMOS_KM, "
         query += "    PERIAMOS_HORA, "
         query += "    PERIAMOS_QUANT, "
-        query += "    CODICAMA_TROC_SUG, "
-        query += "    CODICAMA_REMO_SUG, "
-        query += "    QUANT_REMO_SUG, "
-        query += "    PERIINI_TROC_DIA, "
-        query += "    PERIINI_AMOS_DIA, "
-        query += "    PERITROC_DIA, "
-        query += "    PERIAMOS_DIA, "
-        query += "    CODIINES_AMO "
+        query += "    PERIAMOS_DIA "
         query += ") "
         query += "VALUES "
-        query += "(?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?)";
+        query += "(SELECT "
+	    query += "    ? as IDEQUI, "
+	    query += "    CODICOMP, "
+	    query += "    ? as CODIINES, "
+	    query += "    CODIMATE, "
+	    query += "    CAPACOMP, "
+	    query += "    PORCREMO, "
+	    query += "    PERITROC_KM, "
+	    query += "    PERITROC_HORA, "
+	    query += "    PERITROC_QUANT, "
+	    query += "    PERIAMOS_DIA, "
+	    query += "    PERIAMOS_HORA, "
+	    query += "    PERIAMOS_KM, "
+	    query += "    PERIAMOS_QUANT "
+        query += "FROM MODELCOMPA ";
+        query += "WHERE IDMODE = ?) ";
 
 
         executeInsert(query, [
             { type: "int", value: IDEQUI },//IDEQUI
-            { type: "int", value: 501 },//CODICOMP
             { type: "int", value: 0 },//CODIINES
-            { type: "int", value: 405 },//CODIMATE
-            { type: "int", value: 0 },//PERIINI_TROC_KM
-            { type: "datetime", value: "2025-10-01 00:00:00.000" },//DATAINI_TROC_KM
-            { type: "int", value: 0 },//PERIINI_TROC_HORA
-            { type: "int", value: 0 },//PERIINI_TROC_QUANT
-            { type: "int", value: 0 },//PERIINI_AMOS_KM
-            { type: "datetime", value: "2025-10-01 00:00:00.000" },//DATAINI_AMOS_KM
-            { type: "int", value: 0 },//PERIINI_AMOS_HORA
-            { type: "int", value: 0 },//PERIINI_AMOS_QUANT
-            { type: "float", value: 20.0000 },//QUANT_TROC_SUG
-            { type: "float", value: 20.00 },//CAPACOMP
-            { type: "float", value: 1.00 },//PORCREMO
-            { type: "int", value: 10000 },//PERITROC_KM
-            { type: "int", value: 0 },//PERITROC_HORA
-            { type: "int", value: 0 },//PERITROC_QUANT
-            { type: "int", value: 0 },//PERIAMOS_KM
-            { type: "int", value: 0 },//PERIAMOS_HORA
-            { type: "int", value: 0 },//PERIAMOS_QUANT
-            { type: "int", value: 0 },//CODICAMA_TROC_SUG
-            { type: "int", value: 0 },//CODICAMA_REMO_SUG
-            { type: "float", value: 20.0000 },//QUANT_REMO_SUG
-            { type: "int", value: 0 },//PERIINI_TROC_DIA
-            { type: "int", value: 0 },//PERIINI_AMOS_DIA
-            { type: "int", value: 0 },//PERITROC_DIA
-            { type: "int", value: 0 },//PERIAMOS_DIA
-            { type: "int", value: 0 },//CODIINES_AMO
+            { type: "int", value: EQUIPAMENTO.IDMODE },//IDMODE
+
+
         ], "/jdbc/Sisma");
     } catch (error) {
         if (error instanceof Error) {
@@ -442,71 +417,43 @@ function insereCompartimento(IDEQUI) {
         }
     }
 }
-function insereFiltros(IDEQUI) {
+function insereFiltros(IDEQUI, EQUIPAMENTO) {
     try {
-
-
         var query = "";
-        query += "INSERT INTO "
-        query += "EQUIPFILTR ( "
-        query += "    IDEQUI, "
-        query += "    CODIFILT, "
-        query += "    CODIINES, "
-        query += "    PERIINI_TROC_KM, "
-        query += "    DATAINI_TROC_KM, "
-        query += "    PERIINI_TROC_HORA, "
-        query += "    PERIINI_TROC_QUANT, "
-        query += "    PERIINI_LIMP_KM, "
-        query += "    DATAINI_LIMP_KM, "
-        query += "    PERIINI_LIMP_HORA, "
-        query += "    PERIINI_LIMP_QUANT, "
-        query += "    PERITROC_KM, "
-        query += "    PERITROC_HORA, "
-        query += "    PERITROC_QUANT, "
-        query += "    PERILIMP_KM, "
-        query += "    PERILIMP_HORA, "
-        query += "    PERILIMP_QUANT, "
-        query += "    CODICAMA_TROC_SUG, "
-        query += "    CODICAMA_LIMP_SUG, "
-        query += "    ESFAFILT, "
-        query += "    CODIMAT, "
-        query += "    PERIINI_TROC_DIA, "
-        query += "    PERIINI_LIMP_DIA, "
-        query += "    PERITROC_DIA, "
-        query += "    PERILIMP_DIA, "
-        query += "    QUANTIDADE "
-        query += ") "
-        query += "VALUES "
-        query += "(?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?)"
+        query += "INSERT INTO ";
+        query += "EQUIPFILTR ( ";
+        query += "    IDEQUI, ";
+        query += "    CODIFILT, ";
+        query += "    CODIINES, ";
+        query += "    PERITROC_KM, ";
+        query += "    PERITROC_HORA, ";
+        query += "    PERITROC_QUANT, ";
+        query += "    PERILIMP_KM, ";
+        query += "    PERILIMP_HORA, ";
+        query += "    PERILIMP_QUANT, ";
+        query += "    ESFAFILT, ";
+        query += ") ";
+        query += "VALUES ";
+        query += "(SELECT ";
+	    query += "  ? as IDEQUI, ";
+	    query += "  CODIFILT, ";
+	    query += "  ? as CODIINES, ";
+	    query += "  ESFAFILT, ";
+	    query += "  PERITROC_KM, ";
+	    query += "  PERITROC_HORA, ";
+	    query += "  PERITROC_QUANT, ";
+	    query += "  PERILIMP_DIA, ";
+	    query += "  PERILIMP_HORA, ";
+	    query += "  PERILIMP_KM, ";
+	    query += "  PERILIMP_QUANT ";
+        query += "FROM MODELFILTR " ;
+        query += "WHERE IDMODE = ?)";
 
 
         executeInsert(query, [
             { type: "int", value: IDEQUI },//IDEQUI
-            { type: "int", value: 701 },//CODIFILT
             { type: "int", value: 0 },//CODIINES
-            { type: "int", value: 0 },//PERIINI_TROC_KM
-            { type: "datetime", value: "2025-10-01 00:00:00.000" },//DATAINI_TROC_KM
-            { type: "int", value: 0 },//PERIINI_TROC_HORA
-            { type: "int", value: 0 },//PERIINI_TROC_QUANT
-            { type: "int", value: 0 },//PERIINI_LIMP_KM
-            { type: "datetime", value: "2025-10-01 00:00:00.000" },//DATAINI_LIMP_KM
-            { type: "int", value: 0 },//PERIINI_LIMP_HORA
-            { type: "int", value: 0 },//PERIINI_LIMP_QUANT
-            { type: "int", value: 10000 },//PERITROC_KM
-            { type: "int", value: 0 },//PERITROC_HORA
-            { type: "int", value: 0 },//PERITROC_QUANT
-            { type: "int", value: 0 },//PERILIMP_KM
-            { type: "int", value: 0 },//PERILIMP_HORA
-            { type: "int", value: 0 },//PERILIMP_QUANT
-            { type: "int", value: 0 },//CODICAMA_TROC_SUG
-            { type: "int", value: 0 },//CODICAMA_LIMP_SUG
-            { type: "varchar", value: "*W950/26" },//ESFAFILT
-            { type: "varchar", value: "30.001.00024" },//CODIMAT
-            { type: "int", value: 0 },//PERIINI_TROC_DIA
-            { type: "int", value: 0 },//PERIINI_LIMP_DIA
-            { type: "int", value: 0 },//PERITROC_DIA
-            { type: "int", value: 0 },//PERILIMP_DIA
-            { type: "int", value: 0 },//QUANTIDADE
+            { type: "int", value:  EQUIPAMENTO.IDMODE},//CODIINES
         ], "/jdbc/Sisma");
     } catch (error) {
         if (error instanceof Error) {
@@ -561,6 +508,28 @@ function insereCadastroAuxiliar(EQUIPAMENTO){
 
             // Safely rethrow as standard JS error
             throw "Erro ao executar Dataset: " + msg;
+    }
+}
+function insereCaracteristicasTecnicas(IDEQUI, CARACTECNICA){
+    try {
+        for (var item of CARACTECNICA) {
+            if (item.VALOR_PADRAO != item.VALOR) {
+                // Insere a Caracteristica Tecnica somente quando for diferente do padrão
+                // Visto que o SISMA já puxa o Padrão do Modelo automaticamente
+                var query= "";
+                query += "INSERT INTO ITEMEQUIPCARTEC (IDEQUI, TIPOCARAC, CODICATC, ITEM, VALOR) VALUES (?,?,?,?,?)";
+        
+                executeInsert(query, [
+                    {type:"int", value:IDEQUI},
+                    {type:"int", value:CARACTECNICA.TIPOCARAC},
+                    {type:"int", value:CARACTECNICA.CODICATC},
+                    {type:"int", value:CARACTECNICA.ITEM},
+                    {type:"float", value:CARACTECNICA.VALOR},
+                ], "/jdbc/Sisma");
+            }
+        }    
+    } catch (error) {
+        throw error;
     }
 }
 
