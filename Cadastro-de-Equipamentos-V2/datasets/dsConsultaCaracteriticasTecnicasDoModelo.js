@@ -8,6 +8,7 @@ function createDataset(fields, constraints, sortFields) {
         query += "    ITEMMODCARTEC.TIPOCARAC, ";
         query += "    ITEMMODCARTEC.CODICATC, ";
         query += "    ITEMMODCARTEC.ITEM, ";
+        query += "    ITEMMODCARTEC.VALOR as VALOR_PADRAO, ";
         query += "    ITEMMODCARTEC.VALOR, ";
         query += "    ITEMCARACTEC.DESCRICAO, ";
         query += "    ITEMCARACTEC.CODIUNID, ";
