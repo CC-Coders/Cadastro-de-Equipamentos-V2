@@ -4,16 +4,17 @@ function createDataset(fields, constraints, sortFields) {
         lancaErroSeConstraintsObrigatoriasNaoInformadas(constraints, ["EQUIPAMENTO"]);
 
         var IDEQUI = geraNovoIDEQUI();
+        var EQUIPAMENTO = JSON.parse(constraints.EQUIPAMENTO);
 
-        insereEquipamento(IDEQUI, JSON.parse(constraints.EQUIPAMENTO), constraints.NUMPROCESS, constraints.isPAouMA, constraints.CGCCFO);
-        insereTransfdiv3(IDEQUI);
-        insereCombustivel(IDEQUI, JSON.parse(constraints.EQUIPAMENTO));
-        insereTanqueCombustivel(IDEQUI, JSON.parse(constraints.EQUIPAMENTO));
-        insereCompartimento(IDEQUI);
-        insereFiltros(IDEQUI);
+        insereEquipamento(IDEQUI, EQUIPAMENTO, constraints.NUMPROCESS, constraints.isPAouMA, constraints.CGCCFO);
+        insereTransfdiv3(IDEQUI, EQUIPAMENTO);
+        insereCombustivel(IDEQUI, EQUIPAMENTO);
+        insereTanqueCombustivel(IDEQUI, EQUIPAMENTO);
+        insereCompartimento(IDEQUI, EQUIPAMENTO);
+        insereFiltros(IDEQUI, EQUIPAMENTO);
         insereCaracteristicasTecnicas(IDEQUI, JSON.parse(constraints.CARCTERISTICAS));
 
-        insereCadastroAuxiliar(JSON.parse(constraints.EQUIPAMENTO));
+        insereCadastroAuxiliar(EQUIPAMENTO);
 
         return returnDataset("SUCCESS", "", IDEQUI);
     } catch (error) {
@@ -383,38 +384,50 @@ function insereCompartimento(IDEQUI, EQUIPAMENTO) {
         query += "    PERIAMOS_QUANT, "
         query += "    PERIAMOS_DIA "
         query += ") "
-        query += "VALUES "
-        query += "(SELECT "
-	    query += "    ? as IDEQUI, "
-	    query += "    CODICOMP, "
-	    query += "    ? as CODIINES, "
-	    query += "    CODIMATE, "
-	    query += "    CAPACOMP, "
-	    query += "    PORCREMO, "
-	    query += "    PERITROC_KM, "
-	    query += "    PERITROC_HORA, "
-	    query += "    PERITROC_QUANT, "
-	    query += "    PERIAMOS_DIA, "
-	    query += "    PERIAMOS_HORA, "
-	    query += "    PERIAMOS_KM, "
-	    query += "    PERIAMOS_QUANT "
-        query += "FROM MODELCOMPA ";
-        query += "WHERE IDMODE = ?) ";
-
+        query += "SELECT "
+        query += "    ? as IDEQUI, "
+        query += "    CODICOMP, "
+        query += "    ? as CODIINES, "
+        query += "    CODIMATE, "
+        query += "    CAPACOMP, "
+        query += "    PORCREMO, "
+        query += "    PERITROC_KM, "
+        query += "    PERITROC_HORA, "
+        query += "    PERITROC_QUANT, "
+        query += "    PERIAMOS_DIA, "
+        query += "    PERIAMOS_HORA, "
+        query += "    PERIAMOS_KM, "
+        query += "    PERIAMOS_QUANT "
+        query += "FROM MODELCOMPA " ;
+        query += "WHERE IDMODE = ?";
 
         executeInsert(query, [
             { type: "int", value: IDEQUI },//IDEQUI
             { type: "int", value: 0 },//CODIINES
             { type: "int", value: EQUIPAMENTO.IDMODE },//IDMODE
-
-
         ], "/jdbc/Sisma");
     } catch (error) {
-        if (error instanceof Error) {
-            throw error;
-        } else {
-            throw new Error(typeof error === "string" ? error : JSON.stringify(error));
-        }
+            var msg = "";
+            // Try to extract useful message safely
+            if (error && error.javaException) {
+                msg = error.javaException.getMessage();
+            } else if (error && error.message) {
+                if (error.message.Error) {
+                }else{
+                    msg = error.message;
+                }
+
+
+            } else {
+                msg = String(error);
+            }
+
+            log.error("ERRO==============> " + msg);
+            log.error("Type of error: " + typeof error);
+            log.error("Type of msg: " + typeof msg);
+
+            // Safely rethrow as standard JS error
+            throw "Erro ao executar Dataset: " + msg;
     }
 }
 function insereFiltros(IDEQUI, EQUIPAMENTO) {
@@ -431,29 +444,27 @@ function insereFiltros(IDEQUI, EQUIPAMENTO) {
         query += "    PERILIMP_KM, ";
         query += "    PERILIMP_HORA, ";
         query += "    PERILIMP_QUANT, ";
-        query += "    ESFAFILT, ";
+        query += "    ESFAFILT ";
         query += ") ";
-        query += "VALUES ";
-        query += "(SELECT ";
-	    query += "  ? as IDEQUI, ";
-	    query += "  CODIFILT, ";
-	    query += "  ? as CODIINES, ";
-	    query += "  ESFAFILT, ";
-	    query += "  PERITROC_KM, ";
-	    query += "  PERITROC_HORA, ";
-	    query += "  PERITROC_QUANT, ";
-	    query += "  PERILIMP_DIA, ";
-	    query += "  PERILIMP_HORA, ";
-	    query += "  PERILIMP_KM, ";
-	    query += "  PERILIMP_QUANT ";
+        query += "SELECT ";
+        query += "  ? as IDEQUI, ";
+        query += "  CODIFILT, ";
+        query += "  ? as CODIINES, ";
+        query += "  PERITROC_KM, ";
+        query += "  PERITROC_HORA, ";
+        query += "  PERITROC_QUANT, ";
+        query += "  PERILIMP_KM, ";
+        query += "  PERILIMP_HORA, ";
+        query += "  PERILIMP_QUANT, ";
+        query += "  ESFAFILT ";
         query += "FROM MODELFILTR " ;
-        query += "WHERE IDMODE = ?)";
+        query += "WHERE IDMODE = ?";
 
 
         executeInsert(query, [
             { type: "int", value: IDEQUI },//IDEQUI
             { type: "int", value: 0 },//CODIINES
-            { type: "int", value:  EQUIPAMENTO.IDMODE},//CODIINES
+            { type: "int", value:  EQUIPAMENTO.IDMODE},//IDMODE
         ], "/jdbc/Sisma");
     } catch (error) {
         if (error instanceof Error) {
