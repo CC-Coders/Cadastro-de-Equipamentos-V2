@@ -64,6 +64,8 @@
 		 <input type="hidden" name="IDCLOP" id="IDCLOP">
 		 <input type="hidden" name="CODIFABR" id="CODIFABR">
 		 <input type="hidden" name="CODIESPE" id="CODIESPE">
+		 <input type="hidden" name="JSONCARACTERISTICASTECNICAS" id="JSONCARACTERISTICASTECNICAS">
+
 
 		<!-- Dados Solicitacao -->
         <input type="hidden" id="solicitante" name="solicitante" />
@@ -131,22 +133,22 @@
 			<h2>Identificação (Equipamento e Obra)</h2>
 			<div class="row">
 				<div class="col-md-6">
-					<label for="coligada">Coliga/Empresa:</label>
+					<label for="coligada" class="required">Coliga/Empresa:</label>
 					<select name="coligada" id="coligada" class=""></select>
 				</div>
 				<div class="col-md-6">
-					<label for="obra">Obra:</label>
+					<label for="obra" class="required">Obra: </label>
 					<select name="obra" id="obra" class=""></select>
 				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-6">
-					<label for="descricaoEquipamento">Descrição do Equipamento:</label>
+					<label for="descricaoEquipamento" class="required">Descrição do Equipamento:</label>
 					<input type="text" name="descricaoEquipamento" id="descricaoEquipamento" class="form-control">
 				</div>
 				<div class="col-md-6">
-					<label for="prefixo">Prefixo:</label>
+					<label for="prefixo" class="required">Prefixo:</label>
 					<input type="text" name="prefixo" id="prefixo" class="form-control">
 				</div>
 			</div>
@@ -155,7 +157,7 @@
 			<h2>Detalhes Técnicos e Financeiros</h2>
 			<div class="row">
 				<div class="col-md-6">
-					<label for="">Categoria:</label>
+					<label for="categoria" class="required">Categoria:</label>
 					<select name="categoria" id="categoria" class="form-control">
 						<option value=""></option>
 						<option value="MA">MA</option>
@@ -167,7 +169,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6 inputGroup">
-					<label for="modelo">Modelo:</label>
+					<label for="modelo" class="required">Modelo:</label>
 					<select name="modelo" id="modelo" class="inputPA inputMA"></select>
 					<br>
 				</div>
@@ -191,31 +193,31 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6 inputGroup">
-					<label for="AnoFabricacao">Ano Fabricação:</label>
+					<label for="AnoFabricacao" class="required">Ano Fabricação:</label>
 					<input type="text" name="AnoFabricacao" id="AnoFabricacao" class="form-control inputPA inputMA">
 					<br>
 				</div>
 				<div class="col-md-6 inputGroup">
-					<label for="AnoModelo">Ano Modelo:</label>
+					<label for="AnoModelo" class="required">Ano Modelo:</label>
 					<input type="text" name="AnoModelo" id="AnoModelo" class="form-control inputPA inputMA">
 					<br>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-6 inputGroup">
-					<label for="placa">Placa:</label>
+					<label for="placa" class="required">Placa:</label>
 					<input type="text" name="placa" id="placa" class="form-control inputPA inputMA">
 					<br>
 				</div>
 				<div class="col-md-6 inputGroup">
-					<label for="chassi">Chassis:</label>
+					<label for="chassi" class="required">Chassis:</label>
 					<input type="text" name="chassi" id="chassi" class="form-control inputPA inputMA">
 					<br>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-4 inputGroup">
-					<label for="potenciaMotor">Potência do Motor:</label>
+					<label for="potenciaMotor" class="required">Potência do Motor:</label>
 					<div class="flexInput">
 						<input type="text" name="potenciaMotor" id="potenciaMotor" class="form-control inputMA">
 						<select name="tipoPotenciaMotor" id="tipoPotenciaMotor" class="form-control inputMA">
@@ -231,14 +233,14 @@
 				<div class="col-md-4"></div>
 			</div>
 
-			<label for="">Características Técnicas:</label>
 			<div class="row inputGroup">
 				<div class="col-md-12">
+					<label for="">Características Técnicas:</label>
 					<table class="table table-bordered inputMA" id="tableCaracteristicasTecnicas">
 						<thead>
 							<tr>
-								<th>TIPO</th>
 								<th>DESCRIÇÃO</th>
+								<th>VALOR PADRÃO</th>
 								<th>VALOR</th>
 								<th>UNID</th>
 							</tr>
@@ -280,7 +282,7 @@
 					<br>
 				</div>
 				<div class="col-md-4 inputGroup">
-					<label for="valorLocacao">Valor de Locação (R$):</label>
+					<label for="valorLocacao" class="required">Valor de Locação (R$):</label>
 					<input type="text" name="valorLocacao" id="valorLocacao" class="form-control inputPA inputMA inputOutros">
 					<br>
 				</div>
@@ -293,7 +295,7 @@
 						<label for="checkboxTemMaoDeObra"> Incluir Mão de Obra?</label>
 					</div>
 					<div id="divValorMaoDeObra" style="display: none;">
-						<label for="valorMaoDeObra">Valor de Mão de Obra (R$):</label>
+						<label for="valorMaoDeObra" class="required">Valor de Mão de Obra (R$):</label>
 						<input type="text" name="valorMaoDeObra" id="valorMaoDeObra" class="form-control">
 					</div>
 				</div>
@@ -303,12 +305,12 @@
 			<h2>Dados Operacionais</h2>
 			<div class="row">
 				<div class="col-md-6">
-					<label for="dataChegadaObra">Data de Chegada na Obra:</label>
+					<label for="dataChegadaObra" class="required">Data de Chegada na Obra:</label>
 					<input type="text" name="dataChegadaObra" id="dataChegadaObra" class="form-control">
 					<br>
 				</div>
 				<div class="col-md-6">
-					<label for="">Km/Horas:</label>
+					<label for="" class="required">Km/Horas:</label>
 					<div class="flexInput">
 						<input type="text" name="kmChegadaObra" id="kmChegadaObra" class="form-control">
 						<select name="tipoKmChegadaObra" id="tipoKmChegadaObra" class="form-control">
@@ -321,7 +323,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-4">
-					<label for="tipoCombustivel">Tipo de combustível:</label>
+					<label for="tipoCombustivel" class="required">Tipo de combustível:</label>
 					<select name="tipoCombustivel" id="tipoCombustivel" class="form-control">
 						<option value=""></option>
 						<option value="400">GASOLINA COMUM</option>
@@ -337,12 +339,12 @@
 					<br>
 				</div>
 				<div class="col-md-4">
-					<label for="litrosTanque">Tanque (Litros):</label>
+					<label for="litrosTanque" class="required">Tanque (Litros):</label>
 					<input type="text" name="litrosTanque" id="litrosTanque" class="form-control">
 					<br>
 				</div>
 				<div class="col-md-4">
-					<label for="consumoMedio">Consumo Médio:</label>
+					<label for="consumoMedio" class="required">Consumo Médio:</label>
 					<div class="flexInput">
 						<input type="text" name="consumoMedio" id="consumoMedio" class="form-control">
 						<select name="tipoConsumoMedio" id="tipoConsumoMedio" class="form-control">
@@ -358,7 +360,7 @@
 			<h2>Dados do Fornecedor & Anexos</h2>
 			<div class="row">
 				<div class="col-md-6">
-					<label for="fornecedor">Fornecedor (CPF/CNPJ):</label>
+					<label for="fornecedor" class="required">Fornecedor (CPF/CNPJ):</label>
 					<select name="fornecedor" id="fornecedor" ></select>
 					<br>
 				</div>

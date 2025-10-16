@@ -11,21 +11,27 @@ const pastaAnexosEquipamento = {
 const env = getServerURL() == "http://fluig.castilho.com.br:1010" ? "PRODUCAO" : "DESENVOLVIMENTO"; 
 
 $(document).ready(async function () {
-    bindings();
     
     const atividadeAtual = $("#atividade").val();
     const formMode = $("#formMode").val();
 
     if (formMode=="ADD") {
+        bindings();
         loadTelaInicio();
     }
+    else if (formMode == "VIEW") {
+        loadTelaVIEW();
+    }
     else if(atividadeAtual == ATIVIDADES.INICIO || atividadeAtual == ATIVIDADES.INICIO_0){
+        bindings();
         loadTelaAjuste();
     }
     else if(atividadeAtual == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS){
+        bindings();
         loadTelaCentralDeEquipamentos();
     }
     else if(atividadeAtual == ATIVIDADES.QSST){
+        bindings();
         loadTelaQSST();
     }
 });
@@ -62,7 +68,7 @@ async function loadTelaAjuste() {
 
     preencheObras($("#CODCOLIGADA").val());
     geraAnexos();
-
+    geraTabelaCaracteristicasTecnicas();
     
     
         
@@ -80,7 +86,7 @@ async function loadTelaCentralDeEquipamentos() {
     insereOptionsDosFornecedores();
     preenchePermissoesDoUsuario(true);
     asyncMontaHistorico();
-
+    geraTabelaCaracteristicasTecnicas();
     alteraCategoriaDaSolicitacao($("#categoria").val());
     preencheObras($("#CODCOLIGADA").val());
     geraAnexos();
@@ -101,6 +107,7 @@ async function loadTelaCentralDeEquipamentos() {
 async function loadTelaQSST() {
     asyncMontaHistorico();
     geraAnexos();
+    geraTabelaCaracteristicasTecnicas();
     modelos = await promiseBuscaModelosDeEquipamentosDoSisma();
     preencheOptionsDosModelos();
     alteraCategoriaDaSolicitacao($("#categoria").val());
@@ -110,6 +117,16 @@ async function loadTelaQSST() {
     if ($("#checkboxTemMaoDeObra").is(":checked")) {
         $("#divValorMaoDeObra").show();
     }
+}
+
+async function loadTelaVIEW() {
+    asyncMontaHistorico();
+    geraAnexos();
+    geraTabelaCaracteristicasTecnicas();
+        alteraCategoriaDaSolicitacao($("#categoria").text());
+
+    $("#coligada, #obra, #modelo, #fornecedor").addClass("form-control");
+
 }
 
 
@@ -237,8 +254,8 @@ function bindings() {
             $("#decisaoSeguranca").val("Aprovado");
         }
         
+        $("#decisao").val("Aprovado");
         parent.$("#send-process-button").click();
-
     });
     $("#btnReprovar").on("click", function () {
         if ($("#atividade").val() == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS) {
@@ -247,7 +264,131 @@ function bindings() {
         else if ($("#atividade").val() == ATIVIDADES.QSST) {
             $("#decisaoSeguranca").val("Reprovado");
         }
+        $("#decisao").val("Reprovado");
         parent.$("#send-process-button").click();
     });
 
+}
+
+var beforeSendValidate = function () {
+    const atividade = $("#atividade").val();
+    if (atividade == ATIVIDADES.INICIO || atividade == ATIVIDADES.INICIO_0 || atividade == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS) {
+        var valida = validateForm();
+        if (valida.length > 0) {
+            throw `Necessário verificar os campos abaixo: <br> <ul>${valida.map(e => `<li>${e}</li>`).join("")}</ul>`;
+        }
+        var json = [];
+        $("#tableCaracteristicasTecnicas>tbody>tr").each(function () {
+            var TIPOCARAC = $(this).find(".TIPOCARAC").val();
+            var CODICATC = $(this).find(".CODICATC").val();
+            var VALOR_PADRAO = $(this).find(".VALOR_PADRAO").val();
+            var VALOR = $(this).find(".VALOR").val();
+            var DESCRICAO = $(this).find(".DESCRICAO").val();
+            var SIGLA = $(this).find(".SIGLA").val();
+
+            json.push({ TIPOCARAC, CODICATC, VALOR_PADRAO, VALOR, DESCRICAO, SIGLA });
+        });
+        $("#JSONCARACTERISTICASTECNICAS").val(JSON.stringify(json));
+    }
+
+    function validateForm() {
+        var errorMessage = [];
+
+        //Identificação
+        if (!$("#coligada").val()) {
+            errorMessage.push("Selecione a Coligada");
+        }
+        if (!$("#obra").val()) {
+            errorMessage.push("Selecione a Obra");
+        }
+        if (!$("#descricaoEquipamento").val()) {
+            errorMessage.push("Informe a Descrição do Equipamento");
+        }
+        if (!$("#prefixo").val()) {
+            errorMessage.push("Informe o Prefixo");
+        }
+
+        // Detalhes
+        if (!$("#categoria").val()) {
+            errorMessage.push("Selecione a Categoria");
+        }
+        if (!$("#modelo").val()) {
+            errorMessage.push("Selecione o Modelo");
+        }
+        if (!$("#AnoFabricacao").val()) {
+            errorMessage.push("Informe o Ano de Fabricacao");
+        }
+        if (!$("#AnoModelo").val()) {
+            errorMessage.push("Informe o Ano do Modelo");
+        }
+        if (!$("#placa").val()) {
+            errorMessage.push("Informe a Placa");
+        }
+        if (!$("#chassi").val()) {
+            errorMessage.push("Informe o Chassi");
+        }
+        if (!$("#potenciaMotor").val()) {
+            errorMessage.push("Informe a Potência do Motor");
+        }
+        if (!$("#tipoPotenciaMotor").val()) {
+            errorMessage.push("Informe o Tipo da Potência do Motor");
+        }
+        if (!$("#tipoPotenciaMotor").val()) {
+            errorMessage.push("Informe o Tipo da Potência do Motor");
+        }
+
+        if (!$("#valorLocacao").val()) {
+            errorMessage.push("Informe o Valor da Locação");
+        }
+        if ($("#checkboxTemMaoDeObra").is(":checked") && !$("#valorMaoDeObra").val()) {
+            errorMessage.push("Informe o Valor da Mão de Obra");
+        }
+
+
+        $("#tableCaracteristicasTecnicas>tbody>tr").each(function () {
+            if (!$(this).find(".VALOR").val()) {
+                errorMessage.push(`Informe o Valor da ${$(this).find(".DESCRICAO").val()}`);
+            }
+        });
+
+        // Operacional
+        if (!$("#dataChegadaObra").val()) {
+            errorMessage.push("Informe a Data de Chegada na Obra");
+        }
+        if (!$("#kmChegadaObra").val()) {
+            errorMessage.push("Informe a km/horas de Chegada na Obra");
+        }
+        if (!$("#tipoCombustivel").val()) {
+            errorMessage.push("Informe o Tipo de combustível");
+        }
+        if (!$("#litrosTanque").val()) {
+            errorMessage.push("Informe a Capacidade do Tanque");
+        }
+        if (!$("#consumoMedio").val()) {
+            errorMessage.push("Informe o Consumo Médio");
+        }
+
+        // Fornecedor e Anexo
+        if (!$("#fornecedor").val()) {
+            errorMessage.push("Selecione o Fornecedor");
+        }
+
+        if ($("#anexosDocumentosEquipamento").val() == "") {
+            errorMessage.push("Anexe a Documentação do Equipamento");
+        }
+        if ($("#anexosFotosEquipamentos").val() == "") {
+            errorMessage.push("Anexe a Foto do Equipamento");
+        }
+        if ($("#anexosLaudoTecnico").val() == "") {
+            errorMessage.push("Anexe o Laudo Técnico");
+        }
+        if ($("#anexpsPlanoManutencao").val() == "") {
+            errorMessage.push("Anexe o Plano de Manutenção");
+        }
+        if ($("#anexosART").val() == "") {
+            errorMessage.push("Anexe a ART");
+        }
+
+        return errorMessage;
+    }
 }

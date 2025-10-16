@@ -4,30 +4,17 @@ function createDataset(fields, constraints, sortFields) {
         lancaErroSeConstraintsObrigatoriasNaoInformadas(constraints, ["IDMODE"]);
 
         var query = "";
-        query += "SELECT ";
-        query += "    ITEMMODCARTEC.TIPOCARAC, ";
-        query += "    ITEMMODCARTEC.CODICATC, ";
-        query += "    ITEMMODCARTEC.ITEM, ";
-        query += "    ITEMMODCARTEC.VALOR as VALOR_PADRAO, ";
-        query += "    ITEMMODCARTEC.VALOR, ";
-        query += "    ITEMCARACTEC.DESCRICAO, ";
-        query += "    ITEMCARACTEC.CODIUNID, ";
-        query += "    UNIDADE.SIGLA, ";
-        query += "    ITEMCARACTEC.DESCRICAO as DESC_ITEM, ";
-        query += "    CARACTECNICA.DESCRICAO ";
-        query += "FROM ITEMMODCARTEC ";
-        query += "    INNER JOIN ITEMCARACTEC ON ITEMCARACTEC.ITEM = ITEMMODCARTEC.ITEM ";
-        query += "    INNER JOIN CARACTECNICA ON ITEMMODCARTEC.CODICATC = CARACTECNICA.CODICATC AND ITEMMODCARTEC.TIPOCARAC = CARACTECNICA.TIPOCARAC ";
-        query += "    INNER JOIN UNIDADE ON ITEMCARACTEC.CODIUNID = UNIDADE.CODIUNID ";
-        query += "WHERE ";
-        query += "ITEMMODCARTEC.IDMODE = ?";
+        query += "SELECT MATERIAL.CODIMATE, MATERIAL.DESCRICAO ";
+        query += "FROM MODELCOMBU ";
+        query += "INNER JOIN MATERIAL ON MODELCOMBU.CODIMATE = MATERIAL.CODIMATE ";
+        query += "WHERE MODELCOMBU.IDMODE = ? ";
 
-        var retorno = executaQuery(query, [
-            {type: "int", value:constraints.IDMODE}
+
+        var retorno = executaQuery(query,[
+            {type:"int", value:constraints.IDMODE}
         ], "/jdbc/Sisma");
 
-        return returnDataset("SUCCESS", "", JSON.stringify(retorno));
-
+        return returnDataset("SUCCESS","",JSON.stringify(retorno));
     } catch (error) {
         if (typeof error == "object") {
             var mensagem = "";
