@@ -20,10 +20,17 @@
     background-color: lightgray !important;
     color: black !important;
 }
-.selectize-control.single .selectize-input{
+.selectize-control.single .selectize-input:not(.locked){
     box-shadow: rgba(0, 0, 0, 0.0) !important;
-    background-color: #fff !important;
+    background-color: #F7F8FA !important;
     background-image: none !important;
+    height: var(--form-control-height);
+}
+.selectize-input.locked{
+    background-color: #F7F8FA !important;
+    box-shadow: rgba(0, 0, 0, 0.0) !important;
+    background-image: none !important;
+    height: var(--form-control-height);
 }
 
 
@@ -64,4 +71,9 @@
 }
 .btnAnexo>b{
    margin-right: 10px;
+}
+
+label.required::after {
+  content: " *";
+  color: #c00;
 }

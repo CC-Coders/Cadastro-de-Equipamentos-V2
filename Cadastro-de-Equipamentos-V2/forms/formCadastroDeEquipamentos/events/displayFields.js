@@ -9,6 +9,7 @@ function displayFields(form, customHTML) {
 	}
 
 	form.setValue("observacoes", "");
+	form.setValue("decisao", "");
 
 	form.setHidePrintLink(true);
 }

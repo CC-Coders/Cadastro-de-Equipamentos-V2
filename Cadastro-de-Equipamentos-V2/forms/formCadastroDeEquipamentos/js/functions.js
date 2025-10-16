@@ -71,18 +71,19 @@ async function preencheInformacoesDoModelo(ID_MODELO){
 
 
 }
-    function htmlItemCaracTec(data){
-        var html = 
+function htmlItemCaracTec(data) {
+    var permiteAlteracao = $("#atividade").val() != ATIVIDADES.QSST && $("#formMode").val() != "VIEW";
+    var html =
         `<tr>
             <input type="hidden" class="TIPOCARAC" value="${data.TIPOCARAC}"/>
             <input type="hidden" class="CODICATC" value="${data.CODICATC}"/>
             <td><input class="form-control DESCRICAO" value="${data.DESCRICAO}" readonly /></td>
-            <td><input class="form-control VALOR_PADRAO" value="${data.VALOR}" readonly /></td>
-            <td><input class="form-control VALOR" value="${data.VALOR}" /></td>
+            <td><input class="form-control VALOR_PADRAO" value="${data.VALOR_PADRAO}" readonly /></td>
+            <td><input class="form-control VALOR" value="${data.VALOR}" ${!permiteAlteracao ? "readonly" : ""} /></td>
             <td><input class="form-control SIGLA" value="${data.SIGLA}" readonly /></td>
         </tr>`;
-        return html;
-    }
+    return html;
+}
 
 function preenchePermissoesDoUsuario(permissaoGeral = null){
     permissoes = buscaObrasPorPermissaoDoUsuario($("#userCode").val(), permissaoGeral);
@@ -367,7 +368,7 @@ async function geraAnexos() {
             if($(target).find(".btnAnexo").length > 0){
                 $(target).closest(".row").find(".spanStatusAnexos").text("✅");
             }else{
-                $(target).closest(".row").siblings(".spanStatusAnexos").text("❌");
+                $(target).closest(".row").find(".spanStatusAnexos").text("❌");
             }
         }
     }
@@ -375,6 +376,8 @@ async function geraAnexos() {
 function removerAnexos(target){
     var documentId = $(target).attr("data-documentId");
     var divTarget = $(target).closest(".divListaAnexos").attr("id");
+
+
 
         var inputTarget;
         
@@ -403,6 +406,13 @@ function removerAnexos(target){
 
 
     $(target).closest(".btnAnexo").remove();
+   
+        if($("#"+divTarget).find(".btnAnexo").length > 0){
+            $("#"+divTarget).closest(".row").find(".spanStatusAnexos").text("✅");
+        }else{
+            $("#"+divTarget).closest(".row").find(".spanStatusAnexos").text("❌");
+        }
+        
 
 }
 
