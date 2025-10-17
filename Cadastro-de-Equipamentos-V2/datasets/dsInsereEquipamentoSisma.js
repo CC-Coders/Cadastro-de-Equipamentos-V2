@@ -12,7 +12,7 @@ function createDataset(fields, constraints, sortFields) {
         insereTanqueCombustivel(IDEQUI, EQUIPAMENTO);
         insereCompartimento(IDEQUI, EQUIPAMENTO);
         insereFiltros(IDEQUI, EQUIPAMENTO);
-        insereCaracteristicasTecnicas(IDEQUI, JSON.parse(constraints.CARCTERISTICAS));
+        insereCaracteristicasTecnicas(IDEQUI, JSON.parse(constraints.CARCTERISTICAS), EQUIPAMENTO);
 
         insereCadastroAuxiliar(EQUIPAMENTO);
 
@@ -172,7 +172,7 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
             { type: "int", value: isPAouMA == "PA" ? fornecedor.CODITERC : 0 },//CODIPROP
             { type: "varchar", value: EQUIPAMENTO.DESCRICAO },//DESCRICAO
             { type: "float", value: EQUIPAMENTO.ALUGUEL_CONTRATO },//ALUGUEL_CONTRATO
-            { type: "varchar", value: "123456" },//NUMSERIE
+            { type: "varchar", value: EQUIPAMENTO.NUMECHAS },//NUMSERIE
             { type: "int", value: "0" },//CODIPAIS
             { type: "int", value: "0" },//SIGLAUF
             { type: "int", value: "56" },//CODIUSU
@@ -190,16 +190,16 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
             { type: "int", value: "3" },//NUMEEIXO
             { type: "int", value: "2" },//EIXOTRAC
             { type: "int", value: "28" },//PADRCODIOPER
-            { type: "int", value: "11" },//PADRCODILOTR
+            { type: "int", value: "0" },//PADRCODILOTR
             { type: "int", value: "28" },//INICODIOPER
-            { type: "int", value: "11" },//INICODILOTR
+            { type: "int", value: "0" },//INICODILOTR
             { type: "int", value: "0" },//CODICOMBDENAT
             { type: "int", value: "0" },//CODIRESTRICAO
             { type: "int", value: EQUIPAMENTO.POTENCIAHP_UNID },//POTENCIAHP_UNID
-            { type: "int", value: "11" },//COMPRIMENTO_UNID
-            { type: "int", value: "11" },//LARGURA_TOTAL_UNID
-            { type: "int", value: "11" },//ALTURA_TOTAL_UNID
-            { type: "int", value: "11" },//PESO_TOTAL_UNID
+            { type: "int", value: "0" },//COMPRIMENTO_UNID
+            { type: "int", value: "0" },//LARGURA_TOTAL_UNID
+            { type: "int", value: "0" },//ALTURA_TOTAL_UNID
+            { type: "int", value: "0" },//PESO_TOTAL_UNID
             { type: "int", value: "0" },//CODIFORMPAGTO_COMPRA
             { type: "int", value: "0" },//CODICONCESS_VENDA
             { type: "int", value: "0" },//CODIFORMPAGTO_VENDA
@@ -215,8 +215,8 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
             { type: "int", value: "0" },//CODIMARCADENAT
             { type: "int", value: "0" },//CODICOR
             { type: "datetime", value: EQUIPAMENTO.DATACHEGADA },//DATAINIC
-            { type: "datetime", value: "2025-10-01 00:00:00.000" },//DATACOMP
-            { type: "datetime", value: "2025-10-01 00:00:00.000" },//DATAENTREGA
+            { type: "datetime", value: EQUIPAMENTO.DATACHEGADA },//DATACOMP
+            { type: "datetime", value: EQUIPAMENTO.DATACHEGADA },//DATAENTREGA
             { type: "int", value: EQUIPAMENTO.INI_HODOMETRO },//INI_HODOMETRO
             { type: "int", value: EQUIPAMENTO.INI_HORIMETRO },//INI_HORIMETRO
             { type: "int", value: "0" },//CODIINES
@@ -521,21 +521,33 @@ function insereCadastroAuxiliar(EQUIPAMENTO){
             throw "Erro ao executar Dataset: " + msg;
     }
 }
-function insereCaracteristicasTecnicas(IDEQUI, CARACTECNICA){
+function insereCaracteristicasTecnicas(IDEQUI, CARACTECNICA, EQUIPAMENTO){
     try {
         for (var item of CARACTECNICA) {
             if (item.VALOR_PADRAO != item.VALOR) {
                 // Insere a Caracteristica Tecnica somente quando for diferente do padrão
                 // Visto que o SISMA já puxa o Padrão do Modelo automaticamente
                 var query= "";
+                query += "INSERT INTO EQUIPCARTEC (IDEQUI, TIPOCARAC, CODICATC, CODIFABR) VALUES (?,?,?,?)";
+        
+                executeInsert(query, [
+                    {type:"int", value:IDEQUI},
+                    {type:"int", value:item.TIPOCARAC},
+                    {type:"int", value:item.CODICATC},
+                    {type:"int", value:EQUIPAMENTO.CODIFABR},
+                ], "/jdbc/Sisma");
+
+
+
+                var query= "";
                 query += "INSERT INTO ITEMEQUIPCARTEC (IDEQUI, TIPOCARAC, CODICATC, ITEM, VALOR) VALUES (?,?,?,?,?)";
         
                 executeInsert(query, [
                     {type:"int", value:IDEQUI},
-                    {type:"int", value:CARACTECNICA.TIPOCARAC},
-                    {type:"int", value:CARACTECNICA.CODICATC},
-                    {type:"int", value:CARACTECNICA.ITEM},
-                    {type:"float", value:CARACTECNICA.VALOR},
+                    {type:"int", value:item.TIPOCARAC},
+                    {type:"int", value:item.CODICATC},
+                    {type:"int", value:item.ITEM},
+                    {type:"float", value:item.VALOR},
                 ], "/jdbc/Sisma");
             }
         }    
