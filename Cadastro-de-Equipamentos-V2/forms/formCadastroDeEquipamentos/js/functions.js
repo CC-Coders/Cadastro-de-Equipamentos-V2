@@ -1,3 +1,39 @@
+function preenchePermissoesDoUsuario(permissaoGeral = null){
+    permissoes = buscaObrasPorPermissaoDoUsuario($("#userCode").val(), permissaoGeral);
+    var coligadas = Array.from(
+        new Map(permissoes.map(e => [e.CODCOLIGADA, { NOME: e.NOMEFANTASIA, CODIGO: e.CODCOLIGADA }])).values()
+    );
+
+    $("#coligada")[0].selectize.addOption(coligadas.map(e=>{return {value:`${e.CODIGO} - ${e.NOME}`, text:`${e.CODIGO} - ${e.NOME}`}}));
+}
+function preencheObras(CODCOLIGADA){
+    var previousValue = $("#obra").val();
+    $("#obra")[0].selectize.clearOptions();
+    var obras = permissoes.filter(e=>e.CODCOLIGADA==CODCOLIGADA);
+    $("#obra")[0].selectize.addOption(obras.map(e=>{return {value:`${e.CODCCUSTO} - ${e.perfil}`, text:`${e.CODCCUSTO} - ${e.perfil}`}}));
+    $("#obra")[0].selectize.setValue(previousValue);
+}
+function alteraCategoriaDaSolicitacao(categoria) {
+    if (categoria == "") {
+        $(".inputPA, .inputOutros, .inputMA").closest("div.inputGroup").hide();
+    }
+    if (categoria == "MA") {
+        $(".inputPA, .inputOutros").closest("div.inputGroup").hide();
+        $(".inputMA").closest("div.inputGroup").show();
+        $("#CODIESPE").val(1);
+    }
+    if (categoria == "PA") {
+        $(".inputMA, .inputOutros").closest("div.inputGroup").hide();
+        $(".inputPA").closest("div.inputGroup").show();
+        $("#CODIESPE").val(5);
+    }
+    if (categoria == "Outros") {
+        $(".inputMA, .inputPA").closest("div.inputGroup").hide();
+        $(".inputOutros").closest("div.inputGroup").show();
+    }
+}
+
+// Modelo
 function promiseBuscaModelosDeEquipamentosDoSisma(){
     return new Promise((resolve, reject)=>{
         DatasetFactory.getDataset("dsConsultaModelosSisma",null,null,null,{
@@ -72,46 +108,49 @@ async function preencheInformacoesDoModelo(ID_MODELO){
 
 
 }
-function htmlItemCaracTec(data) {
-    var permiteAlteracao = $("#atividade").val() != ATIVIDADES.QSST && $("#formMode").val() != "VIEW";
-    var html =
-        `<tr>
-            <input type="hidden" class="TIPOCARAC" value="${data.TIPOCARAC}"/>
-            <input type="hidden" class="CODICATC" value="${data.CODICATC}"/>
-            <input type="hidden" class="ITEM" value="${data.ITEM}"/>
-            <td><input class="form-control DESCRICAO" value="${data.DESCRICAO}" readonly /></td>
-            <td><input class="form-control VALOR_PADRAO" value="${data.VALOR_PADRAO}" readonly /></td>
-            <td><input class="form-control VALOR" value="${data.VALOR}" ${!permiteAlteracao ? "readonly" : ""} /></td>
-            <td><input class="form-control SIGLA" value="${data.SIGLA}" readonly /></td>
-        </tr>`;
-    return html;
+function verificaSePrefixoCadastradoNoSisma(PREFIXO){
+    return new Promise((resolve, reject)=>{
+        DatasetFactory.getDataset("dsConsultaEquipamentoSisma", null,[
+            DatasetFactory.createConstraint("PREFIXO", PREFIXO, PREFIXO, ConstraintType.MUST)            
+        ],null,{
+            success:ds=>{
+                if (ds.values[0].STATUS != "SUCCESS") {
+                    reject(ds.values[0].MESSAGE);
+                }
+                else{
+                    if (JSON.parse(ds.values[0].RESULT).length >0) {
+                        resolve(true);
+                    }else{
+                        resolve(false);
+                    }
+                }
+            },
+            error:e=>{
+                reject(e);
+            }
+        });
+    });
 }
 
-function preenchePermissoesDoUsuario(permissaoGeral = null){
-    permissoes = buscaObrasPorPermissaoDoUsuario($("#userCode").val(), permissaoGeral);
-    var coligadas = Array.from(
-        new Map(permissoes.map(e => [e.CODCOLIGADA, { NOME: e.NOMEFANTASIA, CODIGO: e.CODCOLIGADA }])).values()
-    );
+// Fornecedor
+function buscaEnderecoFornecedor(CGCCFO){
+    return new Promise((resolve, reject)=>{
+        DatasetFactory.getDataset("RetornaEnderecoFornecedor", null, [
+            DatasetFactory.createConstraint("CGCCFO", CGCCFO, CGCCFO, ConstraintType.MUST)
+        ], null, {
+            success:ds=>{
+                if (ds.values.length == 0) {
+                    reject("Nenhum fornecedor encontrado");
+                }
 
-    $("#coligada")[0].selectize.addOption(coligadas.map(e=>{return {value:`${e.CODIGO} - ${e.NOME}`, text:`${e.CODIGO} - ${e.NOME}`}}));
+                resolve(ds.values[0]);
+            },
+            error:error=>{
+                reject(error);
+            }
+        });
+    });
 }
-function preencheObras(CODCOLIGADA){
-    var previousValue = $("#obra").val();
-    $("#obra")[0].selectize.clearOptions();
-    var obras = permissoes.filter(e=>e.CODCOLIGADA==CODCOLIGADA);
-    $("#obra")[0].selectize.addOption(obras.map(e=>{return {value:`${e.CODCCUSTO} - ${e.perfil}`, text:`${e.CODCCUSTO} - ${e.perfil}`}}));
-    $("#obra")[0].selectize.setValue(previousValue);
-}
-
-function geraTabelaCaracteristicasTecnicas(){
-    var json = JSON.parse($("#JSONCARACTERISTICASTECNICAS").val());
-    
-    $("#tableCaracteristicasTecnicas>tbody").html("");
-    for (const item of json) {
-        $("#tableCaracteristicasTecnicas>tbody").append(htmlItemCaracTec(item));
-    }
-}
-
 function buscaFornecedores(){
     return new Promise((resolve, reject)=>{
         DatasetFactory.getDataset("FCFO", [], [
@@ -136,46 +175,31 @@ async function insereOptionsDosFornecedores(){
     $("#fornecedor")[0].selectize.setValue(previousValue);
 }
 
-function buscaEnderecoFornecedor(CGCCFO){
-    return new Promise((resolve, reject)=>{
-        DatasetFactory.getDataset("RetornaEnderecoFornecedor", null, [
-            DatasetFactory.createConstraint("CGCCFO", CGCCFO, CGCCFO, ConstraintType.MUST)
-        ], null, {
-            success:ds=>{
-                if (ds.values.length == 0) {
-                    reject("Nenhum fornecedor encontrado");
-                }
-
-                resolve(ds.values[0]);
-            },
-            error:error=>{
-                reject(error);
-            }
-        });
-    });
-}
-
-function alteraCategoriaDaSolicitacao(categoria) {
-    if (categoria == "") {
-        $(".inputPA, .inputOutros, .inputMA").closest("div.inputGroup").hide();
-    }
-    if (categoria == "MA") {
-        $(".inputPA, .inputOutros").closest("div.inputGroup").hide();
-        $(".inputMA").closest("div.inputGroup").show();
-        $("#CODIESPE").val(1);
-    }
-    if (categoria == "PA") {
-        $(".inputMA, .inputOutros").closest("div.inputGroup").hide();
-        $(".inputPA").closest("div.inputGroup").show();
-        $("#CODIESPE").val(5);
-    }
-    if (categoria == "Outros") {
-        $(".inputMA, .inputPA").closest("div.inputGroup").hide();
-        $(".inputOutros").closest("div.inputGroup").show();
+// Caracteristicas Tecnicas
+function geraTabelaCaracteristicasTecnicas(){
+    var json = JSON.parse($("#JSONCARACTERISTICASTECNICAS").val());
+    
+    $("#tableCaracteristicasTecnicas>tbody").html("");
+    for (const item of json) {
+        $("#tableCaracteristicasTecnicas>tbody").append(htmlItemCaracTec(item));
     }
 }
+function htmlItemCaracTec(data) {
+    var permiteAlteracao = $("#atividade").val() != ATIVIDADES.QSST && $("#formMode").val() != "VIEW";
+    var html =
+        `<tr>
+            <input type="hidden" class="TIPOCARAC" value="${data.TIPOCARAC}"/>
+            <input type="hidden" class="CODICATC" value="${data.CODICATC}"/>
+            <input type="hidden" class="ITEM" value="${data.ITEM}"/>
+            <td><input class="form-control DESCRICAO" value="${data.DESCRICAO}" readonly /></td>
+            <td><input class="form-control VALOR_PADRAO" value="${data.VALOR_PADRAO}" readonly /></td>
+            <td><input class="form-control VALOR" value="${data.VALOR}" ${!permiteAlteracao ? "readonly" : ""} /></td>
+            <td><input class="form-control SIGLA" value="${data.SIGLA}" readonly /></td>
+        </tr>`;
+    return html;
+}
 
-
+// Consultas
 function promiseConsultaCaracteristicasTecnicas(IDMODE){
     return new Promise((resolve, reject)=>{
         DatasetFactory.getDataset("dsConsultaCaracteriticasTecnicasDoModelo",null,[
@@ -209,30 +233,6 @@ function promiseConsultaCombustivelPorModelo(IDMODE){
             error:(e=>reject(error))
         });
     })
-}
-
-function verificaSePrefixoCadastradoNoSisma(PREFIXO){
-    return new Promise((resolve, reject)=>{
-        DatasetFactory.getDataset("dsConsultaEquipamentoSisma", null,[
-            DatasetFactory.createConstraint("PREFIXO", PREFIXO, PREFIXO, ConstraintType.MUST)            
-        ],null,{
-            success:ds=>{
-                if (ds.values[0].STATUS != "SUCCESS") {
-                    reject(ds.values[0].MESSAGE);
-                }
-                else{
-                    if (JSON.parse(ds.values[0].RESULT).length >0) {
-                        resolve(true);
-                    }else{
-                        resolve(false);
-                    }
-                }
-            },
-            error:e=>{
-                reject(e);
-            }
-        });
-    });
 }
 
 // Anexos

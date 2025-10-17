@@ -100,6 +100,7 @@ select[readonly]{
     pointer-events: none;
 }
 
-select[readonly] option{
+select[readonly] option,
+select[readonly] optgroup{
     display:none;
 }
