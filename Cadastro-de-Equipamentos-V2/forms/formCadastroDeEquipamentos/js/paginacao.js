@@ -40,3 +40,17 @@ function voltarPagina() {
         mostrarPagina(index, "prev");
     }
 }
+
+function setAtividadeAtivaProgresso(atividadesConcluidas) {
+    var counter = 0;
+    $(".wizard-progress")
+        .find("div")
+        .each(function () {
+            if (counter < atividadesConcluidas) {
+                $(this).addClass("completed");
+            } else if (counter == atividadesConcluidas) {
+                $(this).addClass("active");
+            }
+            counter++;
+        });
+}

@@ -17,12 +17,13 @@ function promiseBuscaModelosDeEquipamentosDoSisma(){
 function preencheOptionsDosModelos(){
     var previousValue = $("#modelo").val();
     var html = "<option></option>";
-    html+= modelos.map(e=> `<option value="${e.ID_MODELO}">${e.MODELO}</option>`).join("");
+    html+= modelos.map(e=> `<option value="${e.ID_MODELO} - ${e.MODELO}">${e.MODELO}</option>`).join("");
     $("#modelo").html(html);
     $("#modelo").val(previousValue);
     $("#modelo").selectize({
         onChange: async function (value, isOnInitialize) {
-            preencheInformacoesDoModelo(value);
+            const [ID_MODELO, MODELO] = value.split(" - ");
+            preencheInformacoesDoModelo(ID_MODELO);
         }
     });
 }
@@ -77,6 +78,7 @@ function htmlItemCaracTec(data) {
         `<tr>
             <input type="hidden" class="TIPOCARAC" value="${data.TIPOCARAC}"/>
             <input type="hidden" class="CODICATC" value="${data.CODICATC}"/>
+            <input type="hidden" class="ITEM" value="${data.ITEM}"/>
             <td><input class="form-control DESCRICAO" value="${data.DESCRICAO}" readonly /></td>
             <td><input class="form-control VALOR_PADRAO" value="${data.VALOR_PADRAO}" readonly /></td>
             <td><input class="form-control VALOR" value="${data.VALOR}" ${!permiteAlteracao ? "readonly" : ""} /></td>
@@ -130,7 +132,7 @@ async function insereOptionsDosFornecedores(){
     var fornecedores = await buscaFornecedores();
     $("#fornecedor")[0].selectize.clear();
     $("#fornecedor")[0].selectize.clearOptions();
-    $("#fornecedor")[0].selectize.addOption(fornecedores.map(e=>{return {value:`${e.CODCFO} - ${e.CGCCFO}`, text:`${e.CGCCFO} - ${e.NOMEFANTASIA}`}}));
+    $("#fornecedor")[0].selectize.addOption(fornecedores.map(e=>{return {value:`${e.CODCFO} - ${e.CGCCFO} - ${e.NOMEFANTASIA}`, text:`${e.CGCCFO} - ${e.NOMEFANTASIA}`}}));
     $("#fornecedor")[0].selectize.setValue(previousValue);
 }
 
@@ -207,6 +209,30 @@ function promiseConsultaCombustivelPorModelo(IDMODE){
             error:(e=>reject(error))
         });
     })
+}
+
+function verificaSePrefixoCadastradoNoSisma(PREFIXO){
+    return new Promise((resolve, reject)=>{
+        DatasetFactory.getDataset("dsConsultaEquipamentoSisma", null,[
+            DatasetFactory.createConstraint("PREFIXO", PREFIXO, PREFIXO, ConstraintType.MUST)            
+        ],null,{
+            success:ds=>{
+                if (ds.values[0].STATUS != "SUCCESS") {
+                    reject(ds.values[0].MESSAGE);
+                }
+                else{
+                    if (JSON.parse(ds.values[0].RESULT).length >0) {
+                        resolve(true);
+                    }else{
+                        resolve(false);
+                    }
+                }
+            },
+            error:e=>{
+                reject(e);
+            }
+        });
+    });
 }
 
 // Anexos
@@ -455,7 +481,7 @@ async function asyncMontaHistorico() {
                         <div>
                             <h3 class="card-title" style="margin-bottom:0px; color:black;">${BuscaNomeUsuario(linha.USUARIO)} <small>${linha.ACAO}</small></h3>
                             <small>${DATA}</small>
-                            <p class="card-text">${linha.OBSERVACAO && linha.OBSERVACAO.trim() ? linha.OBSERVACAO : "Aprovado"}</p>
+                            <p class="card-text">${linha.OBSERVACAO && linha.OBSERVACAO.trim() ? linha.OBSERVACAO : ""}</p>
                         </div>
                     </div>
                 </div>

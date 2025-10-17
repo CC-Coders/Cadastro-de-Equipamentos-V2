@@ -3,6 +3,7 @@ const ATIVIDADES = {
     INICIO_0:0,
     CENTRAL_DE_EQUIPAMENTOS:5,
     QSST:8,
+    FIM: 15
 }
 const pastaAnexosEquipamento = {
     PRODUCAO: "TODO",
@@ -21,6 +22,11 @@ $(document).ready(async function () {
     }
     else if (formMode == "VIEW") {
         loadTelaVIEW();
+        if (atividadeAtual == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS || atividadeAtual == ATIVIDADES.QSST) {
+            setAtividadeAtivaProgresso(1);
+        }else if(atividadeAtual == ATIVIDADES.FIM){
+            setAtividadeAtivaProgresso(2);
+        }
     }
     else if(atividadeAtual == ATIVIDADES.INICIO || atividadeAtual == ATIVIDADES.INICIO_0){
         bindings();
@@ -28,10 +34,12 @@ $(document).ready(async function () {
     }
     else if(atividadeAtual == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS){
         bindings();
+        setAtividadeAtivaProgresso(1);
         loadTelaCentralDeEquipamentos();
     }
     else if(atividadeAtual == ATIVIDADES.QSST){
         bindings();
+        setAtividadeAtivaProgresso(1);
         loadTelaQSST();
     }
 });
@@ -68,13 +76,9 @@ async function loadTelaAjuste() {
 
     preencheObras($("#CODCOLIGADA").val());
     geraAnexos();
-    geraTabelaCaracteristicasTecnicas();
+    geraTabelaCaracteristicasTecnicas();    
+    alteraCategoriaDaSolicitacao($("#categoria").val());
     
-    
-        
-        alteraCategoriaDaSolicitacao($("#categoria").val());
-    
-
     if ($("#checkboxTemMaoDeObra").is(":checked")) {
         $("#divValorMaoDeObra").show();
     }
@@ -123,10 +127,13 @@ async function loadTelaVIEW() {
     asyncMontaHistorico();
     geraAnexos();
     geraTabelaCaracteristicasTecnicas();
-        alteraCategoriaDaSolicitacao($("#categoria").text());
+    alteraCategoriaDaSolicitacao($("#categoria").text());
 
     $("#coligada, #obra, #modelo, #fornecedor").addClass("form-control");
 
+    if ($("#checkboxTemMaoDeObra").is(":checked")) {
+        $("#divValorMaoDeObra").show();
+    }
 }
 
 
@@ -197,7 +204,7 @@ function bindings() {
                     throw "";
                 }
                 
-                const [CODCFO, CGCCFO] = value.split(" - ");
+                const [CODCFO, CGCCFO, NOMEFANTASIA] = value.split(" - ");
                 var dadosFornecedor = await buscaEnderecoFornecedor(CGCCFO);
                 $("#CGCCFO").val(CGCCFO);
                 $("#enderecoFornecedor").val(dadosFornecedor.RUA);
@@ -223,6 +230,13 @@ function bindings() {
             $("#prefixo").val($("#prefixo").val().toUpperCase());
         }
     });
+    $("#prefixo").on("change", async function(){
+        var isCadastrado = await verificaSePrefixoCadastradoNoSisma($(this).val());
+        if (isCadastrado) {
+            FLUIGC.toast({title:"Prefixo já cadastrado.", message:"", type:"warning"});
+            $(this).val("");
+        }
+    })
     $("#placa").mask("AAAAAAA", {
         onKeyPress:function(){
             $("#placa").val($("#placa").val().toUpperCase());
@@ -241,6 +255,7 @@ function bindings() {
 
     $("#AnoFabricacao").mask("9999");
     $("#AnoModelo").mask("9999");
+    $("#kmChegadaObra").mask('000.000.000');
 
     
     $("#potenciaMotor").mask("0#");
@@ -285,12 +300,18 @@ var beforeSendValidate = function () {
             var VALOR = $(this).find(".VALOR").val();
             var DESCRICAO = $(this).find(".DESCRICAO").val();
             var SIGLA = $(this).find(".SIGLA").val();
+            var ITEM = $(this).find(".ITEM").val();
 
-            json.push({ TIPOCARAC, CODICATC, VALOR_PADRAO, VALOR, DESCRICAO, SIGLA });
+            json.push({ TIPOCARAC, CODICATC, VALOR_PADRAO, VALOR, DESCRICAO, SIGLA, ITEM });
         });
         $("#JSONCARACTERISTICASTECNICAS").val(JSON.stringify(json));
     }
 
+    if (atividade == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS || atividade==ATIVIDADES.QSST) {
+        if ($("#decisao").val() == "Reprovado" && $("#observacoes").val() == "") {
+            throw "Necessário informar a Justificativa da Decisão no campo Observações";
+        }
+    }
     function validateForm() {
         var errorMessage = [];
 
