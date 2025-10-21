@@ -402,19 +402,21 @@
 			</div>
 			<h2>Documentação</h2>
 			<div id="divAnexar">
-				<label for="">Anexo:</label>
 				<div class="row">
-					<div class="col-md-6" style="display: flex;">
-						<select name="tipoAnexo" id="tipoAnexo" class="form-control">
-							<option value=""></option>
-							<option value="Documentação do Equipamento">Documentação do Equipamento</option>
-							<option value="Foto do Equipamento">Foto do Equipamento</option>
-							<option value="Laudo Técnico">Laudo Técnico</option>
-							<option value="Plano de Manutenção">Plano de Manutenção</option>
-							<option value="ART">ART</option>
-						</select>
-						<button class="btn btn-info" id="btnAnexarDocumentacao">Anexar</button>
-						<input type="file" name="inputFile" id="inputFile" style="display: none;" multiple>
+					<div class="col-md-6">
+						<label for="">Anexo:</label>
+						<div style="display: flex;">
+							<select name="tipoAnexo" id="tipoAnexo" class="form-control">
+								<option value=""></option>
+								<option value="Documentação do Equipamento">Documentação do Equipamento</option>
+								<option value="Foto do Equipamento">Foto do Equipamento</option>
+								<option value="Laudo Técnico">Laudo Técnico</option>
+								<option value="Plano de Manutenção">Plano de Manutenção</option>
+								<option value="ART">ART</option>
+							</select>
+							<button class="btn btn-info" id="btnAnexarDocumentacao">Anexar</button>
+							<input type="file" name="inputFile" id="inputFile" style="display: none;" multiple>
+						</div>
 					</div>
 				</div>
 				<br>
@@ -466,6 +468,17 @@
 					<div class="col-md-10">
 						<div id="divListaAnexosART" class="divListaAnexos" style="display: flex;"></div>
 					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-3">
+					<label for="">Data de Vencimento ART:</label>
+					<input type="text" name="dataVencimentoART" id="dataVencimentoART" class="form-control">
+				</div>
+				<div class="col-md-3">
+					<label for="">Data de Vencimento Laudo Técnico:</label>
+					<input type="text" name="dataVencimentoLaudo" id="dataVencimentoLaudo" class="form-control">
 				</div>
 			</div>
 		</div>

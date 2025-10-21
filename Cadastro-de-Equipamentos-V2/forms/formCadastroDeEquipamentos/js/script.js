@@ -45,13 +45,19 @@ $(document).ready(async function () {
 });
 
 async function loadTelaInicio(){
-    preenchePermissoesDoUsuario();
+    if ($("#userCode").val() == "FlavioHerculano") {
+        preenchePermissoesDoUsuario(true);
+    }else{
+        preenchePermissoesDoUsuario();
+    }
     insereOptionsDosFornecedores();
     $(".inputPA, .inputOutros, .inputMA").closest("div.inputGroup").hide();
     modelos = await promiseBuscaModelosDeEquipamentosDoSisma();
     preencheOptionsDosModelos();
     $("#historico").hide();
     FLUIGC.calendar('#dataChegadaObra');
+    FLUIGC.calendar('#dataVencimentoART');
+    FLUIGC.calendar('#dataVencimentoLaudo');
     $("#valorMobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorExtra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
@@ -68,6 +74,8 @@ async function loadTelaAjuste() {
     modelos = await promiseBuscaModelosDeEquipamentosDoSisma();
     preencheOptionsDosModelos();
     FLUIGC.calendar('#dataChegadaObra');
+    FLUIGC.calendar('#dataVencimentoART');
+    FLUIGC.calendar('#dataVencimentoLaudo');
     $("#valorMobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorExtra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
@@ -102,6 +110,9 @@ async function loadTelaCentralDeEquipamentos() {
     $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorMaoDeObra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#consumoMedio").maskMoney({ thousands: '', decimal: '.' });
+
+    $("#dataVencimentoART").attr("readonly","readonly");
+    $("#dataVencimentoLaudo").attr("readonly","readonly");
 
     if ($("#checkboxTemMaoDeObra").is(":checked")) {
         $("#divValorMaoDeObra").show();
@@ -149,6 +160,9 @@ function bloqueiaCampos(){
     $("#dataChegadaObra").attr("readonly","readonly");
     $("#kmChegadaObra, #tipoKmChegadaObra, #tipoCombustivel, #litrosTanque,#consumoMedio,#tipoConsumoMedio").attr("readonly","readonly");
     $("#fornecedor")[0].selectize.lock();
+
+    $("#dataVencimentoART").attr("readonly","readonly");
+    $("#dataVencimentoLaudo").attr("readonly","readonly");
 }
 
 
@@ -164,6 +178,7 @@ function bindings() {
         for (const file of files) {
             loadFile(file);
         }
+        $("#inputFile").val("");
     });
 
     $("#checkboxTemMaoDeObra").on("change", function () {
@@ -230,8 +245,8 @@ function bindings() {
             $("#prefixo").val($("#prefixo").val().toUpperCase());
         }
     });
-    $("#prefixo").on("change", async function(){
-        var isCadastrado = await verificaSePrefixoCadastradoNoSisma($(this).val());
+    $("#prefixo").on("change", function(){
+        var isCadastrado = verificaSePrefixoCadastradoNoSisma($(this).val());
         if (isCadastrado) {
             FLUIGC.toast({title:"Prefixo já cadastrado.", message:"", type:"warning"});
             $(this).val("");
@@ -255,7 +270,7 @@ function bindings() {
 
     $("#AnoFabricacao").mask("9999");
     $("#AnoModelo").mask("9999");
-    $("#kmChegadaObra").mask('000.000.000');
+    $("#kmChegadaObra").mask('000.000.000', {reverse:true});
 
     
     $("#potenciaMotor").mask("0#");
@@ -308,6 +323,9 @@ var beforeSendValidate = function () {
     }
 
     if (atividade == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS || atividade==ATIVIDADES.QSST) {
+        if (!$("#decisao").val()) {
+            throw "Necessário selecionar uma opção de aprovação na aba Histórico e Decisão";
+        }
         if ($("#decisao").val() == "Reprovado" && $("#observacoes").val() == "") {
             throw "Necessário informar a Justificativa da Decisão no campo Observações";
         }
@@ -342,11 +360,8 @@ var beforeSendValidate = function () {
         if (!$("#AnoModelo").val()) {
             errorMessage.push("Informe o Ano do Modelo");
         }
-        if (!$("#placa").val()) {
-            errorMessage.push("Informe a Placa");
-        }
-        if (!$("#chassi").val()) {
-            errorMessage.push("Informe o Chassi");
+        if (!$("#placa").val() && !$("#chassi").val()) {
+            errorMessage.push("Informe a Placa ou o Chassi");
         }
         if (!$("#potenciaMotor").val()) {
             errorMessage.push("Informe a Potência do Motor");
@@ -408,6 +423,13 @@ var beforeSendValidate = function () {
         }
         if ($("#anexosART").val() == "") {
             errorMessage.push("Anexe a ART");
+        }
+
+        if (!$("#dataVencimentoART").val()) {
+            errorMessage.push("Informe a Data de Vencimento da ART");
+        }   
+        if (!$("#dataVencimentoLaudo").val()) {
+            errorMessage.push("Informe a Data de Vencimento do Laudo Técnico");
         }
 
         return errorMessage;

@@ -28,7 +28,7 @@
     <processDefinitionVersionPK>
       <companyId>1</companyId>
       <processId>Cadastro de Equipamentos</processId>
-      <version>30</version>
+      <version>31</version>
     </processDefinitionVersionPK>
     <versionDescription></versionDescription>
     <formId>29958</formId>
@@ -381,7 +381,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>1</expressionOrder>
-        <version>30</version>
+        <version>31</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -393,7 +393,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>2</expressionOrder>
-        <version>30</version>
+        <version>31</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -407,7 +407,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>3</expressionOrder>
-        <version>30</version>
+        <version>31</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -787,7 +787,9 @@ function getDadosEquipamento() {&#xd;
     var ANEXOS_LAUDO = hAPI.getCardValue(&quot;anexosLaudoTecnico&quot;);&#xd;
     var ANEXOS_PLANO_MANUTENCAO = hAPI.getCardValue(&quot;anexpsPlanoManutencao&quot;);&#xd;
     var ANEXOS_ART = hAPI.getCardValue(&quot;anexosART&quot;);&#xd;
-&#xd;
+    &#xd;
+    var DATA_VENCIMENTO_ART = hAPI.getCardValue(&quot;dataVencimentoART&quot;);&#xd;
+    var DATA_VENCIMENTO_LAUDO = hAPI.getCardValue(&quot;dataVencimentoLaudo&quot;);&#xd;
 &#xd;
     return {&#xd;
         &quot;CODCOLIGADA&quot;: CODCOLIGADA,&#xd;
@@ -831,6 +833,9 @@ function getDadosEquipamento() {&#xd;
         ANEXOS_LAUDO: ANEXOS_LAUDO,&#xd;
         ANEXOS_PLANO_MANUTENCAO: ANEXOS_PLANO_MANUTENCAO,&#xd;
         ANEXOS_ART: ANEXOS_ART,&#xd;
+&#xd;
+        DATA_VENCIMENTO_ART:DATA_VENCIMENTO_ART,&#xd;
+        DATA_VENCIMENTO_LAUDO:DATA_VENCIMENTO_LAUDO,&#xd;
     };&#xd;
 &#xd;
 }</eventDescription>
@@ -894,7 +899,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>30</version>
+        <version>31</version>
         <linkSequence>22</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -905,7 +910,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>30</version>
+        <version>31</version>
         <linkSequence>20</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -916,7 +921,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>30</version>
+        <version>31</version>
         <linkSequence>21</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -927,7 +932,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>30</version>
+        <version>31</version>
         <linkSequence>23</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -938,7 +943,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>30</version>
+        <version>31</version>
         <linkSequence>18</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>

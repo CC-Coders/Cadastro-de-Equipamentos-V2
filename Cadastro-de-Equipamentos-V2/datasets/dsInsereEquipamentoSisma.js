@@ -477,10 +477,24 @@ function insereFiltros(IDEQUI, EQUIPAMENTO) {
 
 function insereCadastroAuxiliar(EQUIPAMENTO){
     try {
-        var query = "INSERT INTO ";
-        query += "    EQUIPAMENTOS_CONTRATOS_AUXILIAR (PREFIXO, VALOR_MOBILIZADO, UN_MOBILIZADO, VALOR_EXTRA, UN_EXTRA, STATUS, MAODEOBRA, ANEXOS_DOCUMENTACAO, ANEXOS_FOTOS, ANEXOS_LAUDO, ANEXOS_PLANO_MANUTENCAO, ANEXOS_ART) ";
+        var query = "INSERT INTO EQUIPAMENTOS_CONTRATOS_AUXILIAR (";
+        query += "    PREFIXO, ";
+        query += "    VALOR_MOBILIZADO, ";
+        query += "    UN_MOBILIZADO,";
+        query += "    VALOR_EXTRA, ";
+        query += "    UN_EXTRA, ";
+        query += "    STATUS, ";
+        query += "    MAODEOBRA,";
+        query += "    ANEXOS_DOCUMENTACAO, ";
+        query += "    ANEXOS_FOTOS, ";
+        query += "    ANEXOS_LAUDO, ";
+        query += "    ANEXOS_PLANO_MANUTENCAO, ";
+        query += "    ANEXOS_ART, ";
+        query += "    DATA_VENCIMENTO_ART, ";
+        query += "    DATA_VENCIMENTO_LAUDO ";
+        query +=") ";
         query += "VALUES ";
-        query += "    (?,?,?,?,?,?,?,?,?,?,?,?) ";
+        query += "    (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 
         return executeInsert(query, [
             {type:"varchar", value:EQUIPAMENTO.PREFIXO},//PREFIXO
@@ -495,6 +509,8 @@ function insereCadastroAuxiliar(EQUIPAMENTO){
             {type:"varchar", value:EQUIPAMENTO.ANEXOS_LAUDO},//ANEXOS_LAUDO
             {type:"varchar", value:EQUIPAMENTO.ANEXOS_PLANO_MANUTENCAO},//ANEXOS_PLANO_MANUTENCAO
             {type:"varchar", value:EQUIPAMENTO.ANEXOS_ART},//ANEXOS_ART
+            {type:"date", value:EQUIPAMENTO.DATA_VENCIMENTO_ART.split("/").reverse().join("-")},//DATA_VENCIMENTO_ART
+            {type:"date", value:EQUIPAMENTO.DATA_VENCIMENTO_LAUDO.split("/").reverse().join("-")},//DATA_VENCIMENTO_LAUDO
         ], "/jdbc/CastilhoCustom");  
 
     } catch (error) {

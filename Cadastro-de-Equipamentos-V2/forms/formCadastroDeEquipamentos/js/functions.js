@@ -109,27 +109,21 @@ async function preencheInformacoesDoModelo(ID_MODELO){
 
 }
 function verificaSePrefixoCadastradoNoSisma(PREFIXO){
-    return new Promise((resolve, reject)=>{
-        DatasetFactory.getDataset("dsConsultaEquipamentoSisma", null,[
+        var ds = DatasetFactory.getDataset("dsConsultaEquipamentoSisma", null,[
             DatasetFactory.createConstraint("PREFIXO", PREFIXO, PREFIXO, ConstraintType.MUST)            
-        ],null,{
-            success:ds=>{
-                if (ds.values[0].STATUS != "SUCCESS") {
-                    reject(ds.values[0].MESSAGE);
-                }
-                else{
-                    if (JSON.parse(ds.values[0].RESULT).length >0) {
-                        resolve(true);
-                    }else{
-                        resolve(false);
-                    }
-                }
-            },
-            error:e=>{
-                reject(e);
+        ],null);
+
+        if (ds.values[0].STATUS != "SUCCESS") {
+            console.error(ds.values[0].MESSAGE);
+            throw ds.values[0].MESSAGE;
+        }
+        else{
+            if (JSON.parse(ds.values[0].RESULT).length >0) {
+                return true;
+            }else{
+                return false;
             }
-        });
-    });
+        }
 }
 
 // Fornecedor

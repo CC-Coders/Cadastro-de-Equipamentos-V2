@@ -98,7 +98,9 @@ function getDadosEquipamento() {
     var ANEXOS_LAUDO = hAPI.getCardValue("anexosLaudoTecnico");
     var ANEXOS_PLANO_MANUTENCAO = hAPI.getCardValue("anexpsPlanoManutencao");
     var ANEXOS_ART = hAPI.getCardValue("anexosART");
-
+    
+    var DATA_VENCIMENTO_ART = hAPI.getCardValue("dataVencimentoART");
+    var DATA_VENCIMENTO_LAUDO = hAPI.getCardValue("dataVencimentoLaudo");
 
     return {
         "CODCOLIGADA": CODCOLIGADA,
@@ -142,6 +144,9 @@ function getDadosEquipamento() {
         ANEXOS_LAUDO: ANEXOS_LAUDO,
         ANEXOS_PLANO_MANUTENCAO: ANEXOS_PLANO_MANUTENCAO,
         ANEXOS_ART: ANEXOS_ART,
+
+        DATA_VENCIMENTO_ART:DATA_VENCIMENTO_ART,
+        DATA_VENCIMENTO_LAUDO:DATA_VENCIMENTO_LAUDO,
     };
 
 }
