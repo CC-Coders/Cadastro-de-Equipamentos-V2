@@ -253,6 +253,24 @@ async function loadFile(file) {
             divTarget = "#divListaAnexosART";
         }
 
+        if (tipoAnexo == "Laudo Técnico" || tipoAnexo == "ART") {
+            let dataVencimento = $("#dataVencimentoAnexo").val();
+            if (!dataVencimento) {
+                showMessage("Informe a Data de Vencimento do Anexo","","warning");
+                throw "Informe a Data de Vencimento do Anexo";
+            }else{
+                if (tipoAnexo == "Laudo Técnico" ) {
+                    $("#smallDataValidadeLaudo").text("Valido até: " + dataVencimento);
+                    $("#dataVencimentoLaudo").val(dataVencimento);
+                }
+                else if( tipoAnexo == "ART"){
+                    $("#smallDataValidadeART").text("Valido até: " + dataVencimento);
+                    $("#dataVencimentoART").val(dataVencimento);
+                }
+                $("#dataVencimentoAnexo").val("");
+            }
+        }
+
 
         var target = await insereCarregandoAnexo(divTarget);
         const parentId = pastaAnexosEquipamento[env];
@@ -431,6 +449,14 @@ function removerAnexos(target){
             $("#"+divTarget).closest(".row").find(".spanStatusAnexos").text("✅");
         }else{
             $("#"+divTarget).closest(".row").find(".spanStatusAnexos").text("❌");
+            if (divTarget == "divListaAnexosART") {
+                $("#smallDataValidadeART").text("");
+                $("#dataVencimentoART").val("");
+            }
+            if (divTarget == "smallDataValidadeLaudo") {
+                $("#smallDataValidadeLaudo").text("");
+                $("#dataVencimentoLaudo").val("");
+            }
         }
         
 

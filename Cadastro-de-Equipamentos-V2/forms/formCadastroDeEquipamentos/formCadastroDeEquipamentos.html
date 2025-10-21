@@ -77,6 +77,9 @@
 		<input type="hidden" name="anexpsPlanoManutencao" id="anexpsPlanoManutencao">
 		<input type="hidden" name="anexosART" id="anexosART">
 
+		<input type="hidden" name="dataVencimentoART" id="dataVencimentoART">
+		<input type="hidden" name="dataVencimentoLaudo" id="dataVencimentoLaudo">
+
 		<!-- Tabela Historico -->
 		<div>
 			<table id="tableHistorico" tablename="tableHistorico" noaddbuttom="true" nodeletebuttom="true">
@@ -418,6 +421,13 @@
 							<input type="file" name="inputFile" id="inputFile" style="display: none;" multiple>
 						</div>
 					</div>
+					<div class="col-md-2" id="divDataVencimentoAnexo" style="display: none;">
+						<label for="">
+							Data de Vencimento do Anexo:
+							<i class="flaticon flaticon-info icon-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="Caso o documento não tenha data de validade, favor informar a data de um ano apos a data de emissão do documento o qual está anexando"></i>
+						</label>
+						<input type="text" name="dataVencimentoAnexo" id="dataVencimentoAnexo" class="form-control">
+					</div>
 				</div>
 				<br>
 			</div>
@@ -445,7 +455,11 @@
 				<div class="row" style="margin-bottom: 10px;">
 					<div class="col-md-2">
 						<span class="spanStatusAnexos">❌</span>
-						<b>Laudo Técnico: </b>
+							<b style="display: inline-grid">
+								Laudo Técnico: 
+								<br>
+								<small id="smallDataValidadeLaudo"></small>
+							</b>
 					</div>
 					<div class="col-md-10">
 						<div id="divListaAnexosLaudo" class="divListaAnexos" style="display: flex;"></div>
@@ -454,7 +468,7 @@
 				<div class="row" style="margin-bottom: 10px;">
 					<div class="col-md-2">
 						<span class="spanStatusAnexos">❌</span>
-						<b>Plano de Manutenção: </b>
+						<b>Plano de Manutenção: </b>							
 					</div>
 					<div class="col-md-10">
 						<div id="divListaAnexosPlanoManutencao" class="divListaAnexos" style="display: flex;"></div>
@@ -463,28 +477,15 @@
 				<div class="row" style="margin-bottom: 10px;">
 					<div class="col-md-2">
 						<span class="spanStatusAnexos">❌</span>
-						<b>ART: </b>
+						<b style="display: inline-grid">
+							ART: 
+							<br>
+							<small id="smallDataValidadeART"></small>
+						</b>
 					</div>
 					<div class="col-md-10">
 						<div id="divListaAnexosART" class="divListaAnexos" style="display: flex;"></div>
 					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-md-2">
-					<label for="">
-						Data de Vencimento ART:
-						<i class="flaticon flaticon-info icon-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="Caso o documento não tenha data de validade, favor informar a data de um ano apos a data de emissão do documento o qual está anexando"></i>
-					</label>
-					<input type="text" name="dataVencimentoART" id="dataVencimentoART" class="form-control">
-				</div>
-				<div class="col-md-2">
-					<label for="">
-						Data de Vencimento Laudo Técnico:
-						<i class="flaticon flaticon-info icon-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="Caso o documento não tenha data de validade, favor informar a data de um ano apos a data de emissão do documento o qual está anexando"></i>
-					</label>
-					<input type="text" name="dataVencimentoLaudo" id="dataVencimentoLaudo" class="form-control">
 				</div>
 			</div>
 		</div>

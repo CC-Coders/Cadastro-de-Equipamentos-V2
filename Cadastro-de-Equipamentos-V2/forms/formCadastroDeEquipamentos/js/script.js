@@ -56,8 +56,7 @@ async function loadTelaInicio(){
     preencheOptionsDosModelos();
     $("#historico").hide();
     FLUIGC.calendar('#dataChegadaObra');
-    FLUIGC.calendar('#dataVencimentoART');
-    FLUIGC.calendar('#dataVencimentoLaudo');
+    FLUIGC.calendar('#dataVencimentoAnexo');
     $("#valorMobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorExtra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
@@ -70,17 +69,20 @@ async function loadTelaAjuste() {
     preenchePermissoesDoUsuario();
     insereOptionsDosFornecedores();
     asyncMontaHistorico();
-
+    $("#tipoAnexo").val("");
     modelos = await promiseBuscaModelosDeEquipamentosDoSisma();
     preencheOptionsDosModelos();
     FLUIGC.calendar('#dataChegadaObra');
-    FLUIGC.calendar('#dataVencimentoART');
-    FLUIGC.calendar('#dataVencimentoLaudo');
+    FLUIGC.calendar('#dataVencimentoAnexo');
+
     $("#valorMobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorExtra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorMaoDeObra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#consumoMedio").maskMoney({ thousands: '', decimal: '.' });
+
+    $("#smallDataValidadeLaudo").text("Valido até: " + $("#dataVencimentoART").val());
+    $("#smallDataValidadeART").text("Valido até: " + $("#dataVencimentoLaudo").val());
 
     preencheObras($("#CODCOLIGADA").val());
     geraAnexos();
@@ -114,6 +116,9 @@ async function loadTelaCentralDeEquipamentos() {
     $("#dataVencimentoART").attr("readonly","readonly");
     $("#dataVencimentoLaudo").attr("readonly","readonly");
 
+    $("#smallDataValidadeLaudo").text("Valido até: " + $("#dataVencimentoART").val());
+    $("#smallDataValidadeART").text("Valido até: " + $("#dataVencimentoLaudo").val());
+
     if ($("#checkboxTemMaoDeObra").is(":checked")) {
         $("#divValorMaoDeObra").show();
     }
@@ -129,6 +134,9 @@ async function loadTelaQSST() {
     $("#divOpcoesAprovacao").show();
     $("#divAnexar").hide();
     bloqueiaCampos();
+
+    $("#smallDataValidadeLaudo").text("Valido até: " + $("#dataVencimentoART").val());
+    $("#smallDataValidadeART").text("Valido até: " + $("#dataVencimentoLaudo").val());
     if ($("#checkboxTemMaoDeObra").is(":checked")) {
         $("#divValorMaoDeObra").show();
     }
@@ -145,6 +153,9 @@ async function loadTelaVIEW() {
     if ($("#checkboxTemMaoDeObra").is(":checked")) {
         $("#divValorMaoDeObra").show();
     }
+
+    $("#smallDataValidadeLaudo").text("Valido até: " + $("#dataVencimentoART").val());
+    $("#smallDataValidadeART").text("Valido até: " + $("#dataVencimentoLaudo").val());
 }
 
 
@@ -263,6 +274,14 @@ function bindings() {
         },
         onKeyPress:function(){
             $("#chassi").val($("#chassi").val().toUpperCase());
+        }
+    });
+
+    $("#tipoAnexo").on("change", function(){
+        if ($(this).val() == "Laudo Técnico" || $(this).val() == "ART") {
+            $("#divDataVencimentoAnexo").show();
+        }else{
+            $("#divDataVencimentoAnexo").hide();
         }
     });
 
