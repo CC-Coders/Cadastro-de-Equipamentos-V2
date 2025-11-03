@@ -5,7 +5,7 @@ var MyWidget = SuperWidget.extend({
 
     init: function () {
         var self = this;
-        console.log("81")
+        console.log("84")
         var $button = $("#button-search");
         var originalText = "Buscar";
         var loadingInterval;
@@ -149,6 +149,9 @@ var MyWidget = SuperWidget.extend({
                     return {
                     	ID_FLUIG: item.ID_FLUIG || "-",
                         PERIODO_LOCACAO: item.periodoLocacao || "-",
+                        VALOR_FIPE: item.VALOR_FIPE || "-",
+                        VALOR_IMPLEMENTO: item.VALOR_IMPLEMENTO || "-",
+                        VALOR_EQUIPAMENTO: item.VALOR_EQUIPAMENTO || "-",
                         ID: item.ID || "-",
                         SOLICITANTE: item.solicitante || "-",
                         OBRA: item.obra || "-",
@@ -175,6 +178,9 @@ var MyWidget = SuperWidget.extend({
                         { data: "ID", title: "ID", visible: false },
                         { data: "ID_FLUIG", title: "Nº DA SOLICITAÇÃO" },
                         { data: "PERIODO_LOCACAO", title: "PERIODO_LOCACAO", visible: false },
+                        { data: "VALOR_IMPLEMENTO", title: "VALOR_IMPLEMENTO", visible: false },
+                        { data: "VALOR_FIPE", title: "VALOR_FIPE", visible: false },
+                        { data: "VALOR_EQUIPAMENTO", title: "VALOR_EQUIPAMENTO", visible: false },
                         { data: "SOLICITANTE", title: "SOLICITANTE" },
                         { data: "OBRA", title: "OBRA" },
                         { data: "FORNECEDOR", title: "FORNECEDOR" },
@@ -319,18 +325,20 @@ var MyWidget = SuperWidget.extend({
                 }
             	//console.log(rowData)
                 var tableData = ds.values.map(function(item) {
+                	console.log(rowData)
+                    console.log(item);
                     return {
                         prefixo: item.PREFIXO || "-",
                         descricao: item.DESCRICAO || "-",
                         marca: item.FABRICANTE || "-",
                         modelo: item.MODELO || "-",
                         periodo_locacao: rowData.PERIODO_LOCACAO || "-", 
+                        valor_fipe: rowData.VALOR_FIPE || "-", 
+                        valor_implemento: rowData.VALOR_IMPLEMENTO || "-", 
+                        valor_atual: rowData.VALOR_EQUIPAMENTO || "-", 
                         valor_locacao: item.VALOR_LOCACAO || "-", 
-                        implemento: item.VALOR_IMPLEMENTO || "-",
-                        fipe: item.VALOR_FIPE || "-",
                         mao_obra: item.MAODEOBRA || "-",
-                        classificacaoBem: item.CLASSIFICACAO_BEM || "-",
-                        valor_locacao: item.VALOR_LOCACAO || "-"
+                        classificacaoBem: item.CLASSIFICACAO_BEM || "-"
                     };
                 });
                 var alturaMaxima = $('.meu-modal-edit .table-container').height();
@@ -383,27 +391,36 @@ var MyWidget = SuperWidget.extend({
                                 });
                             }
                         },
-
                         {
                             data: null,
                             width: "120px",
-                            render: function() {
-                                return `<input type="text" class="form-control valorAtual" placeholder="R$ 0,00">`;
+                            render: function (data, type, row) {
+                                const valor = row.valor_atual && row.valor_atual !== "-" && row.valor_atual !== "null"
+                                    ? formatarMoeda(row.valor_atual)
+                                    : "";
+                                return `<input type="text" class="form-control valorAtual" placeholder="R$ 0,00" value="${valor}">`;
                             }
                         },
                         {
                             data: null,
                             width: "100px",
-                            render: function() {
-                                return `<input type="text" class="form-control valorFipe" placeholder="R$ 0,00">`;
+                            render: function (data, type, row) {
+                                const valor = row.valor_fipe && row.valor_fipe !== "-" && row.valor_fipe !== "null"
+                                    ? formatarMoeda(row.valor_fipe)
+                                    : "";
+                                return `<input type="text" class="form-control valorFipe" placeholder="R$ 0,00" value="${valor}">`;
                             }
                         },
                         {
                             data: null,
                             width: "120px",
-                            render: function(data, type, row, meta) {
+                            render: function (data, type, row, meta) {
+                                const valor = row.valor_implemento && row.valor_implemento !== "-" && row.valor_implemento !== "null"
+                                    ? formatarMoeda(row.valor_implemento)
+                                    : "";
                                 return `<input type="text" class="form-control valorImplemento" 
                                          placeholder="R$ 0,00" 
+                                         value="${valor}"
                                          data-row-index="${meta.row}">`;
                             }
                         },
@@ -499,6 +516,35 @@ var MyWidget = SuperWidget.extend({
                     stripeClasses: [],
                     language: { emptyTable: "Nenhum registro encontrado" }
                 });
+                
+                
+                var table = $("#dataTableEdit").DataTable();
+
+             table.on('draw.dt', function () {
+                 table.rows().every(function () {
+                     var row = $(this.node());
+                     var valorFipe = limparMoeda(row.find('.valorFipe').val());
+                     var valorImplemento = limparMoeda(row.find('.valorImplemento').val());
+                     var valorLocacao = limparMoeda(row.find('td:eq(5)').text());
+                     var maoObra = limparMoeda(row.find('td:eq(10)').text());
+                     var depreciacaoImplemento = (valorImplemento * 0.05 * 10).toFixed(2);
+                     row.find('.depreciacaoImplemento').val(formatarMoeda(depreciacaoImplemento));
+                     var precoEquipamento = (valorFipe + parseFloat(depreciacaoImplemento)).toFixed(2);
+                     row.find('.precoEquipamento').val(formatarMoeda(precoEquipamento));
+                     var percentual = 0;
+                     if (parseFloat(precoEquipamento) > 0) {
+                         percentual = ((valorLocacao - maoObra) / parseFloat(precoEquipamento) * 100).toFixed(1);
+                     }
+                     var campoClassificacao = row.find('.classificacaoBem');
+                     campoClassificacao.val(formatarPercentual(percentual));
+                     campoClassificacao.css('box-shadow', percentual > 3
+                         ? 'inset 0 0 0 1000px #f8d7da'
+                         : 'inset 0 0 0 1000px #d4edda');
+                 });
+             });
+             table.draw();
+                
+                
                 $('#dataTableEdit').find('input').prop('readonly', true);
                 $('#dataTableEdit').find('.btnSalvarItem').prop('disabled', true);
                 
@@ -623,14 +669,30 @@ function createMultipleLinks(anexoIds) {
     return links.length > 0 ? links.join('') : "-";
 }
 
+//function formatarMoeda(valor) {
+//    return 'R$ ' + (parseFloat(valor) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+//}
+//
+//function limparMoeda(valor) {
+//    return parseFloat(String(valor).replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+//}
+//
+//function formatarPercentual(valor) {
+//    return (parseFloat(valor) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 1 }) + '%';
+//}
 function formatarMoeda(valor) {
-    return 'R$ ' + (parseFloat(valor) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    if (valor == null || valor === "" || valor === "-") return "";
+    let numero = parseFloat(String(valor).replace(/[^\d,.-]/g, '').replace(',', '.'));
+    if (isNaN(numero)) return "";
+    return numero.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
 function limparMoeda(valor) {
+    if (!valor) return 0;
     return parseFloat(String(valor).replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
 }
 
 function formatarPercentual(valor) {
-    return (parseFloat(valor) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 1 }) + '%';
+    if (valor == null || valor === "" || isNaN(valor)) return "0%";
+    return parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 1 }) + '%';
 }
