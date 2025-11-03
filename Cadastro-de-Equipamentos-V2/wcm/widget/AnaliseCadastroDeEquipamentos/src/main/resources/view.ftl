@@ -35,8 +35,8 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-input">
-                                        <label>Nº da Solicitação:</label> <input type="number" id="solicitacao"
-                                            name="solicitacao" class="form-control inputInfoChamado inputStyle" />
+                                        <label>Nº da Solicitação:</label> <input type="number" id="nsolicitacao"
+                                            name="nsolicitacao" class="form-control inputInfoChamado inputStyle" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -57,19 +57,19 @@
                                 <div class="col-md-4">
                                     <div class="form-input">
                                         <label>Data de Abertura:</label> <input type="text" id="dataAbertura"
-                                            name="dataAbertura" class="form-control inputInfoChamado" />
+                                            name="dataAbertura" class="form-control inputInfoChamado date" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-input">
                                         <label>Criado em:</label> <input type="text" id="criado" name="criado"
-                                            class="form-control inputInfoChamado date" />
+                                            class="form-control inputInfoChamado" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-input">
                                         <label>Finalizado em:</label> <input type="text" id="finalizado"
-                                            name="finalizado" class="form-control inputInfoChamado date" />
+                                            name="finalizado" class="form-control inputInfoChamado" />
                                     </div>
                                 </div>
                             </div>
@@ -90,14 +90,16 @@
                             </h4>
                         </div>
                         <div class="panel-body" style="display: black">
-                            <table id="dataTableFilter" class="table table-bordered table-striped dataTable no-footer"
+                            <table id="dataTableFilter" class="table table-bordered dataTable no-footer"
                                 style="width: 100%">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Nº DA SOLICITAÇÃO</th>
+                                        <th style="display:none;">PERIODO LOCAÇÃO</th>     
                                         <th>SOLICITANTE</th>
                                         <th>OBRA</th>
+                                        <th>FORNECEDOR</th>
                                         <th>DATA DE ABERTURA</th>
                                         <th>CRIADO EM</th>
                                         <th>FINALIZADO EM</th>
@@ -110,16 +112,8 @@
                             </table>
                         </div>
                     </div>
-
-
-
                 </div>
             </div>
-
-
-
-
-
         </div>
 </div>
 </body>

@@ -1,7 +1,6 @@
 <div id="ConsultaCadastroDeEquipamentos_${instanceId}" class="super-widget wcm-widget-class fluig-style-guide"
     data-params="ConsultaCadastroDeEquipamentos.instance()">
 
-
     <body>
         <div class="fluig-style-guide">
             <div class="panel panel-primary" id="background">
@@ -87,6 +86,15 @@
                                             name="localizacao" class="form-control inputInfoChamado" />
                                     </div>
                                 </div>
+                                 <div class="col-md-4">
+                                    <div class="form-input">
+                                        <label>Contrato:</label> <input type="text" id="contrato"
+                                            name="contrato" class="form-control inputInfoChamado" />
+                                    </div>
+                                </div>
+                               </div>
+                                    <br />
+                                    <div class="row">
                                 <div class="col-md-4">
                                     <div id="divResolucaoChamado">
                                         <div id="divAtivo" style="display: inline-block">
@@ -129,21 +137,20 @@
                             </h4>
                         </div>
                         <div class="panel-body" style="display: black">
-                            <table id="dataTableFilter" class="table table-bordered table-striped dataTable no-footer"
+                            <table id="dataTableFilter" class="table table-bordered dataTable no-footer"
                                 style="width: 100%">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>PREFIXO</th>
-                                        <th>DESCRIÇÃO</th>
-                                        <th>MODELO</th>
-                                        <th>FABRICANTE</th>
+                                        <th>Prefixo</th>
+                                        <th>Descrição</th>
+                                        <th>Modelo</th>
+                                        <th>Fabricante</th>
                                         <th>CPF/CNPJ</th>
-                                        <th>FORNECEDOR</th>
-                                        <th>VALOR DE LOCAÇÃO</th>
-                                        <th>LOCALIZAÇÃO</th>
-                                        <th>STATUS</th>
-                                        <th>AÇÕES</th>
+                                        <th>Fornecedor</th>
+                                        <th>Valor de Locação</th>
+                                        <th>Localização</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -154,9 +161,6 @@
                 </div>
             </div>
         </div>
-
-
-        <!-- Modal de Detalhes do Equipamento -->
         <div class="modal fade" id="modalDetalhesEquipamento" tabindex="-1" role="dialog"
             aria-labelledby="modalDetalhesLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document" style="max-width: 1000px;">
@@ -169,8 +173,7 @@
                         </button>
                     </div>
                     <div class="modal-body" id="conteudoModalEquipamento"
-                        style="background: #e9e9e9; max-height: 70vh; overflow-y: auto">
-                        <!-- Conteúdo será preenchido dinamicamente via JS -->
+                        style="background-color: #edecec; max-height: 70vh; overflow-y: auto">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
@@ -178,11 +181,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
     </body>
 
     <script src="https://cdn.jsdelivr.net/npm/react@17/umd/react.development.js" crossorigin></script>

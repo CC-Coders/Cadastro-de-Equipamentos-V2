@@ -6,7 +6,7 @@
 }
 .super-widget .fluig-style-guide .panel-body .form-input input.form-control.inputInfoChamado {
     height: 40px !important;
-    background-color: #F7F8FA !important;
+    background-color: #eeeeee !important;
     border: none !important;
     padding: 8px 12px !important;
 }
@@ -25,25 +25,137 @@
          user-select: none;
  }
 
-/* Remove o efeito zebrado e força todas as linhas brancas */
-#dataTableFilter tbody tr,
-#dataTableFilter tbody tr:nth-child(even),
-#dataTableFilter tbody tr:nth-child(odd) {
-        background-color: #ffffff !important;
+
+.modal-body {
+        max-height: 70vh;
+        overflow-y: auto;
+        background-color: #F7F8FA;
+        /* Fundo geral */
+        padding: 15px;
+        background-color: #eaeaea;
 }
 
-/* Mantém o cabeçalho como está */
-#dataTableFilter thead tr {
-        background-color: #f2f2f2 !important;
+
+.modal-section {
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 15px;
+}
+
+
+.modal-section h5 {
+        margin-bottom: 10px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 5px;
         font-weight: bold;
+        color: #58595b;
 }
 
-/* Cor de fundo personalizada no corpo do modal */
-.modal.fade.in .modal-content {
-        background-color: #ffffff !important;
+
+.modal-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
 }
 
-/* (Opcional) cor diferente só para o modal de anexos */
-.meu-modal-anexo .modal-content {
-        background-color: #f9f9f9 !important;
+.modal-row div {
+        flex: 1 1 50%;
+        /* duas colunas */
+        padding: 5px 10px;
+}
+
+
+.subsection {
+        margin-top: 10px;
+        padding: 10px;
+        border-left: 3px solid #58595b;
+        background-color: #f5f5f5;
+        border-radius: 3px;
+}
+
+
+body .fluig-style-guide #dataTableFilter table.dataTable tbody tr,
+body .fluig-style-guide #dataTableFilter table.dataTable tbody tr.odd,
+body .fluig-style-guide #dataTableFilter table.dataTable tbody tr.even {
+        background-color: white !important;
+        background: white !important;
+}
+
+/* Adicione a classe do seu widget antes */
+.my-widget-class #dataTableFilter tbody tr,
+.my-widget-class #dataTableFilter tbody tr.odd,
+.my-widget-class #dataTableFilter tbody tr.even {
+        background-color: white !important;
+}
+
+#button-search.loading-yellow {
+        background-color: #ffc107 !important;
+        color: #000 !important;
+        border: none !important;
+}
+
+
+#dataTableFilter {
+    border-collapse: collapse !important;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+
+#dataTableFilter thead th {
+    background-color: #f1f1f1;
+    color: #333;
+    font-weight: 600;
+    text-align: center;
+    padding: 10px;
+    font-size: 13px;
+    border: 1px solid #dcdcdc;
+}
+
+
+#dataTableFilter thead th:first-child {
+    border-top-left-radius: 8px;
+}
+#dataTableFilter thead th:last-child {
+    border-top-right-radius: 8px;
+}
+
+
+#dataTableFilter tbody tr {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #e6e6e6;
+}
+#dataTableFilter tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+
+#dataTableFilter td, 
+#dataTableFilter th {
+    vertical-align: middle;
+    padding: 8px 10px;
+    border-right: 1px solid #e0e0e0;
+}
+
+
+#dataTableFilter td:last-child,
+#dataTableFilter th:last-child {
+    border-right: none;
+}
+
+
+#dataTableFilter td:last-child,
+#dataTableFilter th:last-child {
+    text-align: center;
+}
+
+
+#dataTableFilter td {
+    font-size: 13px;
+    color: #333;
 }
