@@ -5,7 +5,7 @@ var MyWidget = SuperWidget.extend({
 
     init: function () {
         var self = this;
-        console.log("84")
+        console.log("91")
         var $button = $("#button-search");
         var originalText = "Buscar";
         var loadingInterval;
@@ -161,7 +161,8 @@ var MyWidget = SuperWidget.extend({
                         FINALIZADO_EM: (item.FINALIZADO_EM && item.FINALIZADO_EM !== "null" && item.FINALIZADO_EM !== "") 
                         ? item.FINALIZADO_EM 
                         : "-",
-                        STATUS: item.DESC_STATUS_EQUIPAMENTO || "-",
+                        STATUS_EQUIP_ITEM: item.STATUS_EQUIP_ITEM || "-",
+                        DESC_STATUS_EQUIPAMENTO: item.DESC_STATUS_EQUIPAMENTO || "-",                   
                         ACOES: `
                             <button class="btnAnexos" title="Anexos" style="border:none; background:none">
                                 <i class="flaticon flaticon-paperclip icon-md" aria-hidden="true"></i>
@@ -196,7 +197,22 @@ var MyWidget = SuperWidget.extend({
                         },
                         { data: "CRIADO_EM", title: "CRIADO EM" },
                         { data: "FINALIZADO_EM", title: "FINALIZADO EM" },
-                        { data: "STATUS", title: "STATUS" },
+                     //   { data: "STATUS", title: "STATUS" },
+                        {
+                            data: null,
+                            title: "STATUS",
+                            render: function (data, type, row) {
+                                const codigo = parseInt(row.STATUS_EQUIP_ITEM);
+                                const desc = row.DESC_STATUS_EQUIPAMENTO || "-";
+                                if (isNaN(codigo)) return desc;
+                                switch (codigo) {
+                                    case 2: return "Pendente";
+                                    case 3: return "Realizado";
+                                    case 7: return "Em Andamento";
+                                    default: return desc;
+                                }
+                            }
+                        },
                         {
                             data: null,
                             title: "AÇÕES",
@@ -516,8 +532,7 @@ var MyWidget = SuperWidget.extend({
                     stripeClasses: [],
                     language: { emptyTable: "Nenhum registro encontrado" }
                 });
-                
-                
+                               
                 var table = $("#dataTableEdit").DataTable();
 
              table.on('draw.dt', function () {
@@ -584,11 +599,49 @@ var MyWidget = SuperWidget.extend({
                 	});
                 	$(document).off('click', '.btn-editar-equipamento').on('click', '.btn-editar-equipamento', function () {
                 	    const $modal = $('#'+modalId);
+                	    const $row = $modal.find('#dataTableEdit tbody tr').eq(0); 
+                	    const prefixo = $row.find('td').eq(0).text().trim(); 
+
+                	    if (!prefixo) {
+                	        FLUIGC.toast({
+                	            title: "Erro",
+                	            message: "Prefixo não encontrado para atualizar.",
+                	            type: "danger"
+                	        });
+                	        return;
+                	    }
+
+                	    var c1 = DatasetFactory.createConstraint("PREFIXO", prefixo, prefixo, ConstraintType.MUST);
+                	    var c2 = DatasetFactory.createConstraint("MODO", "EDITAR_APENAS_STATUS", "EDITAR_APENAS_STATUS", ConstraintType.MUST);
+                	    var c3 = DatasetFactory.createConstraint("STATUS", "7", "7", ConstraintType.MUST);
+                	    var c4 = DatasetFactory.createConstraint("USUARIO_ANALISE", WCMAPI.userCode, WCMAPI.userCode, ConstraintType.MUST);
+
+                	    DatasetFactory.getDataset("dsUpdateAnaliseEquipamento", null, [c1, c2, c3, c4], null, {
+                	        success: function(ds) {
+                	            var statusResp = ds.values[0].status;
+                	            var mensagem = ds.values[0].mensagem;
+                	            FLUIGC.toast({
+                	                title: statusResp === "SUCCESS" ? "Sucesso: " : "Erro: ",
+                	                message: mensagem,
+                	                type: statusResp === "SUCCESS" ? "success" : "danger"
+                	            });
+                	        },
+                	        error: function(err) {
+                	            console.error("Erro ao atualizar status:", err);
+                	            FLUIGC.toast({
+                	                title: "Erro",
+                	                message: "Falha ao atualizar o status do equipamento.",
+                	                type: "danger"
+                	            });
+                	        }
+                	    });
+
                 	    $modal.find('#dataTableEdit input').prop('readonly', false);
                 	    $modal.find('#dataTableEdit .btnSalvarItem').prop('disabled', false);
                 	    $modal.find('#dataTableEdit .depreciacaoImplemento, #dataTableEdit .precoEquipamento, #dataTableEdit .classificacaoBem')
                 	          .prop('readonly', true);
                 	});
+
                 $('#dataTableEdit').on('click', '.btnSalvarItem', function () {
                     var row = $(this).closest('tr');
                     var rowData = $('#dataTableEdit').DataTable().row(row).data();
@@ -602,17 +655,18 @@ var MyWidget = SuperWidget.extend({
                     var precoEquipamento = limparMoeda(row.find('.precoEquipamento').val());
                     var dataFinalizado = moment().format('DD/MM/YYYY');
 
-
                     var c1 = DatasetFactory.createConstraint("PREFIXO", prefixo, prefixo, ConstraintType.MUST);
-                    var c2 = DatasetFactory.createConstraint("VALOR_EQUIPAMENTO", valorAtual, valorAtual, ConstraintType.MUST);
-                    var c3 = DatasetFactory.createConstraint("VALOR_FIPE", valorFipe, valorFipe, ConstraintType.MUST);
-                    var c4 = DatasetFactory.createConstraint("VALOR_IMPLEMENTO", valorImplemento, valorImplemento, ConstraintType.MUST);
-                    var c5 = DatasetFactory.createConstraint("VALOR_DEPRECIACAO", valorDepreciacao, valorDepreciacao, ConstraintType.MUST);
-                    var c6 = DatasetFactory.createConstraint("PRECO_EQUIPAMENTO", precoEquipamento, precoEquipamento, ConstraintType.MUST);
-                    var c7 = DatasetFactory.createConstraint("FINALIZADO_EM", dataFinalizado, dataFinalizado, ConstraintType.MUST);
-                    var c8 = DatasetFactory.createConstraint("CLASSIFICACAO_BEM", classificacaoBem, classificacaoBem, ConstraintType.MUST);
+                    var c2 = DatasetFactory.createConstraint("MODO", "EDITAR_TUDO", "EDITAR_TUDO", ConstraintType.MUST); 
+                    var c3 = DatasetFactory.createConstraint("VALOR_EQUIPAMENTO", valorAtual, valorAtual, ConstraintType.MUST);
+                    var c4 = DatasetFactory.createConstraint("VALOR_FIPE", valorFipe, valorFipe, ConstraintType.MUST);
+                    var c5 = DatasetFactory.createConstraint("VALOR_IMPLEMENTO", valorImplemento, valorImplemento, ConstraintType.MUST);
+                    var c6 = DatasetFactory.createConstraint("VALOR_DEPRECIACAO", valorDepreciacao, valorDepreciacao, ConstraintType.MUST);
+                    var c7 = DatasetFactory.createConstraint("PRECO_EQUIPAMENTO", precoEquipamento, precoEquipamento, ConstraintType.MUST);
+                    var c8 = DatasetFactory.createConstraint("FINALIZADO_EM", dataFinalizado, dataFinalizado, ConstraintType.MUST);
+                    var c9 = DatasetFactory.createConstraint("CLASSIFICACAO_BEM", classificacaoBem, classificacaoBem, ConstraintType.MUST);
+              
 
-                    DatasetFactory.getDataset("dsUpdateAnaliseEquipamento", null, [c1, c2, c3, c4, c5, c6, c7, c8], null, {
+                    DatasetFactory.getDataset("dsUpdateAnaliseEquipamento", null, [c1, c2, c3, c4, c5, c6, c7, c8, c9], null, {
                         success: function (ds) {
                             var status = ds.values[0].status;
                             var mensagem = ds.values[0].mensagem;
@@ -668,6 +722,7 @@ function createMultipleLinks(anexoIds) {
 
     return links.length > 0 ? links.join('') : "-";
 }
+
 
 //function formatarMoeda(valor) {
 //    return 'R$ ' + (parseFloat(valor) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
