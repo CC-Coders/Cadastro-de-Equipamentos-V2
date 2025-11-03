@@ -1,5 +1,5 @@
-<div id="MyWidget_${instanceId}" class="super-widget wcm-widget-class fluig-style-guide"
-    data-params="MyWidget.instance()">
+<div id="ConsultaCadastroDeEquipamentos_${instanceId}" class="super-widget wcm-widget-class fluig-style-guide"
+    data-params="ConsultaCadastroDeEquipamentos.instance()">
 
     <body>
         <div class="fluig-style-guide">
@@ -30,30 +30,7 @@
                             </h4>
                         </div>
                         <div class="panel-body" id="filtrosBody" style="display: block">
-                            <!-- <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-input">
-                                    <label>Pesquisar por:</label> <select name="pesquisar" id="pesquisar"
-                                        class="form-control inputInfoChamado">
-                                        <option value="ID">ID</option>
-                                        <option value="Prefixo">Prefixo</option>
-                                        <option value="Descrição">Descrição</option>
-                                        <option value="Modelo">Modelo</option>
-                                        <option value="Fabricante">Fabricante</option>
-                                        <option value="CPF/CNPJ">CPF/CNPJ</option>
-                                        <option value="Fornecedor">Fornecedor</option>
-                                        <option value="Valor de Locação">Valor de Locação</option>
-                                        <option value="Localização">Localização</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-9">
-                                <div class="form-input">
-                                    <label>Termo:</label> <input type="text" id="termo" name="termo"
-                                        class="form-control inputInfoChamado" />
-                                </div>
-                            </div>
-                        </div> -->
+
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-input">
@@ -109,6 +86,15 @@
                                             name="localizacao" class="form-control inputInfoChamado" />
                                     </div>
                                 </div>
+                                 <div class="col-md-4">
+                                    <div class="form-input">
+                                        <label>Contrato:</label> <input type="text" id="contrato"
+                                            name="contrato" class="form-control inputInfoChamado" />
+                                    </div>
+                                </div>
+                               </div>
+                                    <br />
+                                    <div class="row">
                                 <div class="col-md-4">
                                     <div id="divResolucaoChamado">
                                         <div id="divAtivo" style="display: inline-block">
@@ -151,27 +137,46 @@
                             </h4>
                         </div>
                         <div class="panel-body" style="display: black">
-                            <table id="dataTableFilter" class="table table-bordered table-striped dataTable no-footer"
+                            <table id="dataTableFilter" class="table table-bordered dataTable no-footer"
                                 style="width: 100%">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>PREFIXO</th>
-                                        <th>DESCRIÇÃO</th>
-                                        <th>MODELO</th>
-                                        <th>FABRICANTE</th>
+                                        <th>Prefixo</th>
+                                        <th>Descrição</th>
+                                        <th>Modelo</th>
+                                        <th>Fabricante</th>
                                         <th>CPF/CNPJ</th>
-                                        <th>FORNECEDOR</th>
-                                        <th>VALOR DE LOCAÇÃO</th>
-                                        <th>LOCALIZAÇÃO</th>
-                                        <th>STATUS</th>
-                                        <th>AÇÕES</th>
+                                        <th>Fornecedor</th>
+                                        <th>Valor de Locação</th>
+                                        <th>Localização</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modalDetalhesEquipamento" tabindex="-1" role="dialog"
+            aria-labelledby="modalDetalhesLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document" style="max-width: 1000px;">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #58595b; color: white;">
+                        <h4 class="modal-title" id="modalDetalhesLabel">Detalhes do Equipamento</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            style="color: white; opacity: 1;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="conteudoModalEquipamento"
+                        style="background-color: #edecec; max-height: 70vh; overflow-y: auto">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
                     </div>
                 </div>
             </div>
