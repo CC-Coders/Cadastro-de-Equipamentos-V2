@@ -96,7 +96,11 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Nº DA SOLICITAÇÃO</th>
-                                        <th style="display:none;">PERIODO LOCAÇÃO</th>     
+                                        <th style="display:none;">PERIODO_LOCAÇÃO</th>
+     									<th style="display:none;">VALOR_IMPLEMENTO</th>
+      									<th style="display:none;">VALOR_FIPE</th>
+      									<th style="display:none;">VALOR_EQUIPAMENTO</th>   
+      									<th style="display:none;">USUARIO_LOGADO</th>   
                                         <th>SOLICITANTE</th>
                                         <th>OBRA</th>
                                         <th>FORNECEDOR</th>
