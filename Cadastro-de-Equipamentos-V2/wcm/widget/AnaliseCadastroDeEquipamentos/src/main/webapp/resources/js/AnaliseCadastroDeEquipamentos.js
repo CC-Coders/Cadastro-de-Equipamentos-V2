@@ -5,7 +5,7 @@ var MyWidget = SuperWidget.extend({
 
     init: function () {
         var self = this;
-        console.log("93")
+        console.log("94")
         var $button = $("#button-search");
         var originalText = "Buscar";
         var loadingInterval;
@@ -531,22 +531,34 @@ var MyWidget = SuperWidget.extend({
                 });
 
                 var table = $("#dataTableEdit").DataTable();
+                $(document).on('input', '#dataTableEdit .valorAtual, #dataTableEdit .valorFipe, #dataTableEdit .valorImplemento', function () {
+                    let valor = $(this).val().replace(/\D/g, "");
+                    let numero = (parseInt(valor, 10) / 100).toFixed(2);
+                    numero = numero.replace('.', ',');
+                    numero = numero.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                    $(this).val('R$ ' + numero);
+                });
+
                 table.on('draw.dt', function () {
                     table.rows().every(function () {
-                        var row = $(this.node());
-                        var valorFipe = limparMoeda(row.find('.valorFipe').val());
-                        var valorImplemento = limparMoeda(row.find('.valorImplemento').val());
-                        var valorLocacao = limparMoeda(row.find('td:eq(5)').text());
-                        var maoObra = limparMoeda(row.find('td:eq(10)').text());
-                        var depreciacaoImplemento = (valorImplemento * 0.05 * 10).toFixed(2);
+                        const row = $(this.node());
+                        const valorFipe = limparMoeda(row.find('.valorFipe').val());
+                        const valorImplemento = limparMoeda(row.find('.valorImplemento').val());
+                        const valorLocacao = limparMoeda(row.find('td:eq(5)').text());
+                        const maoObra = limparMoeda(row.find('td:eq(10)').text());
+
+                        const depreciacaoImplemento = (valorImplemento * 0.05 * 10).toFixed(2);
                         row.find('.depreciacaoImplemento').val(formatarMoeda(depreciacaoImplemento));
-                        var precoEquipamento = (valorFipe + parseFloat(depreciacaoImplemento)).toFixed(2);
+
+                        const precoEquipamento = (valorFipe + parseFloat(depreciacaoImplemento)).toFixed(2);
                         row.find('.precoEquipamento').val(formatarMoeda(precoEquipamento));
-                        var percentual = 0;
+
+                        let percentual = 0;
                         if (parseFloat(precoEquipamento) > 0) {
                             percentual = ((valorLocacao - maoObra) / parseFloat(precoEquipamento) * 100).toFixed(1);
                         }
-                        var campoClassificacao = row.find('.classificacaoBem');
+
+                        const campoClassificacao = row.find('.classificacaoBem');
                         campoClassificacao.val(formatarPercentual(percentual));
                         campoClassificacao.css('box-shadow', percentual > 3
                             ? 'inset 0 0 0 1000px #f8d7da'
@@ -735,24 +747,13 @@ function formatarMoeda(valor) {
 
 function limparMoeda(valor) {
     if (!valor) return 0;
-    return parseFloat(String(valor).replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+    valor = String(valor).replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.');
+    return parseFloat(valor) || 0;
 }
+
 
 function formatarPercentual(valor) {
     if (valor == null || valor === "" || isNaN(valor)) return "0%";
     return parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 1 }) + '%';
 }
 
-
-
-//function formatarMoeda(valor) {
-//    return 'R$ ' + (parseFloat(valor) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-//}
-//
-//function limparMoeda(valor) {
-//    return parseFloat(String(valor).replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
-//}
-//
-//function formatarPercentual(valor) {
-//    return (parseFloat(valor) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 1 }) + '%';
-//}
