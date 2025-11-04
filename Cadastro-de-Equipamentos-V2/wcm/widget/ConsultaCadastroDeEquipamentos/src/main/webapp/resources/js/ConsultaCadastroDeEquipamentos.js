@@ -3,7 +3,7 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
     variavelCaracter: null,
 
     init: function () {
-        console.log("31");
+        console.log("34");
         var self = this;
 
         var $button = $("#button-search");
@@ -192,7 +192,7 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
             }
             self.dataTable.clear();
             self.dataTable.rows.add(dados.slice(0, 500)).draw();
-            console.log("✅ DataTable atualizado com", dados.length, "registros");
+
             $("#dataTableFilter").off("click", ".btnSol").on("click", ".btnSol", function () {
                 var rowData = self.dataTable.row($(this).closest("tr")).data();
                 if (rowData) self.abrirModalVisualiza(rowData);
@@ -210,7 +210,14 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
 
     
     abrirModalVisualiza: function (rowData) {
-        const baseUrl = "http://desenvolvimento.castilho.com.br:3232/portal/p/1/ecmnavigation?app_ecm_navigation_doc=";
+        (async () => {
+            const baseUrl = "http://desenvolvimento.castilho.com.br:3232/portal/p/1/ecmnavigation?app_ecm_navigation_doc=";
+            
+            const docEquip = await createMultipleLinks(rowData.ANEXOS_DOCUMENTACAO);
+            const fotos = await createMultipleLinks(rowData.ANEXOS_FOTOS);
+            const laudo = await createMultipleLinks(rowData.ANEXOS_LAUDO);
+            const manutencao = await createMultipleLinks(rowData.ANEXOS_PLANO_MANUTENCAO);
+            const art = await createMultipleLinks(rowData.ANEXOS_ART);
         function renderLinks(campo) {
             if (!campo || campo.trim() === "") return "<span style='color:red'>❌ Não anexado</span>";
 
@@ -371,28 +378,28 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
         <div class="row">
             <div class="col-md-6">
                 <strong>Documentação Equipamento:</strong><br>
-                ${createMultipleLinks(rowData.ANEXOS_DOCUMENTACAO)}
+                ${docEquip}
             </div>
             <div class="col-md-6">
                 <strong>Foto do Equipamento:</strong><br>
-                ${createMultipleLinks(rowData.ANEXOS_FOTOS)}
+                ${fotos}
             </div>
            
         </div>
         <div class="row">
          <div class="col-md-6">
                 <strong>Laudo Técnico:</strong><br>
-                ${createMultipleLinks(rowData.ANEXOS_LAUDO)}
+                ${laudo}
             </div>
             <div class="col-md-6">
                 <strong>Plano de Manutenção:</strong><br>
-                ${createMultipleLinks(rowData.ANEXOS_PLANO_MANUTENCAO)}
+                ${manutencao}
             </div>
         </div>
         <div class="row">
                <div class="col-md-6">
                 <strong>ART:</strong><br>
-                ${createMultipleLinks(rowData.ANEXOS_ART)}
+                ${art}
             </div>
          
         </div>
@@ -409,44 +416,48 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
             id: modalId,
             size: 'large',
             cssClass: 'meu-modal-anexo',
-            actions: [{
-                'label': 'Fechar',
-                'autoClose': true
-            }]
         });
+        })();
     },
 
-    abrirModalAnexos: function (rowData) {
+    abrirModalAnexos: async function (rowData) { 
+        const docEquip = await createMultipleLinks(rowData.ANEXOS_DOCUMENTACAO);
+        const fotos = await createMultipleLinks(rowData.ANEXOS_FOTOS);
+        const laudo = await createMultipleLinks(rowData.ANEXOS_LAUDO);
+        const plano = await createMultipleLinks(rowData.ANEXOS_PLANO_MANUTENCAO);
+        const art = await createMultipleLinks(rowData.ANEXOS_ART);
+
         const modalContent = `
-        <div class="panel-body" style="padding: 15px; background: white;">
-            <div class="row">
-                <div class="col-md-6" style="margin-bottom: 15px;">
-                    <strong>Documentação Equipamento:</strong><br>
-                    ${createMultipleLinks(rowData.ANEXOS_DOCUMENTACAO)}
+            <div class="panel-body" style="padding: 15px; background: white;">
+                <div class="row">
+                    <div class="col-md-6" style="margin-bottom: 15px;">
+                        <strong>Documentação Equipamento:</strong><br>
+                        ${docEquip}
+                    </div>
+                    <div class="col-md-6" style="margin-bottom: 15px;">
+                        <strong>Foto do Equipamento:</strong><br>
+                        ${fotos}
+                    </div>
                 </div>
-                <div class="col-md-6" style="margin-bottom: 15px;">
-                    <strong>Foto do Equipamento:</strong><br>
-                    ${createMultipleLinks(rowData.ANEXOS_FOTOS)}
+                <div class="row">
+                    <div class="col-md-6" style="margin-bottom: 15px;">
+                        <strong>Laudo Técnico:</strong><br>
+                        ${laudo}
+                    </div>
+                    <div class="col-md-6" style="margin-bottom: 15px;">
+                        <strong>Plano de Manutenção:</strong><br>
+                        ${plano}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6" style="margin-bottom: 15px;">
+                        <strong>ART:</strong><br>
+                        ${art}
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6" style="margin-bottom: 15px;">
-                    <strong>Laudo Técnico:</strong><br>
-                    ${createMultipleLinks(rowData.ANEXOS_LAUDO)}
-                </div>
-                <div class="col-md-6" style="margin-bottom: 15px;">
-                    <strong>Plano de Manutenção:</strong><br>
-                    ${createMultipleLinks(rowData.ANEXOS_PLANO_MANUTENCAO)}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6" style="margin-bottom: 15px;">
-                    <strong>ART:</strong><br>
-                    ${createMultipleLinks(rowData.ANEXOS_ART)}
-                </div>
-            </div>
-        </div>
-    `;
+        `;
+
         const modalId = 'modalAnexos_' + new Date().getTime();
 
         FLUIGC.modal({
@@ -456,7 +467,7 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
             size: 'large',
             actions: [{ 'label': 'Fechar', 'autoClose': true }]
         });
-    },
+    }
 });
 
 
@@ -465,41 +476,48 @@ function trataNull(valor) {
 }
 
 
-function createMultipleLinks(anexoIds) {
-    const baseUrl = `${window.location.origin}/portal/p/1/ecmnavigation?app_ecm_navigation_doc=`;
+async function createMultipleLinks(anexoIds) {
     if (!anexoIds || anexoIds === "null" || anexoIds === "NULL" || anexoIds.toString().trim() === "") {
         return "<span style='color: #6c757d;'>-</span>";
     }
-    const ids = anexoIds.toString().split(',').map(id => id.trim()).filter(id => id && id !== "null");
+
+    const ids = anexoIds
+        .toString()
+        .split(',')
+        .map(id => id.trim())
+        .filter(id => id && id !== "null");
+
     let linksHtml = "";
-    ids.forEach(function (id, index) {
+
+    for (const id of ids) {
         try {
             const constraint = DatasetFactory.createConstraint("documentPK.documentId", id, id, ConstraintType.MUST);
             const ds = DatasetFactory.getDataset("document", ["documentDescription"], [constraint], null);
-
-            let nomeArquivo = ds && ds.values && ds.values.length > 0
-                ? ds.values[0].documentDescription
-                : `Documento ${id}`;
-            linksHtml += `
-                <a href="${baseUrl + id}" target="_blank"
-                    style="color: #007bff; text-decoration: none; display: block; margin-bottom: 5px;">
-                    <i class="flaticon flaticon-download icon-sm" aria-hidden="true"></i>
-                    ${nomeArquivo}
-                </a>
-            `;
-
+            const nomeArquivo =
+                ds && ds.values && ds.values.length > 0 ? ds.values[0].documentDescription : `Documento ${id}`;
+            linksHtml += await htmlNovoAnexo(id, nomeArquivo, false);
         } catch (e) {
             console.error(`❌ Erro ao buscar nome do documento ID ${id}:`, e);
-            linksHtml += `
-                <a href="${baseUrl + id}" target="_blank"
-                    style="color: #007bff; text-decoration: none; display: block; margin-bottom: 5px;">
-                    <i class="flaticon flaticon-download icon-sm" aria-hidden="true"></i>
-                    Documento ${id}
-                </a>
-            `;
+            linksHtml += await htmlNovoAnexo(id, `Documento ${id}`, false);
         }
-    });
+    }
 
     return linksHtml || "<span style='color: #6c757d;'>-</span>";
+}
+
+async function htmlNovoAnexo(documentId, documentName, permiteExclusao) {
+    var html = 
+    `<div class="btn btnAnexo">
+        <i class="flaticon flaticon-download icon-md" aria-hidden="true"></i>
+        <b><a target="_blank" href=${documentId == "#" ? "#" : await promiseBuscaDownloadUrlDocumentoNoFLuig(documentId)}>
+            ${documentName}
+        </a></b>
+        ${!permiteExclusao ? "" :
+            `<button class="btn btnDeletarAnexo" data-documentId="${documentId}">
+                <i class="flaticon flaticon-close icon-sm" aria-hidden="true"></i>
+            </button>`}
+    </div>`;
+
+    return html;
 }
 
