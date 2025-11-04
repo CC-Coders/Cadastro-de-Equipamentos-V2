@@ -182,18 +182,27 @@
             </div>
         </div>
     </body>
-
+    
+    <!-- Castilho Dev Guide -->
+    <script src="/castilho_dev_guide/resources/js/castilho-utils.js"></script>
+    <script src="/castilho_dev_guide/resources/js/castilho-consultas-rm.js"></script>
+    
+    <!-- React -->
     <script src="https://cdn.jsdelivr.net/npm/react@17/umd/react.development.js" crossorigin></script>
     <script src="https://cdn.jsdelivr.net/npm/react-dom@17/umd/react-dom.development.js" crossorigin></script>
     <script src="https://cdn.jsdelivr.net/npm/babel-core@6.26.0/browser.min.js"></script>
-    <!-- ChartJS -->
+    
+    <!-- ChartJS -->    
     <script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1"></script>
+    
     <!-- vcXMLRPC -->
     <script src="/webdesk/vcXMLRPC.js"></script>
     <!-- DataTables -->
+    
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+    
     <!-- DateRangePicker -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />

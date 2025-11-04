@@ -717,7 +717,6 @@ var MyWidget = SuperWidget.extend({
 });
 
 
-
 function createMultipleLinks(anexoIds) {
     if (!anexoIds || anexoIds === "null" || anexoIds === "NULL" || anexoIds.toString().trim() === "") {
         return "-";
