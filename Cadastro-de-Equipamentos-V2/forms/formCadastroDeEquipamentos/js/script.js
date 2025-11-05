@@ -289,6 +289,7 @@ function bindings() {
 
     $("#AnoFabricacao").mask("9999");
     $("#AnoModelo").mask("9999");
+    $("#Quantidade").mask("99999");
     $("#kmChegadaObra").mask('000.000.000', {reverse:true});
 
     
@@ -370,27 +371,34 @@ var beforeSendValidate = function () {
         if (!$("#categoria").val()) {
             errorMessage.push("Selecione a Categoria");
         }
-        if (!$("#modelo").val()) {
-            errorMessage.push("Selecione o Modelo");
+
+        if ($("#categoria").val() != "Outros") {
+            if (!$("#modelo").val()) {
+                errorMessage.push("Selecione o Modelo");
+            }
+            if (!$("#AnoFabricacao").val()) {
+                errorMessage.push("Informe o Ano de Fabricacao");
+            }
+            if (!$("#AnoModelo").val()) {
+                errorMessage.push("Informe o Ano do Modelo");
+            }
+            if (!$("#placa").val() && !$("#chassi").val()) {
+                errorMessage.push("Informe a Placa ou o Chassi");
+            }
+            if (!$("#potenciaMotor").val()) {
+                errorMessage.push("Informe a Potência do Motor");
+            }
+            if (!$("#tipoPotenciaMotor").val()) {
+                errorMessage.push("Informe o Tipo da Potência do Motor");
+            }
         }
-        if (!$("#AnoFabricacao").val()) {
-            errorMessage.push("Informe o Ano de Fabricacao");
+        else{
+            if (!$("#quantidade").val()) {
+                errorMessage.push("Informe a Quantidade");
+            }
         }
-        if (!$("#AnoModelo").val()) {
-            errorMessage.push("Informe o Ano do Modelo");
-        }
-        if (!$("#placa").val() && !$("#chassi").val()) {
-            errorMessage.push("Informe a Placa ou o Chassi");
-        }
-        if (!$("#potenciaMotor").val()) {
-            errorMessage.push("Informe a Potência do Motor");
-        }
-        if (!$("#tipoPotenciaMotor").val()) {
-            errorMessage.push("Informe o Tipo da Potência do Motor");
-        }
-        if (!$("#tipoPotenciaMotor").val()) {
-            errorMessage.push("Informe o Tipo da Potência do Motor");
-        }
+
+
 
         if (!$("#valorLocacao").val()) {
             errorMessage.push("Informe o Valor da Locação");
@@ -413,14 +421,17 @@ var beforeSendValidate = function () {
         if (!$("#kmChegadaObra").val()) {
             errorMessage.push("Informe a km/horas de Chegada na Obra");
         }
-        if (!$("#tipoCombustivel").val()) {
-            errorMessage.push("Informe o Tipo de combustível");
-        }
-        if (!$("#litrosTanque").val()) {
-            errorMessage.push("Informe a Capacidade do Tanque");
-        }
-        if (!$("#consumoMedio").val()) {
-            errorMessage.push("Informe o Consumo Médio");
+
+        if ($("#categoria").val() != "Outros") {
+            if (!$("#tipoCombustivel").val()) {
+                errorMessage.push("Informe o Tipo de combustível");
+            }
+            if (!$("#litrosTanque").val()) {
+                errorMessage.push("Informe a Capacidade do Tanque");
+            }
+            if (!$("#consumoMedio").val()) {
+                errorMessage.push("Informe o Consumo Médio");
+            }
         }
 
         // Fornecedor e Anexo

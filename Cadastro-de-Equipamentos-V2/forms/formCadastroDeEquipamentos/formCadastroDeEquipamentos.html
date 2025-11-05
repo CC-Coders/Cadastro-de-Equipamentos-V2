@@ -169,6 +169,11 @@
 					</select>
 					<br>
 				</div>
+				<div class="col-md-6 inputGroup">
+					<label for="quantidade" class="required">Quantidade:</label>
+					<input name="quantidade" id="quantidade" class="form-control inputOutros"/>
+					<br>
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-6 inputGroup">
@@ -325,9 +330,9 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-4 inputGroup">
 					<label for="tipoCombustivel" class="required">Tipo de combustível:</label>
-					<select name="tipoCombustivel" id="tipoCombustivel" class="form-control">
+					<select name="tipoCombustivel" id="tipoCombustivel" class="form-control inputPA inputMA">
 						<option value=""></option>
 						<option value="400">GASOLINA COMUM</option>
 						<option value="401">DIESEL S-10</option>
@@ -341,16 +346,16 @@
 					</select>
 					<br>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-4 inputGroup">
 					<label for="litrosTanque" class="required">Tanque (Litros):</label>
-					<input type="text" name="litrosTanque" id="litrosTanque" class="form-control">
+					<input type="text" name="litrosTanque" id="litrosTanque" class="form-control inputPA inputMA">
 					<br>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-4 inputGroup">
 					<label for="consumoMedio" class="required">Consumo Médio:</label>
 					<div class="flexInput">
-						<input type="text" name="consumoMedio" id="consumoMedio" class="form-control">
-						<select name="tipoConsumoMedio" id="tipoConsumoMedio" class="form-control">
+						<input type="text" name="consumoMedio" id="consumoMedio" class="form-control inputPA inputMA">
+						<select name="tipoConsumoMedio" id="tipoConsumoMedio" class="form-control inputPA inputMA">
 							<option value="km/L">km/L</option>
 							<option value="L/H">L/H</option>
 						</select>
