@@ -28,7 +28,7 @@
     <processDefinitionVersionPK>
       <companyId>1</companyId>
       <processId>Cadastro de Equipamentos</processId>
-      <version>31</version>
+      <version>32</version>
     </processDefinitionVersionPK>
     <versionDescription></versionDescription>
     <formId>29958</formId>
@@ -381,7 +381,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>1</expressionOrder>
-        <version>31</version>
+        <version>32</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -393,7 +393,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>2</expressionOrder>
-        <version>31</version>
+        <version>32</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -407,7 +407,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>3</expressionOrder>
-        <version>31</version>
+        <version>32</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -691,7 +691,7 @@ function getDateTimeNow() {&#xd;
     try {&#xd;
         &#xd;
         var isPAouMAouOutros = hAPI.getCardValue(&quot;categoria&quot;);&#xd;
-        if (isPAouMAouOutros == &quot;PA&quot; || isPAouMAouOutros == &quot;MA&quot;) {&#xd;
+        if (isPAouMAouOutros == &quot;PA&quot; || isPAouMAouOutros == &quot;MA&quot; || isPAouMAouOutros == &quot;Outros&quot;) {&#xd;
             cadastraEquipamentoNoSisma();&#xd;
         }&#xd;
         &#xd;
@@ -791,6 +791,8 @@ function getDadosEquipamento() {&#xd;
     var DATA_VENCIMENTO_ART = hAPI.getCardValue(&quot;dataVencimentoART&quot;);&#xd;
     var DATA_VENCIMENTO_LAUDO = hAPI.getCardValue(&quot;dataVencimentoLaudo&quot;);&#xd;
 &#xd;
+    var QUANTIDADE = hAPI.getCardValue(&quot;quantidade&quot;);&#xd;
+&#xd;
     return {&#xd;
         &quot;CODCOLIGADA&quot;: CODCOLIGADA,&#xd;
         &quot;CODCCUSTO&quot;: CODCCUSTO,&#xd;
@@ -836,6 +838,8 @@ function getDadosEquipamento() {&#xd;
 &#xd;
         DATA_VENCIMENTO_ART:DATA_VENCIMENTO_ART,&#xd;
         DATA_VENCIMENTO_LAUDO:DATA_VENCIMENTO_LAUDO,&#xd;
+&#xd;
+        QUANTIDADE:QUANTIDADE,&#xd;
     };&#xd;
 &#xd;
 }</eventDescription>
@@ -899,7 +903,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>31</version>
+        <version>32</version>
         <linkSequence>22</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -910,7 +914,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>31</version>
+        <version>32</version>
         <linkSequence>20</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -921,7 +925,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>31</version>
+        <version>32</version>
         <linkSequence>21</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -932,7 +936,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>31</version>
+        <version>32</version>
         <linkSequence>23</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -943,7 +947,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>31</version>
+        <version>32</version>
         <linkSequence>18</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>

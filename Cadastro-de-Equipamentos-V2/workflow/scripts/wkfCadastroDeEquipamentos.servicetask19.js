@@ -2,7 +2,7 @@ function servicetask19(attempt, message) {
     try {
         
         var isPAouMAouOutros = hAPI.getCardValue("categoria");
-        if (isPAouMAouOutros == "PA" || isPAouMAouOutros == "MA") {
+        if (isPAouMAouOutros == "PA" || isPAouMAouOutros == "MA" || isPAouMAouOutros == "Outros") {
             cadastraEquipamentoNoSisma();
         }
         
@@ -102,6 +102,8 @@ function getDadosEquipamento() {
     var DATA_VENCIMENTO_ART = hAPI.getCardValue("dataVencimentoART");
     var DATA_VENCIMENTO_LAUDO = hAPI.getCardValue("dataVencimentoLaudo");
 
+    var QUANTIDADE = hAPI.getCardValue("quantidade");
+
     return {
         "CODCOLIGADA": CODCOLIGADA,
         "CODCCUSTO": CODCCUSTO,
@@ -147,6 +149,8 @@ function getDadosEquipamento() {
 
         DATA_VENCIMENTO_ART:DATA_VENCIMENTO_ART,
         DATA_VENCIMENTO_LAUDO:DATA_VENCIMENTO_LAUDO,
+
+        QUANTIDADE:QUANTIDADE,
     };
 
 }
