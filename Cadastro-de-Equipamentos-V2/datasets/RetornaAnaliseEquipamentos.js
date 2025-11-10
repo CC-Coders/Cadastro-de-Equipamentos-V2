@@ -60,7 +60,7 @@ LEFT JOIN (
 ) AS EQ_AUX
     ON EQ_AUX.ID_TCNT_AUXILIAR = TCNT_AUXILIAR.ID
 INNER JOIN [fluig_desenvolvimento].dbo.ML001121 
-    ON TCNT_AUXILIAR.ID_FLUIG = ML001121.numProces;
+    ON TCNT_AUXILIAR.ID_FLUIG = ML001121.numProces
 
         `;
         var whereParts = [];
@@ -81,9 +81,9 @@ INNER JOIN [fluig_desenvolvimento].dbo.ML001121
             } else if (campo === "DATA_ABERTURA" || campo === "dataAberturaSol") {              
                 whereParts.push("ML001121.dataAberturaSol = '" + valor + "'");
             } else if (campo === "CRIADO_EM") {
-                whereParts.push("ML001121.criadoEm = '" + valor + "'");
+                whereParts.push("ML001121.dataCriadoEm = '" + valor + "'");
             } else if (campo === "FINALIZADO_EM") {
-                whereParts.push("ML001121.finalizadoEm = '" + valor + "'");
+                whereParts.push("EQ_AUX.FINALIZADO_EM = '" + valor + "'");
             } else {
                 whereParts.push(campo + " LIKE '%" + valor + "%'");
             }

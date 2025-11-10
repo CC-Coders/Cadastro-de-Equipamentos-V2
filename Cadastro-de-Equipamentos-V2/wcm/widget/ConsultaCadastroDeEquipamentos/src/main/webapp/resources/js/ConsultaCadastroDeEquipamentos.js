@@ -3,7 +3,7 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
     variavelCaracter: null,
 
     init: function () {
-        console.log("34");
+        console.log("39");
         var self = this;
 
         var $button = $("#button-search");
@@ -21,7 +21,7 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
             $button.prop("disabled", true)
                 .text("Buscando")
                 .css({
-                    backgroundColor: "#ffc107", 
+                    backgroundColor: "#ffc107",
                     color: "#000",
                     minWidth: "120px",
                     transition: "background-color 0.3s ease"
@@ -38,9 +38,9 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
                 clearInterval(loadingInterval);
                 $button.prop("disabled", false)
                     .text(originalText)
-                    .removeClass("loading-yellow") 
+                    .removeClass("loading-yellow")
                     .css({
-                        backgroundColor: "#777777ff", 
+                        backgroundColor: "#777777ff",
                         color: "#fff"
                     });
             });
@@ -69,8 +69,8 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
 
     executeAction: function (htmlElement, event) { },
 
-    
-    
+
+
     buscaResultados: function () {
         var self = this;
         var filtros = {
@@ -171,7 +171,17 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
                             },
                         },
                         { data: "OBRA", title: "Localização" },
-                        { data: "DESC_STATUS_EQUIPAMENTO", title: "Status" },
+                        {
+                            data: "DESC_STATUS_EQUIPAMENTO",
+                            title: "Status",
+                            render: function (data, type, row) {
+                                if (data == null || data === undefined || data === "" ||
+                                    (typeof data === 'string' && (data.trim() === "" || data.toLowerCase() === "null"))) {
+                                    return "-";
+                                }
+                                return data;
+                            }
+                        },
                         {
                             data: null,
                             title: "Ações",
@@ -191,7 +201,8 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
                 });
             }
             self.dataTable.clear();
-            self.dataTable.rows.add(dados.slice(0, 500)).draw();
+            self.dataTable.rows.add(dados).draw();
+            // self.dataTable.rows.add(dados.slice(0, 500)).draw();
 
             $("#dataTableFilter").off("click", ".btnSol").on("click", ".btnSol", function () {
                 var rowData = self.dataTable.row($(this).closest("tr")).data();
@@ -208,28 +219,28 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
         }
     },
 
-    
+
     abrirModalVisualiza: function (rowData) {
         (async () => {
             const baseUrl = "http://desenvolvimento.castilho.com.br:3232/portal/p/1/ecmnavigation?app_ecm_navigation_doc=";
-            
+
             const docEquip = await createMultipleLinks(rowData.ANEXOS_DOCUMENTACAO);
             const fotos = await createMultipleLinks(rowData.ANEXOS_FOTOS);
             const laudo = await createMultipleLinks(rowData.ANEXOS_LAUDO);
             const manutencao = await createMultipleLinks(rowData.ANEXOS_PLANO_MANUTENCAO);
             const art = await createMultipleLinks(rowData.ANEXOS_ART);
-        function renderLinks(campo) {
-            if (!campo || campo.trim() === "") return "<span style='color:red'>❌ Não anexado</span>";
+            function renderLinks(campo) {
+                if (!campo || campo.trim() === "") return "<span style='color:red'>❌ Não anexado</span>";
 
-            const ids = campo.split(",").map(id => id.trim());
-            return ids.map(id => `
+                const ids = campo.split(",").map(id => id.trim());
+                return ids.map(id => `
                  <a href="${baseUrl + id}" target="_blank" style="display:inline-block; margin-right:8px;">
                      <i class="flaticon flaticon-attachment icon-sm" style="color:#007bff"></i> ${id}
                  </a>
              `).join("");
-        }
-        var self = this;
-        var modalContent = `
+            }
+            var self = this;
+            var modalContent = `
     <div class="panel-body" style="display: block;">
 
         <!-- Identificação (Equipamento e Obra) -->
@@ -242,13 +253,13 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6"><b style="color: #636E72">Coliga/Empresa:</b> ${rowData.COLIGADA == 1
-                ? "1 - Construtora Castilho"
-                : rowData.COLIGADA == 12
-                    ? "12 - Dromos"
-                    : rowData.COLIGADA == 13
-                        ? "13 - Epya"
-                        : "-"
-            }</div>
+                    ? "1 - Construtora Castilho"
+                    : rowData.COLIGADA == 12
+                        ? "12 - Dromos"
+                        : rowData.COLIGADA == 13
+                            ? "13 - Epya"
+                            : "-"
+                }</div>
                     <div class="col-md-6"><strong style="color: #636E72">Obra:</strong> ${trataNull(rowData.OBRA)}</div>
                   
                 </div>
@@ -297,30 +308,30 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
                 </div>
                 <div class="row">
                     <div class="col-md-6"><strong style="color: #636E72">Valor Mobilização:</strong> ${!rowData.VALOR_MOBILIZADO ||
-                rowData.VALOR_MOBILIZADO.toLowerCase() === "null"
-                ? "-"
-                : rowData.VALOR_MOBILIZADO
-            }</div>
+                    rowData.VALOR_MOBILIZADO.toLowerCase() === "null"
+                    ? "-"
+                    : rowData.VALOR_MOBILIZADO
+                }</div>
                         <div class="col-md-6"><strong style="color: #636E72">Valor Extra:</strong> ${!rowData.VALOR_EXTRA || rowData.VALOR_EXTRA.toLowerCase() === "null"
-                ? "-"
-                : rowData.VALOR_EXTRA
-            }</div>
+                    ? "-"
+                    : rowData.VALOR_EXTRA
+                }</div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                     <b style="color: #636E72">Valor de Locação:</b>
                         ${rowData.VALOR_LOCACAO
-                ? "R$ " +
-                parseFloat(rowData.VALOR_LOCACAO).toLocaleString("pt-BR", {
-                    minimumFractionDigits: 2,
-                })
-                : "-"
-            }
+                    ? "R$ " +
+                    parseFloat(rowData.VALOR_LOCACAO).toLocaleString("pt-BR", {
+                        minimumFractionDigits: 2,
+                    })
+                    : "-"
+                }
                     </div>
                 <div class="col-md-4"><strong style="color: #636E72">Mão de Obra:</strong> ${!rowData.MAODEOBRA || rowData.MAODEOBRA.toLowerCase() === "null"
-                ? "-"
-                : rowData.MAODEOBRA
-            }</div>
+                    ? "-"
+                    : rowData.MAODEOBRA
+                }</div>
             </div>
             </div>
         </div>
@@ -341,12 +352,12 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
                   <div class="row">
                    <div class="col-md-6"><strong style="color: #636E72">Tipo de Combustível:</strong> ${!rowData.COMBUSTIVEL || rowData.COMBUSTIVEL.toLowerCase() === "null" ? "-" : rowData.COMBUSTIVEL}</div>
                 <div class="col-md-6"><strong style="color: #636E72">Capacidade do Tanque:</strong> ${!rowData.CAPACIDADE_COMBUSTIVEL ||
-                rowData.CAPACIDADE_COMBUSTIVEL.toLowerCase() === "null"
-                ? "-"
-                : rowData.CAPACIDADE_COMBUSTIVEL
-            }</div>
+                    rowData.CAPACIDADE_COMBUSTIVEL.toLowerCase() === "null"
+                    ? "-"
+                    : rowData.CAPACIDADE_COMBUSTIVEL
+                }</div>
                 <div class="col-md-6"><strong style="color: #636E72">Consumo Médio:</strong> ${rowData.RELACAO_KM_HORA || "-"
-            }</div>
+                }</div>
             </div>
             </div>
         </div>
@@ -374,34 +385,39 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
             <h4 class="panel-title">Anexos</h4>
         </div>
 
-    <div class="panel-body" style="display: block;">
-        <div class="row">
-            <div class="col-md-6">
-                <strong>Documentação Equipamento:</strong><br>
-                ${docEquip}
+     <div class="panel-body" style="padding: 20px; background: white;">
+        <div style="
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        ">
+            <!-- Coluna Esquerda -->
+            <div style="flex: 1;">
+                <div style="margin-bottom: 15px;">
+                    <strong>Documentação Equipamento:</strong><br>
+                    <div style="padding-left:10px;">${docEquip}</div>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <strong>Laudo Técnico:</strong><br>
+                    <div style="padding-left:10px;">${laudo}</div>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <strong>ART:</strong><br>
+                    <div style="padding-left:10px;">${art}</div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <strong>Foto do Equipamento:</strong><br>
-                ${fotos}
+
+            <!-- Coluna Direita -->
+            <div style="flex: 1;">
+                <div style="margin-bottom: 15px;">
+                    <strong>Foto do Equipamento:</strong><br>
+                    <div style="padding-left:10px;">${fotos}</div>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <strong>Plano de Manutenção:</strong><br>
+                    <div style="padding-left:10px;">${manutencao}</div>
+                </div>
             </div>
-           
-        </div>
-        <div class="row">
-         <div class="col-md-6">
-                <strong>Laudo Técnico:</strong><br>
-                ${laudo}
-            </div>
-            <div class="col-md-6">
-                <strong>Plano de Manutenção:</strong><br>
-                ${manutencao}
-            </div>
-        </div>
-        <div class="row">
-               <div class="col-md-6">
-                <strong>ART:</strong><br>
-                ${art}
-            </div>
-         
         </div>
     </div>
 </div>
@@ -409,54 +425,66 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
     </div>
     </div>
     `;
-        var modalId = 'modalDetalhesEquipamento_' + new Date().getTime();
-        FLUIGC.modal({
-            title: 'Detalhes do Equipamento',
-            content: modalContent,
-            id: modalId,
-            size: 'large',
-            cssClass: 'meu-modal-anexo',
-        });
+            var modalId = 'modalDetalhesEquipamento_' + new Date().getTime();
+            FLUIGC.modal({
+                title: 'Detalhes do Equipamento',
+                content: modalContent,
+                id: modalId,
+                size: 'large',
+                cssClass: 'meu-modal-anexo',
+            });
         })();
     },
+   
 
-    abrirModalAnexos: async function (rowData) { 
-        const docEquip = await createMultipleLinks(rowData.ANEXOS_DOCUMENTACAO);
+
+
+    abrirModalAnexos: async function (rowData) {
+        console.log(rowData)
+    	const docEquip = await createMultipleLinks(rowData.ANEXOS_DOCUMENTACAO);
         const fotos = await createMultipleLinks(rowData.ANEXOS_FOTOS);
         const laudo = await createMultipleLinks(rowData.ANEXOS_LAUDO);
         const plano = await createMultipleLinks(rowData.ANEXOS_PLANO_MANUTENCAO);
         const art = await createMultipleLinks(rowData.ANEXOS_ART);
 
         const modalContent = `
-            <div class="panel-body" style="padding: 15px; background: white;">
-                <div class="row">
-                    <div class="col-md-6" style="margin-bottom: 15px;">
-                        <strong>Documentação Equipamento:</strong><br>
-                        ${docEquip}
+            <div class="panel-body" style="padding: 20px; background: white;">
+                <div style="
+                    display: flex;
+                    gap: 30px;
+                    align-items: flex-start;
+                ">
+                    <!-- Coluna Esquerda -->
+                    <div style="flex: 1;">
+                        <div style="margin-bottom: 15px;">
+                            <strong>Documentação do Equipamento:</strong><br>
+                            <div style="padding-left:10px;">${docEquip}</div>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <strong>Laudo Técnico:</strong><br>
+                            <div style="padding-left:10px;">${laudo}</div>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <strong>ART:</strong><br>
+                            <div style="padding-left:10px;">${art}</div>
+                        </div>
                     </div>
-                    <div class="col-md-6" style="margin-bottom: 15px;">
-                        <strong>Foto do Equipamento:</strong><br>
-                        ${fotos}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6" style="margin-bottom: 15px;">
-                        <strong>Laudo Técnico:</strong><br>
-                        ${laudo}
-                    </div>
-                    <div class="col-md-6" style="margin-bottom: 15px;">
-                        <strong>Plano de Manutenção:</strong><br>
-                        ${plano}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6" style="margin-bottom: 15px;">
-                        <strong>ART:</strong><br>
-                        ${art}
+
+                    <!-- Coluna Direita -->
+                    <div style="flex: 1;">
+                        <div style="margin-bottom: 15px;">
+                            <strong>Foto do Equipamento:</strong><br>
+                            <div style="padding-left:10px;">${fotos}</div>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <strong>Plano de Manutenção:</strong><br>
+                            <div style="padding-left:10px;">${plano}</div>
+                        </div>
                     </div>
                 </div>
             </div>
         `;
+
 
         const modalId = 'modalAnexos_' + new Date().getTime();
 
@@ -506,8 +534,8 @@ async function createMultipleLinks(anexoIds) {
 }
 
 async function htmlNovoAnexo(documentId, documentName, permiteExclusao) {
-    var html = 
-    `<div class="btn btnAnexo">
+    var html =
+        `<div class="btn btnAnexo">
         <i class="flaticon flaticon-download icon-md" aria-hidden="true"></i>
         <b><a target="_blank" href=${documentId == "#" ? "#" : await promiseBuscaDownloadUrlDocumentoNoFLuig(documentId)}>
             ${documentName}
