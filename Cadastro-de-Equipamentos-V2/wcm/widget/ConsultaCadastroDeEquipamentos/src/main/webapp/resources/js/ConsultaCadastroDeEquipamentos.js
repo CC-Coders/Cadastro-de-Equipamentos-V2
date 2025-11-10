@@ -15,7 +15,7 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
         
         const inputValorLocacao = document.getElementById("valorLocacao");
         aplicarMascaraMoeda(inputValorLocacao);
-            
+        preencherObrasDoUsuario()
         $button.css({
             minWidth: "120px",
             color: "#fff",
@@ -637,3 +637,57 @@ function aplicarMascaraMoeda(input) {
     });
 }
 
+
+function preencherObrasDoUsuario() {
+    const userCode = WCMAPI.userCode;
+    if (!userCode) {
+        console.error("O valor de 'solicitante' está vazio ou não foi encontrado.");
+        FLUIGC.toast({
+            title: "Erro:",
+            message: "O usuário solicitante não está definido.",
+            type: "warning"
+        });
+        return;
+    }
+
+    try {
+        const permissoes = buscaObrasPorPermissaoDoUsuario(userCode, true);
+        if (permissoes.length > 0) {
+            const selectObra = $("#localizacao");
+            selectObra.empty();
+
+            let optionsObra = "<option value='' id='option'></option>";
+            let codcoligadaAtual = "";
+
+            permissoes.forEach(ccusto => {
+                if (codcoligadaAtual !== ccusto.CODCOLIGADA) {
+                    if (codcoligadaAtual !== "") {
+                        optionsObra += "</optgroup>";
+                    }
+                    optionsObra += `<optgroup label="${ccusto.CODCOLIGADA} - ${ccusto.NOMEFANTASIA}">`;
+                    codcoligadaAtual = ccusto.CODCOLIGADA;
+                }
+
+                const optionValue = `${ccusto.CODCOLIGADA} - ${ccusto.CODCCUSTO} - ${ccusto.perfil}`;
+                const optionLabel = `${ccusto.CODCCUSTO} - ${ccusto.perfil}`;
+                optionsObra += `<option value="${optionValue}">${optionLabel}</option>`;
+
+            });
+            optionsObra += "</optgroup>";
+            selectObra.append(optionsObra);
+        } else {
+            FLUIGC.toast({
+                title: "Aviso:",
+                message: "Nenhuma permissão encontrada para o usuário.",
+                type: "warning"
+            });
+        }
+    } catch (error) {
+        console.error("Erro ao preencher obras do usuário:", error);
+        FLUIGC.toast({
+            title: "Erro ao preencher obras do usuário:",
+            message: error.message || error,
+            type: "danger"
+        });
+    }
+}

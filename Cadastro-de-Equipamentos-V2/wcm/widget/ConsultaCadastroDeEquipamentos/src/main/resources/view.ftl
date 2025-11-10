@@ -82,8 +82,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-input">
-                                        <label>Localização:</label> <input type="text" id="localizacao"
-                                            name="localizacao" class="form-control inputInfoChamado" />
+                                        <label>Localização:</label>
+                                            <select name="ocalizacao" id="localizacao" class="form-control inputInfoChamado"> 
+                                           </select>
                                     </div>
                                 </div>
                                  <div class="col-md-4">
