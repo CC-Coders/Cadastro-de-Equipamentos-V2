@@ -436,66 +436,98 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
         })();
     },
    
-
-
-
     abrirModalAnexos: async function (rowData) {
-        console.log(rowData)
-    	const docEquip = await createMultipleLinks(rowData.ANEXOS_DOCUMENTACAO);
+        const docEquip = await createMultipleLinks(rowData.ANEXOS_DOCUMENTACAO);
         const fotos = await createMultipleLinks(rowData.ANEXOS_FOTOS);
         const laudo = await createMultipleLinks(rowData.ANEXOS_LAUDO);
-        const plano = await createMultipleLinks(rowData.ANEXOS_PLANO_MANUTENCAO);
+        const manutencao = await createMultipleLinks(rowData.ANEXOS_PLANO_MANUTENCAO);
         const art = await createMultipleLinks(rowData.ANEXOS_ART);
 
+        const formatarData = (data) => {
+            if (!data || data === "null") return "-";
+            const partes = data.split("-");
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        };
+
+        const vencimentoLaudo = formatarData(rowData.DATA_VENCIMENTO_LAUDO);
+        const vencimentoArt = formatarData(rowData.DATA_VENCIMENTO_ART);
+
+        const estiloCard = `
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        `;
+
+        const estiloTitulo = `
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 15px;
+        `;
+
+        const estiloData = `
+            color: #c9302c;
+            font-weight: bold;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 4px;
+        `;
+
         const modalContent = `
-            <div class="panel-body" style="padding: 20px; background: white;">
-                <div style="
-                    display: flex;
-                    gap: 30px;
-                    align-items: flex-start;
-                ">
-                    <!-- Coluna Esquerda -->
+            <div class="panel-body" style="display: block; padding: 10px;">
+                <div style="display: flex; justify-content: space-between; gap: 15px;">
                     <div style="flex: 1;">
-                        <div style="margin-bottom: 15px;">
-                            <strong>Documentação do Equipamento:</strong><br>
-                            <div style="padding-left:10px;">${docEquip}</div>
+                        <div style="${estiloCard}">
+                            <div style="${estiloTitulo}">Documentação do Equipamento</div>
+                            <div>${docEquip}</div>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                            <strong>Laudo Técnico:</strong><br>
-                            <div style="padding-left:10px;">${laudo}</div>
+                        <div style="${estiloCard}">
+                            <div style="${estiloTitulo}">Laudo Técnico</div>
+                            <div>${laudo}</div>
+                            <div style="${estiloData}">
+                                <i class="fluigicon fluigicon-warning-sign icon-sm"></i>
+                                Data de Vencimento: ${vencimentoLaudo}
+                            </div>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                            <strong>ART:</strong><br>
-                            <div style="padding-left:10px;">${art}</div>
+                        <div style="${estiloCard}">
+                            <div style="${estiloTitulo}">ART</div>
+                            <div>${art}</div>
+                            <div style="${estiloData}">
+                                <i class="fluigicon fluigicon-warning-sign icon-sm"></i>
+                                Data de Vencimento: ${vencimentoArt}
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Coluna Direita -->
                     <div style="flex: 1;">
-                        <div style="margin-bottom: 15px;">
-                            <strong>Foto do Equipamento:</strong><br>
-                            <div style="padding-left:10px;">${fotos}</div>
+                        <div style="${estiloCard}">
+                            <div style="${estiloTitulo}">Foto do Equipamento</div>
+                            <div>${fotos}</div>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                            <strong>Plano de Manutenção:</strong><br>
-                            <div style="padding-left:10px;">${plano}</div>
+                        <div style="${estiloCard}">
+                            <div style="${estiloTitulo}">Plano de Manutenção</div>
+                            <div>${manutencao}</div>
                         </div>
                     </div>
                 </div>
             </div>
         `;
 
-
         const modalId = 'modalAnexos_' + new Date().getTime();
 
         FLUIGC.modal({
-            title: 'Anexos do Equipamento',
+            title: '📎 Anexos do Equipamento',
             content: modalContent,
             id: modalId,
             size: 'large',
             actions: [{ 'label': 'Fechar', 'autoClose': true }]
         });
     }
+
 });
 
 
