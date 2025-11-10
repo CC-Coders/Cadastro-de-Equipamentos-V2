@@ -63,13 +63,13 @@
                                 <div class="col-md-4">
                                     <div class="form-input">
                                         <label>Criado em:</label> <input type="text" id="criado" name="criado"
-                                            class="form-control inputInfoChamado" />
+                                            class="form-control inputInfoChamado date" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-input">
                                         <label>Finalizado em:</label> <input type="text" id="finalizado"
-                                            name="finalizado" class="form-control inputInfoChamado" />
+                                            name="finalizado" class="form-control inputInfoChamado date" />
                                     </div>
                                 </div>
                             </div>
