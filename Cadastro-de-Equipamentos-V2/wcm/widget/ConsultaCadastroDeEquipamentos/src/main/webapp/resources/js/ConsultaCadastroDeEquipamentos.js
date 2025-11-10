@@ -3,13 +3,19 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
     variavelCaracter: null,
 
     init: function () {
-        console.log("39");
+        console.log("43");
         var self = this;
 
         var $button = $("#button-search");
         var originalText = "Buscar";
         var loadingInterval;
 
+        const inputCpfCnpj = document.getElementById("cpf");
+        aplicarMascaraCpfCnpj(inputCpfCnpj);
+        
+        const inputValorLocacao = document.getElementById("valorLocacao");
+        aplicarMascaraMoeda(inputValorLocacao);
+            
         $button.css({
             minWidth: "120px",
             color: "#fff",
@@ -69,10 +75,14 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
 
     executeAction: function (htmlElement, event) { },
 
-
-
     buscaResultados: function () {
         var self = this;
+        let valorLocacao = $("#valorLocacao").val();
+        if (valorLocacao) {
+            valorLocacao = valorLocacao
+                .replace(/[R$\s.]/g, "") 
+                .replace(",", "."); 
+        }
         var filtros = {
             PREFIXO: $("#prefixo").val(),
             DESCRICAO: $("#descricao").val(),
@@ -80,7 +90,7 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
             FABRICANTE: $("#fabricante").val(),
             FORNECEDOR_CNPJ: $("#cpf").val(),
             FORNECEDOR: $("#fornecedor").val(),
-            VALOR_LOCACAO: $("#valorLocacao").val(),
+            VALOR_LOCACAO: valorLocacao,
             OBRA: $("#localizacao").val(),
             CONTRATO: $('#contrato').val()
         };
@@ -579,5 +589,51 @@ async function htmlNovoAnexo(documentId, documentName, permiteExclusao) {
     </div>`;
 
     return html;
+}
+
+
+
+function aplicarMascaraCpfCnpj(input) {
+    input.addEventListener('input', function () {
+        let valor = this.value.replace(/\D/g, ''); 
+        if (valor.length <= 11) {
+            this.value = valor
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        } else {
+            this.value = valor
+                .replace(/^(\d{2})(\d)/, '$1.$2')
+                .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+                .replace(/\.(\d{3})(\d)/, '.$1/$2')
+                .replace(/(\d{4})(\d)/, '$1-$2');
+            this.maxLength = 18; 
+        }
+    });
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'Backspace' || e.key === 'Delete') {
+            this.removeAttribute('maxLength');
+        }
+    });
+}
+
+
+function aplicarMascaraMoeda(input) {
+    input.addEventListener("input", function () {
+        let valor = this.value.replace(/\D/g, ""); 
+        if (valor === "") {
+            this.value = "";
+            return;
+        }
+        valor = (parseInt(valor, 10) / 100).toFixed(2) + "";
+        valor = valor.replace(".", ",");
+        valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        this.value = "R$ " + valor;
+    });
+    input.addEventListener("blur", function () {
+        if (this.value === "R$ 0,00" || this.value === "R$ NaN,00") {
+            this.value = "";
+        }
+    });
 }
 
