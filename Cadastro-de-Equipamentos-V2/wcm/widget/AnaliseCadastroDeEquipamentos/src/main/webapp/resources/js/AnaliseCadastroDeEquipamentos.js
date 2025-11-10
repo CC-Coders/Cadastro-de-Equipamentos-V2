@@ -5,7 +5,7 @@ var MyWidget = SuperWidget.extend({
 
     init: function () {
         var self = this;
-        console.log("107")
+        console.log("109")
         var $button = $("#button-search");
         var originalText = "Buscar";
         var loadingInterval;
@@ -961,6 +961,36 @@ var MyWidget = SuperWidget.extend({
                     var precoEquipamento = limparMoeda(row.find('.precoEquipamento').val());
                     var dataFinalizado = moment().format('DD/MM/YYYY');
 
+                    if (!valorAtual || valorAtual === "0" || isNaN(valorAtual)) {
+                        FLUIGC.toast({
+                            title: "Erro:",
+                            message: "O campo 'Valor Atual' é obrigatório.",
+                            type: "danger"
+                        });
+                        row.find('.valorAtual').focus();
+                        return;
+                    }
+
+                    if (!valorFipe || valorFipe === "0" || isNaN(valorFipe)) {
+                        FLUIGC.toast({
+                            title: "Erro:",
+                            message: "O campo 'FIPE' é obrigatório.",
+                            type: "danger"
+                        });
+                        row.find('.valorFipe').focus();
+                        return;
+                    }
+
+//                    if (!referencia) {
+//                        FLUIGC.toast({
+//                            title: "Erro:",
+//                            message: "O campo 'Referência' é obrigatório.",
+//                            type: "danger"
+//                        });
+//                        row.find('.referencia').focus();
+//                        return;
+//                    }
+                    
                     var c1 = DatasetFactory.createConstraint("PREFIXO", prefixo, prefixo, ConstraintType.MUST);
                     var c2 = DatasetFactory.createConstraint("MODO", "EDITAR_TUDO", "EDITAR_TUDO", ConstraintType.MUST);
                     var c3 = DatasetFactory.createConstraint("VALOR_EQUIPAMENTO", valorAtual, valorAtual, ConstraintType.MUST);
