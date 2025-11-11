@@ -3,7 +3,7 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
     variavelCaracter: null,
 
     init: function () {
-        console.log("43");
+        console.log("45");
         var self = this;
 
         var $button = $("#button-search");
@@ -15,7 +15,7 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
         
         const inputValorLocacao = document.getElementById("valorLocacao");
         aplicarMascaraMoeda(inputValorLocacao);
-        preencherObrasDoUsuario()
+    //    preencherObrasDoUsuario()
         $button.css({
             minWidth: "120px",
             color: "#fff",
