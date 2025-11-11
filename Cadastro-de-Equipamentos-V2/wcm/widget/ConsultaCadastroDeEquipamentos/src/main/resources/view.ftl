@@ -185,8 +185,8 @@
     </body>
     
     <!-- Castilho Dev Guide -->
-    <script src="/castilho_dev_guide/resources/js/castilho-utils.js"></script>
-    <script src="/castilho_dev_guide/resources/js/castilho-consultas-rm.js"></script>
+<!--     <script src="/castilho_dev_guide/resources/js/castilho-utils.js"></script> -->
+<!--     <script src="/castilho_dev_guide/resources/js/castilho-consultas-rm.js"></script> -->
     
     <!-- React -->
     <script src="https://cdn.jsdelivr.net/npm/react@17/umd/react.development.js" crossorigin></script>

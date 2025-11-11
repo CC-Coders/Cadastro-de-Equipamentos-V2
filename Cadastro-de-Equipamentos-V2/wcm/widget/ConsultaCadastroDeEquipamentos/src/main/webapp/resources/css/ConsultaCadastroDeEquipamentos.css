@@ -254,3 +254,7 @@ body .fluig-style-guide #dataTableFilter table.dataTable tbody tr.even {
     font-size: 13px;
     color: #444;
 }
+
+#visualizacaoPagina .layout-2-3left {
+	width: 100%;
+}

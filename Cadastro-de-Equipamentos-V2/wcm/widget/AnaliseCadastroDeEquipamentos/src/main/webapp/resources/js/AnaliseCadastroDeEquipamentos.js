@@ -5,7 +5,7 @@ var MyWidget = SuperWidget.extend({
 
     init: function () {
         var self = this;
-        console.log("109")
+        console.log("111")
         var $button = $("#button-search");
         var originalText = "Buscar";
         var loadingInterval;
@@ -604,6 +604,11 @@ var MyWidget = SuperWidget.extend({
                     label: 'Editar',
                     autoClose: false,
                     classType: 'btn-primary btn-editar-equipamento'
+                },
+                {
+                    label: 'Concluir',
+                    autoClose: false,
+                    classType: 'btn-primary btn-concluir-equipamento'
                 }
             ]
         });
@@ -629,9 +634,9 @@ var MyWidget = SuperWidget.extend({
                         marca: item.FABRICANTE || "-",
                         modelo: item.MODELO || "-",
                         periodo_locacao: rowData.PERIODO_LOCACAO || "-",
-                        valor_fipe: rowData.VALOR_FIPE || "-",
-                        valor_implemento: rowData.VALOR_IMPLEMENTO || "-",
-                        valor_atual: rowData.VALOR_EQUIPAMENTO || "-",
+                        valor_fipe: item.VALOR_FIPE || "-",
+                        valor_implemento: item.VALOR_IMPLEMENTO || "-",
+                        valor_atual: item.VALOR_EQUIPAMENTO || "-",
                         valor_locacao: item.VALOR_LOCACAO || "-",
                         mao_obra: item.MAODEOBRA || "-",
                         classificacaoBem: item.CLASSIFICACAO_BEM || "-"
@@ -947,6 +952,83 @@ var MyWidget = SuperWidget.extend({
                         }
                     });
                 });
+             // --- BOTÃO CONCLUIR ---
+                $(document).off('click', '.btn-concluir-equipamento').on('click', '.btn-concluir-equipamento', function () {
+                    var table = $('#dataTableEdit').DataTable();
+                    var rows = table.rows().nodes();
+                    var total = rows.length;
+                    var atualizados = 0;
+
+                    if (total === 0) {
+                        FLUIGC.toast({
+                            title: "Aviso:",
+                            message: "Nenhum equipamento encontrado para concluir.",
+                            type: "warning"
+                        });
+                        return;
+                    }
+
+                    FLUIGC.toast({
+                        title: "Processando...",
+                        message: "Concluindo atualização de todos os equipamentos.",
+                        type: "info"
+                    });
+
+                    $(rows).each(function () {
+                        var row = $(this);
+                        var rowData = table.row(row).data();
+
+                        var prefixo = rowData.prefixo;
+                        var valorFipe = limparMoeda(row.find('.valorFipe').val());
+                        var valorImplemento = limparMoeda(row.find('.valorImplemento').val());
+                        var valorAtual = limparMoeda(row.find('.valorAtual').val());
+                        var valorDepreciacao = limparMoeda(row.find('.depreciacaoImplemento').val());
+                        var precoEquipamento = limparMoeda(row.find('.precoEquipamento').val());
+                        var classificacaoBem = limparMoeda(row.find('.classificacaoBem').val());
+                        var dataFinalizado = moment().format('DD/MM/YYYY');
+
+                        if (!valorAtual || valorAtual === "0" || isNaN(valorAtual)) {
+                            console.warn("Linha ignorada (sem valor atual):", prefixo);
+                            return; // pula a linha
+                        }
+
+                        var c1 = DatasetFactory.createConstraint("PREFIXO", prefixo, prefixo, ConstraintType.MUST);
+                        var c2 = DatasetFactory.createConstraint("MODO", "EDITAR_TUDO", "EDITAR_TUDO", ConstraintType.MUST);
+                        var c3 = DatasetFactory.createConstraint("VALOR_EQUIPAMENTO", valorAtual, valorAtual, ConstraintType.MUST);
+                        var c4 = DatasetFactory.createConstraint("VALOR_FIPE", valorFipe, valorFipe, ConstraintType.MUST);
+                        var c5 = DatasetFactory.createConstraint("VALOR_IMPLEMENTO", valorImplemento, valorImplemento, ConstraintType.MUST);
+                        var c6 = DatasetFactory.createConstraint("VALOR_DEPRECIACAO", valorDepreciacao, valorDepreciacao, ConstraintType.MUST);
+                        var c7 = DatasetFactory.createConstraint("PRECO_EQUIPAMENTO", precoEquipamento, precoEquipamento, ConstraintType.MUST);
+                        var c8 = DatasetFactory.createConstraint("FINALIZADO_EM", dataFinalizado, dataFinalizado, ConstraintType.MUST);
+                        var c9 = DatasetFactory.createConstraint("CLASSIFICACAO_BEM", classificacaoBem, classificacaoBem, ConstraintType.MUST);
+
+                        DatasetFactory.getDataset("dsUpdateAnaliseEquipamento", null, [c1, c2, c3, c4, c5, c6, c7, c8, c9], null, {
+                            success: function (ds) {
+                                var status = ds.values[0].status;
+                                var mensagem = ds.values[0].mensagem;
+
+                                if (status === "SUCCESS") atualizados++;
+
+                                if (atualizados === total) {
+                                    FLUIGC.toast({
+                                        title: "Sucesso!",
+                                        message: "Todos os equipamentos foram concluídos com sucesso.",
+                                        type: "success"
+                                    });
+                                }
+                            },
+                            error: function (err) {
+                                console.error("Erro ao atualizar prefixo:", prefixo, err);
+                                FLUIGC.toast({
+                                    title: "Erro",
+                                    message: "Falha ao concluir o equipamento " + prefixo,
+                                    type: "danger"
+                                });
+                            }
+                        });
+                    });
+                });
+
 
 
                 $('#dataTableEdit').on('click', '.btnSalvarItem', function () {
