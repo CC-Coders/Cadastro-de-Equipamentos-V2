@@ -5,7 +5,7 @@ var MyWidget = SuperWidget.extend({
 
     init: function () {
         var self = this;
-        console.log("111")
+        console.log("116")
         var $button = $("#button-search");
         var originalText = "Buscar";
         var loadingInterval;
@@ -107,7 +107,7 @@ var MyWidget = SuperWidget.extend({
         for (var campo in filtros) {
             var valor = filtros[campo];
             if (valor && valor.trim() !== "") {
-                  	if (campo === "DATA_ABERTURA" || campo === "CRIADO_EM" || campo === "FINALIZADO_EM") {
+                if (campo === "DATA_ABERTURA" || campo === "CRIADO_EM" || campo === "FINALIZADO_EM") {
                     var partes = valor.split("/");
                     if (partes.length === 3) {
                         valor = partes[2] + "-" + partes[1] + "-" + partes[0];
@@ -133,7 +133,6 @@ var MyWidget = SuperWidget.extend({
                     });
                     return;
                 }
-                console.log("🔍 Estrutura completa do dataset:", dataset);
                 var resultadoBruto = dataset.values[0].RESULT;
                 var registros = [];
                 try {
@@ -151,6 +150,7 @@ var MyWidget = SuperWidget.extend({
                         VALOR_EQUIPAMENTO: item.VALOR_EQUIPAMENTO || "-",
                         ID: item.ID || "-",
                         USUARIO_LOGADO: item.USUARIO_ANALISE || "-",
+                        NEGOCIACAO_SUPRIMENTOS: item.NEGOCIACAO_SUPRIMENTOS || "-",
                         SOLICITANTE: item.solicitante || "-",
                         OBRA: item.obra || "-",
                         FORNECEDOR: item.hiddenFORNECEDOR || "-",
@@ -184,6 +184,7 @@ var MyWidget = SuperWidget.extend({
                         { data: "VALOR_FIPE", title: "VALOR_FIPE", visible: false },
                         { data: "VALOR_EQUIPAMENTO", title: "VALOR_EQUIPAMENTO", visible: false },
                         { data: "USUARIO_LOGADO", title: "USUARIO_LOGADO", visible: false },
+                        { data: "NEGOCIACAO_SUPRIMENTOS", title: "NEGOCIACAO_SUPRIMENTOS", visible: false },
                         { data: "SOLICITANTE", title: "SOLICITANTE" },
                         { data: "OBRA", title: "OBRA" },
                         { data: "FORNECEDOR", title: "FORNECEDOR" },
@@ -197,7 +198,6 @@ var MyWidget = SuperWidget.extend({
                                 return partes[2] + "/" + partes[1] + "/" + partes[0]; // DD/MM/YYYY
                             }
                         },
-                       // { data: "CRIADO_EM", title: "CRIADO EM" },
                         {
                             data: "CRIADO_EM",
                             title: "CRIADO EM",
@@ -208,9 +208,8 @@ var MyWidget = SuperWidget.extend({
                                 return partes[2] + "/" + partes[1] + "/" + partes[0];
                             }
                         },
-                      //  { data: "FINALIZADO_EM", title: "FINALIZADO EM" },
                         {
-                            data: "FINALIZADO_EM", 
+                            data: "FINALIZADO_EM",
                             title: "FINALIZADO EM",
                             render: function (data, type, row) {
                                 if (!data || data === "-" || data === "null" || data === "NULL" || data.toString().trim() === "") {
@@ -223,8 +222,8 @@ var MyWidget = SuperWidget.extend({
                                     var dataSplit = dataPart.split('-');
                                     if (dataSplit.length === 3) {
                                         return dataSplit[2] + "/" + dataSplit[1] + "/" + dataSplit[0]; // DD/MM/AAAA
-                                    }                                   
-                                    return data; 
+                                    }
+                                    return data;
                                 } catch (e) {
                                     console.error("Erro ao formatar data FINALIZADO_EM:", e);
                                     return data;
@@ -270,7 +269,7 @@ var MyWidget = SuperWidget.extend({
                     ordering: true,
                     paging: true,
                     info: true,
-                    order: false, // por exemplo, ordena inicialmente pela coluna DATA DE ABERTURA
+                    order: false, 
                     language: {
                         sEmptyTable: "Nenhum registro encontrado",
                         sSearch: "Pesquisar:",
@@ -285,9 +284,7 @@ var MyWidget = SuperWidget.extend({
                 });
 
                 $("#dataTableFilter").off("click", ".btnSolicitacao").on("click", ".btnSolicitacao", function () {
-                    console.log("clicou")
                     var processo = $(this).data("processo");
-                    console.log(processo)
                     if (processo && processo !== "-") {
                         var url = "http://desenvolvimento.castilho.com.br:3232/portal/p/1/pageworkflowview?app_ecm_workflowview_detailsProcessInstanceID=" + processo;
                         window.open(url, '_blank');
@@ -315,247 +312,6 @@ var MyWidget = SuperWidget.extend({
             }
         });
     },
-    
-    
-    
-    
-    
-//    buscaResultados: function () {
-//        var that = this;
-//        var filtros = {
-//            numProces: $("#nsolicitacao").val(), 
-//            solicitante: $("#solicitante").val(), 
-//            obra: $("#obra").val(), 
-//            dataAberturaSol: $("#dataAbertura").val(), 
-//            criadoEm: $("#criado").val(), 
-//            finalizadoEm: $("#finalizado").val() 
-//        };
-//
-//        var constraints = [];
-//        for (var campo in filtros) {
-//            var valor = filtros[campo];
-//            if (valor && valor.trim() !== "") {
-//            	if (campo === "dataAberturaSol" || campo === "criadoEm" || campo === "finalizadoEm") {
-//                    var partes = valor.split("/");
-//                    if (partes.length === 3) {
-//                        valor = partes[2] + "-" + partes[1] + "-" + partes[0];
-//                    }
-//                }
-//                constraints.push(
-//                    DatasetFactory.createConstraint(
-//                        campo,
-//                        valor,
-//                        valor,
-//                        ConstraintType.MUST
-//                    )
-//                );
-//            }
-//        }
-//
-//        DatasetFactory.getDataset("RetornaAnaliseEquipamentos", null, constraints, null, {
-//            success: function (dataset) {
-//                if (!dataset || !dataset.values || dataset.values.length === 0) {
-//                    FLUIGC.toast({
-//                        title: "Atenção: ",
-//                        message: "Nenhum dado encontrado com os filtros aplicados.",
-//                        type: "warning"
-//                    });
-//                    that.retornaDataset([]);
-//                    $(document).trigger("buscaFinalizada");
-//                    return;
-//                }
-//
-//                if (dataset.values && dataset.values.length > 0 && dataset.values[0].RESULT) {
-//                    var dados = JSON.parse(dataset.values[0].RESULT);
-//                    var dadosMapeados = dados.map(function (item) {
-//                        return {
-//                            ID_FLUIG: item.numProces || item.ID_FLUIG || "-",
-//                            PERIODO_LOCACAO: item.periodoLocacao || "-",
-//                            VALOR_FIPE: item.VALOR_FIPE || "-",
-//                            VALOR_IMPLEMENTO: item.VALOR_IMPLEMENTO || "-",
-//                            VALOR_EQUIPAMENTO: item.VALOR_EQUIPAMENTO || "-",
-//                            ID: item.ID || "-",
-//                            USUARIO_LOGADO: item.USUARIO_ANALISE || "-",
-//                            SOLICITANTE: item.solicitante || "-",
-//                            OBRA: item.NOMECCUSTO || item.obra || "-",
-//                            FORNECEDOR: item.hiddenFORNECEDOR || "-",
-//                            DATA_ABERTURA: item.dataAberturaSol || "-",
-//                            CRIADO_EM: item.dataCriadoEm || "-",
-//                            FINALIZADO_EM: (item.FINALIZADO_EM && item.FINALIZADO_EM !== "null" && item.FINALIZADO_EM !== "") 
-//                                ? item.FINALIZADO_EM 
-//                                : "-",
-//                            STATUS_EQUIP_ITEM: item.STATUS_EQUIP_ITEM || "-",
-//                            DESC_STATUS_EQUIPAMENTO: item.DESC_STATUS_EQUIPAMENTO || "-"
-//                        };
-//                    });
-//
-//                    that.retornaDataset(dadosMapeados);
-//                } else {
-//                    console.warn("⚠️ Nenhum dado retornado ou RESULT vazio");
-//                    that.retornaDataset([]);
-//                }
-//                $(document).trigger("buscaFinalizada");
-//            },
-//            error: function (err) {
-//                console.error("❌ Erro ao buscar dataset:", err);
-//                that.retornaDataset([]);
-//                $(document).trigger("buscaFinalizada");
-//            }
-//        });
-//    },
-//    retornaDataset: function (dados) {
-//        try {
-//            var that = this;
-//
-//            if (!that.dataTable) {
-//                that.dataTable = $("#dataTableFilter").DataTable({
-//                    data: [],
-//                    destroy: true,
-//                    pageLength: 25,
-//                    deferRender: true,
-//                    language: { 
-//                        sEmptyTable: "Nenhum registro encontrado", 
-//                        lengthMenu: "Resultados por página _MENU_", 
-//                        sInfo: "Mostrando de _START_ até _END_ de _TOTAL_ registros", 
-//                        sInfoEmpty: "Mostrando 0 até 0 de 0 registros", 
-//                        sInfoFiltered: "(Filtrados de _MAX_ registros)", 
-//                        sInfoPostFix: "", 
-//                        sInfoThousands: ".", 
-//                        sLengthMenu: "_MENU_ resultados por página", 
-//                        sLoadingRecords: "Carregando...", 
-//                        sProcessing: "Processando...", 
-//                        sZeroRecords: "Nenhum registro encontrado", 
-//                        sSearch: "Pesquisar", 
-//                        oPaginate: { 
-//                            sNext: "Próximo", 
-//                            sPrevious: "Anterior", 
-//                            sFirst: "Primeiro", 
-//                            sLast: "Último" 
-//                        }, 
-//                        oAria: { 
-//                            sSortAscending: ": Ordenar colunas de forma ascendente", 
-//                            sSortDescending: ": Ordenar colunas de forma descendente" 
-//                        } 
-//                    },
-//                    columns: [
-//                        { data: "ID", title: "ID", visible: false },
-//                        { data: "ID_FLUIG", title: "Nº DA SOLICITAÇÃO" },
-//                        { data: "PERIODO_LOCACAO", title: "PERIODO_LOCACAO", visible: false },
-//                        { data: "VALOR_IMPLEMENTO", title: "VALOR_IMPLEMENTO", visible: false },
-//                        { data: "VALOR_FIPE", title: "VALOR_FIPE", visible: false },
-//                        { data: "VALOR_EQUIPAMENTO", title: "VALOR_EQUIPAMENTO", visible: false },
-//                        { data: "USUARIO_LOGADO", title: "USUARIO_LOGADO", visible: false },
-//                        { data: "SOLICITANTE", title: "SOLICITANTE" },
-//                        { data: "OBRA", title: "OBRA" },
-//                        { data: "FORNECEDOR", title: "FORNECEDOR" },
-//                        {
-//                            data: "DATA_ABERTURA",
-//                            title: "DATA DE ABERTURA",
-//                            render: function (data, type, row) {
-//                                if (!data) return "-";
-//                                var partes = data.split("-");
-//                                if (partes.length !== 3) return data;
-//                                return partes[2] + "/" + partes[1] + "/" + partes[0];
-//                            }
-//                        },
-//                        {
-//                            data: "CRIADO_EM",
-//                            title: "CRIADO_EM",
-//                            render: function (data, type, row) {
-//                                if (!data) return "-";
-//                                var partes = data.split("-");
-//                                if (partes.length !== 3) return data;
-//                                return partes[2] + "/" + partes[1] + "/" + partes[0];
-//                            }
-//                        },
-//                                    
-//                        {
-//                            data: "FINALIZADO_EM", 
-//                            title: "FINALIZADO EM",
-//                            render: function (data, type, row) {
-//                                if (!data || data === "-" || data === "null" || data === "NULL" || data.toString().trim() === "") {
-//                                    return "-";
-//                                }
-//                                try {
-//                                    var dataSemMillis = data.split('.')[0];
-//                                    var partes = dataSemMillis.split(' ');
-//                                    var dataPart = partes[0];
-//                                    var dataSplit = dataPart.split('-');
-//                                    if (dataSplit.length === 3) {
-//                                        return dataSplit[2] + "/" + dataSplit[1] + "/" + dataSplit[0];
-//                                    }                                   
-//                                    return data; 
-//                                } catch (e) {
-//                                    console.error("Erro ao formatar data FINALIZADO_EM:", e);
-//                                    return data;
-//                                }
-//                            }
-//                        },
-//                        {
-//                            data: null,
-//                            title: "STATUS",
-//                            render: function (data, type, row) {
-//                                const codigo = parseInt(row.STATUS_EQUIP_ITEM);
-//                                const desc = row.DESC_STATUS_EQUIPAMENTO || "-";
-//                                if (isNaN(codigo)) return desc;
-//                                switch (codigo) {
-//                                    case 2: return "Pendente";
-//                                    case 3: return "Realizado";
-//                                    case 7: return "Em Andamento";
-//                                    default: return desc;
-//                                }
-//                            }
-//                        },
-//                        {
-//                            data: null,
-//                            title: "AÇÕES",
-//                            render: function (data, type, row) {
-//                                return `
-//                                    <div style="cursor: pointer; display: flex; align-items: center; gap: 10px">
-//                                        <button class="btnEdit" title="Editar" style="border:none; background:none">
-//                                            <i class="flaticon flaticon-edit-square icon-md" aria-hidden="true"></i>
-//                                        </button>
-//                                        <button class="btnSolicitacao" title="Abrir Solicitação" 
-//                                            style="border:none; background:none" 
-//                                            data-processo="${row.ID_FLUIG}">
-//                                            <i class="flaticon flaticon-documents icon-md" aria-hidden="true"></i>
-//                                        </button>
-//                                    </div>
-//                                `;
-//                            }
-//                        }
-//                    ]
-//                });
-//                $("#dataTableFilter").off("click", ".btnSolicitacao").on("click", ".btnSolicitacao", function () {
-//                    var processo = $(this).data("processo");
-//                    if (processo && processo !== "-") {
-//                        var url = "http://desenvolvimento.castilho.com.br:3232/portal/p/1/pageworkflowview?app_ecm_workflowview_detailsProcessInstanceID=" + processo;
-//                        window.open(url, '_blank');
-//                    } else {
-//                        FLUIGC.toast({
-//                            title: "Atenção",
-//                            message: "Número de processo não disponível",
-//                            type: "warning"
-//                        });
-//                    }
-//                });
-//
-//                $("#dataTableFilter").off("click", ".btnEdit").on("click", ".btnEdit", function () {
-//                    var rowData = that.dataTable.row($(this).closest("tr")).data();
-//                    if (rowData) {
-//                        that.abrirModalEdit(rowData);
-//                    } else {
-//                        console.warn("⚠️ [btnEdit] Nenhum dado encontrado para esta linha!");
-//                    }
-//                });
-//            }
-//            that.dataTable.clear();
-//            that.dataTable.rows.add(dados).draw();
-//
-//        } catch (error) {
-//            console.error("❌ Erro ao processar o dataset:", error);
-//        }
-//    },
 
     abrirModalEdit: function (rowData) {
         var idContrato = rowData.ID;
@@ -587,8 +343,16 @@ var MyWidget = SuperWidget.extend({
                             </thead>
                             <tbody></tbody>
                         </table>
-                    </div>
+                    </div>                                      
                 </div>
+                 <div style="display:flex; justify-content:flex-end; align-items:center; gap:12px; margin-top:10px; padding-right:14px;">
+        <label for="negociacaoSuprimentos_${modalId}" style="margin:0; font-weight:500;">Negociação realizada pelo Suprimentos:</label>
+
+        <div class="switch switch-success">
+          <input class="switch-input" type="checkbox" id="negociacaoSuprimentos_${modalId}" />
+          <label class="switch-button switchRedGreen" for="negociacaoSuprimentos_${modalId}">Toggle</label>
+        </div>
+      </div>
             </div>
         `;
 
@@ -614,7 +378,7 @@ var MyWidget = SuperWidget.extend({
         });
         var c = [DatasetFactory.createConstraint("ID_TCNT_AUXILIAR", idContrato, idContrato, ConstraintType.MUST)];
         DatasetFactory.getDataset("RetornaDetalhesEquipamentos", null, c, null, {
-        	success: function (ds) {
+            success: function (ds) {
                 var maoObraVariavel = ""
                 if (!ds || !ds.values || ds.values.length === 0) {
                     FLUIGC.toast({
@@ -624,6 +388,7 @@ var MyWidget = SuperWidget.extend({
                     });
                     return;
                 }
+
                 var tableData = ds.values.map(function (item) {
                     console.log(rowData)
                     console.log(item);
@@ -639,9 +404,19 @@ var MyWidget = SuperWidget.extend({
                         valor_atual: item.VALOR_EQUIPAMENTO || "-",
                         valor_locacao: item.VALOR_LOCACAO || "-",
                         mao_obra: item.MAODEOBRA || "-",
-                        classificacaoBem: item.CLASSIFICACAO_BEM || "-"
+                        classificacaoBem: item.CLASSIFICACAO_BEM || "-",
+                        negociacaoSuprimentos: item.NEGOCIACAO_SUPRIMENTOS || "-"
                     };
                 });
+                setTimeout(function () {
+                    const negociacao = tableData[0]?.negociacaoSuprimentos;
+
+                    if (negociacao === "S") {
+                        $("#negociacaoSuprimentos_" + modalId).prop("checked", true);
+                    } else {
+                        $("#negociacaoSuprimentos_" + modalId).prop("checked", false);
+                    }
+                }, 200);
                 var alturaMaxima = $('.meu-modal-edit .table-container').height();
                 $("#dataTableEdit").DataTable({
                     data: tableData,
@@ -817,6 +592,7 @@ var MyWidget = SuperWidget.extend({
                     language: { emptyTable: "Nenhum registro encontrado" }
                 });
 
+                
                 var table = $("#dataTableEdit").DataTable();
                 $(document).on('input', '#dataTableEdit .valorAtual, #dataTableEdit .valorFipe, #dataTableEdit .valorImplemento', function () {
                     let valor = $(this).val().replace(/\D/g, "");
@@ -858,7 +634,7 @@ var MyWidget = SuperWidget.extend({
 
                 $(document).on('input', '#dataTableEdit .valorFipe, #dataTableEdit .valorImplemento', function () {
                     var row = $(this).closest('tr');
-                    
+
                     // --- Captura dos valores numéricos ---
                     var valorFipe = limparMoeda(row.find('.valorFipe').val());
                     var valorImplemento = limparMoeda(row.find('.valorImplemento').val());
@@ -876,12 +652,11 @@ var MyWidget = SuperWidget.extend({
                     // --- Cálculo da classificação do bem ---
                     var percentual = 0;
                     if (parseFloat(preco) > 0) {
-                    	console.log("valorLocacao:" + valorLocacao)
-                    	console.log("maoObra:" + maoObraVariavel)
-                    	console.log("preco:" + preco)
+                        console.log("valorLocacao:" + valorLocacao)
+                        console.log("maoObra:" + maoObraVariavel)
+                        console.log("preco:" + preco)
                         percentual = ((valorLocacao - maoObraVariavel) / parseFloat(preco) * 100).toFixed(1);
                     }
-
                     var campoClassificacao = row.find('.classificacaoBem');
                     campoClassificacao.val(formatarPercentual(percentual));
 
@@ -906,11 +681,11 @@ var MyWidget = SuperWidget.extend({
                         });
                         return;
                     }
-                    if (usuarioLogado && 
-                    	    usuarioLogado !== "null" && 
-                    	    usuarioLogado !== "NULL" && 
-                    	    usuarioLogado.toString().trim() !== "" && 
-                    	    usuarioLogado !== WCMAPI.userCode)  {
+                    if (usuarioLogado &&
+                        usuarioLogado !== "null" &&
+                        usuarioLogado !== "NULL" &&
+                        usuarioLogado.toString().trim() !== "" &&
+                        usuarioLogado !== WCMAPI.userCode) {
                         FLUIGC.toast({
                             title: "Atenção",
                             message: "Este equipamento já está sendo analisado pelo usuário " + usuarioLogado + ".",
@@ -952,13 +727,13 @@ var MyWidget = SuperWidget.extend({
                         }
                     });
                 });
-             // --- BOTÃO CONCLUIR ---
+
+                
                 $(document).off('click', '.btn-concluir-equipamento').on('click', '.btn-concluir-equipamento', function () {
                     var table = $('#dataTableEdit').DataTable();
                     var rows = table.rows().nodes();
                     var total = rows.length;
                     var atualizados = 0;
-
                     if (total === 0) {
                         FLUIGC.toast({
                             title: "Aviso:",
@@ -967,17 +742,14 @@ var MyWidget = SuperWidget.extend({
                         });
                         return;
                     }
-
                     FLUIGC.toast({
                         title: "Processando...",
                         message: "Concluindo atualização de todos os equipamentos.",
                         type: "info"
                     });
-
                     $(rows).each(function () {
                         var row = $(this);
                         var rowData = table.row(row).data();
-
                         var prefixo = rowData.prefixo;
                         var valorFipe = limparMoeda(row.find('.valorFipe').val());
                         var valorImplemento = limparMoeda(row.find('.valorImplemento').val());
@@ -986,10 +758,9 @@ var MyWidget = SuperWidget.extend({
                         var precoEquipamento = limparMoeda(row.find('.precoEquipamento').val());
                         var classificacaoBem = limparMoeda(row.find('.classificacaoBem').val());
                         var dataFinalizado = moment().format('DD/MM/YYYY');
-
+                        var negociacaoSuprimentos = $("#negociacaoSuprimentos_" + modalId).is(":checked") ? "S" : "N";
                         if (!valorAtual || valorAtual === "0" || isNaN(valorAtual)) {
-                            console.warn("Linha ignorada (sem valor atual):", prefixo);
-                            return; // pula a linha
+                            return; 
                         }
 
                         var c1 = DatasetFactory.createConstraint("PREFIXO", prefixo, prefixo, ConstraintType.MUST);
@@ -1001,14 +772,13 @@ var MyWidget = SuperWidget.extend({
                         var c7 = DatasetFactory.createConstraint("PRECO_EQUIPAMENTO", precoEquipamento, precoEquipamento, ConstraintType.MUST);
                         var c8 = DatasetFactory.createConstraint("FINALIZADO_EM", dataFinalizado, dataFinalizado, ConstraintType.MUST);
                         var c9 = DatasetFactory.createConstraint("CLASSIFICACAO_BEM", classificacaoBem, classificacaoBem, ConstraintType.MUST);
-
-                        DatasetFactory.getDataset("dsUpdateAnaliseEquipamento", null, [c1, c2, c3, c4, c5, c6, c7, c8, c9], null, {
+                        var c10 = DatasetFactory.createConstraint("NEGOCIACAO_SUPRIMENTOS", negociacaoSuprimentos, negociacaoSuprimentos, ConstraintType.MUST);                       
+                                              
+                        DatasetFactory.getDataset("dsUpdateAnaliseEquipamento", null, [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10], null, {
                             success: function (ds) {
                                 var status = ds.values[0].status;
                                 var mensagem = ds.values[0].mensagem;
-
                                 if (status === "SUCCESS") atualizados++;
-
                                 if (atualizados === total) {
                                     FLUIGC.toast({
                                         title: "Sucesso!",
@@ -1028,8 +798,6 @@ var MyWidget = SuperWidget.extend({
                         });
                     });
                 });
-
-
 
                 $('#dataTableEdit').on('click', '.btnSalvarItem', function () {
                     var row = $(this).closest('tr');
@@ -1063,16 +831,16 @@ var MyWidget = SuperWidget.extend({
                         return;
                     }
 
-//                    if (!referencia) {
-//                        FLUIGC.toast({
-//                            title: "Erro:",
-//                            message: "O campo 'Referência' é obrigatório.",
-//                            type: "danger"
-//                        });
-//                        row.find('.referencia').focus();
-//                        return;
-//                    }
-                    
+                    //                    if (!referencia) {
+                    //                        FLUIGC.toast({
+                    //                            title: "Erro:",
+                    //                            message: "O campo 'Referência' é obrigatório.",
+                    //                            type: "danger"
+                    //                        });
+                    //                        row.find('.referencia').focus();
+                    //                        return;
+                    //                    }
+
                     var c1 = DatasetFactory.createConstraint("PREFIXO", prefixo, prefixo, ConstraintType.MUST);
                     var c2 = DatasetFactory.createConstraint("MODO", "EDITAR_TUDO", "EDITAR_TUDO", ConstraintType.MUST);
                     var c3 = DatasetFactory.createConstraint("VALOR_EQUIPAMENTO", valorAtual, valorAtual, ConstraintType.MUST);

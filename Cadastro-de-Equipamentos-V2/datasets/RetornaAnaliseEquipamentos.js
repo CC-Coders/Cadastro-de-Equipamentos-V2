@@ -1,79 +1,75 @@
-
 function createDataset(fields, constraints, sortFields) {
 
     try {
         var params = getConstraints(constraints);
         log.info("🧩 Constraints recebidas: " + JSON.stringify(params));
 
-        var myQuery = `
-SELECT 
-    TCNT_AUXILIAR.ID_FLUIG,
-    TCNT_AUXILIAR.TIPO_CONTRATO,
-    TCNT_AUXILIAR.*,
-    ML001121.*,
-    STATUS_EQUIPAMENTOS.DESC_STATUS_EQUIPAMENTO,
-    STATUS_EQUIPAMENTOS.STATUS AS STATUS_EQUIP_ITEM,
-    EQ_AUX.FINALIZADO_EM,
-    EQ_AUX.USUARIO_ANALISE,
-    EQ_AUX.VALOR_FIPE,
-    EQ_AUX.VALOR_IMPLEMENTO,
-    EQ_AUX.VALOR_EQUIPAMENTO
-FROM TCNT_AUXILIAR
-INNER JOIN (
-    SELECT DISTINCT 
-        ID_TCNT_AUXILIAR, 
-        STATUS,
-        VIEW_EQUIPAMENTOS_CONTRATOS.DESC_STATUS_EQUIPAMENTO
-    FROM TCNT_AUXILIAR_ITENS
-    INNER JOIN VIEW_EQUIPAMENTOS_CONTRATOS 
-        ON TCNT_AUXILIAR_ITENS.PREFIXO = VIEW_EQUIPAMENTOS_CONTRATOS.PREFIXO 
-        COLLATE SQL_Latin1_General_CP1_CI_AS
-    WHERE VIEW_EQUIPAMENTOS_CONTRATOS.DESC_STATUS_EQUIPAMENTO IS NOT NULL
-      AND VIEW_EQUIPAMENTOS_CONTRATOS.DESC_STATUS_EQUIPAMENTO <> '' 
-      AND VIEW_EQUIPAMENTOS_CONTRATOS.DESC_STATUS_EQUIPAMENTO <> 'NULL' 
-) AS STATUS_EQUIPAMENTOS 
-    ON STATUS_EQUIPAMENTOS.ID_TCNT_AUXILIAR = TCNT_AUXILIAR.ID
-LEFT JOIN (
-    SELECT 
-        ID_TCNT_AUXILIAR,
-        FINALIZADO_EM,
-        USUARIO_ANALISE,
-        VALOR_FIPE,
-        VALOR_IMPLEMENTO,
-        VALOR_EQUIPAMENTO
-    FROM (
-        SELECT 
-            TCNT_AUXILIAR_ITENS.ID_TCNT_AUXILIAR,
-            ECA.FINALIZADO_EM,
-            ECA.USUARIO_ANALISE,
-            ECA.VALOR_FIPE,
-            ECA.VALOR_IMPLEMENTO,
-            ECA.VALOR_EQUIPAMENTO,
-            ROW_NUMBER() OVER (
-                PARTITION BY TCNT_AUXILIAR_ITENS.ID_TCNT_AUXILIAR 
-                ORDER BY ECA.FINALIZADO_EM DESC
-            ) AS RN
-        FROM TCNT_AUXILIAR_ITENS
-        INNER JOIN EQUIPAMENTOS_CONTRATOS_AUXILIAR ECA
-            ON TCNT_AUXILIAR_ITENS.PREFIXO = ECA.PREFIXO
-            COLLATE SQL_Latin1_General_CP1_CI_AS
-    ) AS SUB
-    WHERE SUB.RN = 1
-) AS EQ_AUX
-    ON EQ_AUX.ID_TCNT_AUXILIAR = TCNT_AUXILIAR.ID
-INNER JOIN (
-    SELECT *,
-        ROW_NUMBER() OVER (
-            PARTITION BY numProces 
-            ORDER BY version DESC
-        ) as rn
-    FROM [fluig_desenvolvimento].dbo.ML001121 
-) AS ML001121 
-    ON TCNT_AUXILIAR.ID_FLUIG = ML001121.numProces 
-    AND ML001121.rn = 1
-WHERE STATUS_EQUIPAMENTOS.DESC_STATUS_EQUIPAMENTO IS NOT NULL  
-
-        `;
+        var myQuery = "SELECT " +
+        "TCNT_AUXILIAR.ID_FLUIG, " +
+        "TCNT_AUXILIAR.TIPO_CONTRATO, " +
+        "TCNT_AUXILIAR.*, " +
+        "ML001121.*, " +
+        "STATUS_EQUIPAMENTOS.DESC_STATUS_EQUIPAMENTO, " +
+        "STATUS_EQUIPAMENTOS.STATUS AS STATUS_EQUIP_ITEM, " +
+        "EQ_AUX.FINALIZADO_EM, " +
+        "EQ_AUX.USUARIO_ANALISE, " +
+        "EQ_AUX.VALOR_FIPE, " +
+        "EQ_AUX.VALOR_IMPLEMENTO, " +
+        "EQ_AUX.VALOR_EQUIPAMENTO " +
+    "FROM TCNT_AUXILIAR " +
+    "INNER JOIN ( " +
+        "SELECT DISTINCT " +
+            "ID_TCNT_AUXILIAR, " +
+            "STATUS, " +
+            "VIEW_EQUIPAMENTOS_CONTRATOS.DESC_STATUS_EQUIPAMENTO " +
+        "FROM TCNT_AUXILIAR_ITENS " +
+        "INNER JOIN VIEW_EQUIPAMENTOS_CONTRATOS " +
+            "ON TCNT_AUXILIAR_ITENS.PREFIXO = VIEW_EQUIPAMENTOS_CONTRATOS.PREFIXO " +
+            "COLLATE SQL_Latin1_General_CP1_CI_AS " +
+        "WHERE VIEW_EQUIPAMENTOS_CONTRATOS.DESC_STATUS_EQUIPAMENTO IS NOT NULL " +
+          "AND VIEW_EQUIPAMENTOS_CONTRATOS.DESC_STATUS_EQUIPAMENTO <> '' " +
+          "AND VIEW_EQUIPAMENTOS_CONTRATOS.DESC_STATUS_EQUIPAMENTO <> 'NULL' " +
+    ") AS STATUS_EQUIPAMENTOS " +
+        "ON STATUS_EQUIPAMENTOS.ID_TCNT_AUXILIAR = TCNT_AUXILIAR.ID " +
+    "LEFT JOIN ( " +
+        "SELECT " +
+            "ID_TCNT_AUXILIAR, " +
+            "FINALIZADO_EM, " +
+            "USUARIO_ANALISE, " +
+            "VALOR_FIPE, " +
+            "VALOR_IMPLEMENTO, " +
+            "VALOR_EQUIPAMENTO " +
+        "FROM ( " +
+            "SELECT " +
+                "TCNT_AUXILIAR_ITENS.ID_TCNT_AUXILIAR, " +
+                "ECA.FINALIZADO_EM, " +
+                "ECA.USUARIO_ANALISE, " +
+                "ECA.VALOR_FIPE, " +
+                "ECA.VALOR_IMPLEMENTO, " +
+                "ECA.VALOR_EQUIPAMENTO, " +
+                "ROW_NUMBER() OVER ( " +
+                    "PARTITION BY TCNT_AUXILIAR_ITENS.ID_TCNT_AUXILIAR " +
+                    "ORDER BY ECA.FINALIZADO_EM DESC " +
+                ") AS RN " +
+            "FROM TCNT_AUXILIAR_ITENS " +
+            "INNER JOIN EQUIPAMENTOS_CONTRATOS_AUXILIAR ECA " +
+                "ON TCNT_AUXILIAR_ITENS.PREFIXO = ECA.PREFIXO " +
+                "COLLATE SQL_Latin1_General_CP1_CI_AS " +
+        ") AS SUB " +
+        "WHERE SUB.RN = 1 " +
+    ") AS EQ_AUX " +
+        "ON EQ_AUX.ID_TCNT_AUXILIAR = TCNT_AUXILIAR.ID " +
+    "INNER JOIN ( " +
+        "SELECT *, " +
+            "ROW_NUMBER() OVER ( " +
+                "PARTITION BY numProces " +
+                "ORDER BY version DESC " +
+            ") as rn " +
+        "FROM [fluig_desenvolvimento].dbo.ML001121 " +
+    ") AS ML001121 " +
+        "ON TCNT_AUXILIAR.ID_FLUIG = ML001121.numProces " +
+        "AND ML001121.rn = 1 " +
+    "WHERE STATUS_EQUIPAMENTOS.DESC_STATUS_EQUIPAMENTO IS NOT NULL";
         var whereParts = [];
         var i = 0;
 
@@ -81,8 +77,6 @@ WHERE STATUS_EQUIPAMENTOS.DESC_STATUS_EQUIPAMENTO IS NOT NULL
             var valor = params[campo];
 
             if (valor == null || valor === "") continue;
-
-
             if (campo === "ID_FLUIG") {
                 whereParts.push("TCNT_AUXILIAR.ID_FLUIG = '" + valor + "'");
             } else if (campo === "solicitante") {
