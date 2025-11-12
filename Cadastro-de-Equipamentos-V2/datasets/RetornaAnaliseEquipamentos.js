@@ -1,38 +1,14 @@
-
 function createDataset(fields, constraints, sortFields) {
 
     try {
         var params = getConstraints(constraints);
         log.info("🧩 Constraints recebidas: " + JSON.stringify(params));
 
-
-        var ds = DatasetFactory.getDataset("dsGetServerURL",null,null,null);
-        var URL = ds.getValue(0,"URL");
-        var env = (URL == "http://homologacao.castilho.com.br:2020") ? "HOMOLOGACAO" :
-                    (URL == "http://desenvolvimento.castilho.com.br:3232") ? "DESENVOLVIMENTO" :
-                    (URL == "http://fluig.castilho.com.br:1010") ?"PRODUCAO" : "";
-
-        env = "DESENVOLVIMENTO";
-                    
-    
-        var codigosMlPorServidor = {
-            PRODUCAO:"",
-            HOMOLOGACAO:"ML0017437",
-            DESENVOLVIMENTO:"ML001121",
-        };
-        var nomeBasesDoFluig = {
-            PRODUCAO:"fluig_producao",
-            HOMOLOGACAO:"fluig_homologacao",
-            DESENVOLVIMENTO:"fluig_desenvolvimento",
-        };
-        var codigoMl = codigosMlPorServidor[env];
-        var nomeBaseDoFluig = nomeBasesDoFluig[env];
-
         var myQuery = "SELECT " +
         "TCNT_AUXILIAR.ID_FLUIG, " +
         "TCNT_AUXILIAR.TIPO_CONTRATO, " +
         "TCNT_AUXILIAR.*, " +
-        "ML.*, " +
+        "ML001121.*, " +
         "STATUS_EQUIPAMENTOS.DESC_STATUS_EQUIPAMENTO, " +
         "STATUS_EQUIPAMENTOS.STATUS AS STATUS_EQUIP_ITEM, " +
         "EQ_AUX.FINALIZADO_EM, " +
@@ -89,10 +65,10 @@ function createDataset(fields, constraints, sortFields) {
                 "PARTITION BY numProces " +
                 "ORDER BY version DESC " +
             ") as rn " +
-        "FROM [" + nomeBaseDoFluig + "].dbo." + codigoMl +
-    " ) AS ML " +
-        "ON TCNT_AUXILIAR.ID_FLUIG = ML.numProces " +
-        "AND ML.rn = 1 " +
+        "FROM [fluig_desenvolvimento].dbo.ML001121 " +
+    ") AS ML001121 " +
+        "ON TCNT_AUXILIAR.ID_FLUIG = ML001121.numProces " +
+        "AND ML001121.rn = 1 " +
     "WHERE STATUS_EQUIPAMENTOS.DESC_STATUS_EQUIPAMENTO IS NOT NULL";
         var whereParts = [];
         var i = 0;
@@ -101,8 +77,6 @@ function createDataset(fields, constraints, sortFields) {
             var valor = params[campo];
 
             if (valor == null || valor === "") continue;
-
-
             if (campo === "ID_FLUIG") {
                 whereParts.push("TCNT_AUXILIAR.ID_FLUIG = '" + valor + "'");
             } else if (campo === "solicitante") {

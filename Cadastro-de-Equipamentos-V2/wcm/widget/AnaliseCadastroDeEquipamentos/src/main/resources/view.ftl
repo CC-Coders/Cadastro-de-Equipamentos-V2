@@ -101,6 +101,7 @@
       									<th style="display:none;">VALOR_FIPE</th>
       									<th style="display:none;">VALOR_EQUIPAMENTO</th>   
       									<th style="display:none;">USUARIO_LOGADO</th>   
+      									<th style="display:none;">NEGOCIACAO_SUPRIMENTOS</th>   
                                         <th>SOLICITANTE</th>
                                         <th>OBRA</th>
                                         <th>FORNECEDOR</th>
