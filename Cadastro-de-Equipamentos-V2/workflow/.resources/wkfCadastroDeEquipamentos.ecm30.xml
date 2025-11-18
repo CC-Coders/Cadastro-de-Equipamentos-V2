@@ -28,11 +28,10 @@
     <processDefinitionVersionPK>
       <companyId>1</companyId>
       <processId>Cadastro de Equipamentos</processId>
-      <version>33</version>
+      <version>2</version>
     </processDefinitionVersionPK>
     <versionDescription></versionDescription>
-    <formId>29958</formId>
-    <formIdV2>0</formIdV2>
+    <formId>39243</formId>
     <editionMode>true</editionMode>
     <updateAttachmentsVersion>false</updateAttachmentsVersion>
     <controlsAttachmentsSecurity>false</controlsAttachmentsSecurity>
@@ -406,7 +405,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>1</expressionOrder>
-        <version>33</version>
+        <version>2</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -418,7 +417,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>2</expressionOrder>
-        <version>33</version>
+        <version>2</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -432,7 +431,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>3</expressionOrder>
-        <version>33</version>
+        <version>2</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -446,7 +445,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>1</expressionOrder>
-        <version>33</version>
+        <version>2</version>
         <sequence>26</sequence>
       </conditionProcessStatePK>
       <condition></condition>
@@ -458,7 +457,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>2</expressionOrder>
-        <version>33</version>
+        <version>2</version>
         <sequence>26</sequence>
       </conditionProcessStatePK>
       <condition></condition>
@@ -877,52 +876,52 @@ function getDadosEquipamento() {&#xd;
     var QUANTIDADE = hAPI.getCardValue(&quot;quantidade&quot;);&#xd;
 &#xd;
     return {&#xd;
-        &quot;CODCOLIGADA&quot;: CODCOLIGADA,&#xd;
-        &quot;CODCCUSTO&quot;: CODCCUSTO,&#xd;
-        &quot;PREFIXO&quot;: PREFIXO,&#xd;
-        &quot;IDMODE&quot;: IDMODE,&#xd;
-        &quot;CODICLME&quot;: CODICLME,&#xd;
-        &quot;IDCLOP&quot;: IDCLOP,&#xd;
-        &quot;CODIFABR&quot;: CODIFABR,&#xd;
-        &quot;CODIESPE&quot;: CODIESPE,&#xd;
-        &quot;ANOFABRI&quot;: ANOFABRI,&#xd;
-        &quot;ANOMODELO&quot;: ANOMODELO,&#xd;
-        &quot;NUMECHAS&quot;: NUMECHAS,&#xd;
-        &quot;PLACA&quot;: PLACA,&#xd;
-        &quot;ALUGUEL_CONTRATO&quot;: ALUGUEL_CONTRATO,&#xd;
-        &quot;DESCRICAO&quot;: DESCRICAO,&#xd;
-        &quot;POTENCIAHP_UNID&quot;: POTENCIAHP_UNID,&#xd;
-        &quot;POTENCIAHP&quot;: POTENCIAHP,&#xd;
-        &quot;DATACHEGADA&quot;: DATACHEGADA,&#xd;
+        &quot;CODCOLIGADA&quot;: CODCOLIGADA + &quot;&quot;,&#xd;
+        &quot;CODCCUSTO&quot;: CODCCUSTO + &quot;&quot;,&#xd;
+        &quot;PREFIXO&quot;: PREFIXO + &quot;&quot;,&#xd;
+        &quot;IDMODE&quot;: IDMODE + &quot;&quot;,&#xd;
+        &quot;CODICLME&quot;: CODICLME + &quot;&quot;,&#xd;
+        &quot;IDCLOP&quot;: IDCLOP + &quot;&quot;,&#xd;
+        &quot;CODIFABR&quot;: CODIFABR + &quot;&quot;,&#xd;
+        &quot;CODIESPE&quot;: CODIESPE + &quot;&quot;,&#xd;
+        &quot;ANOFABRI&quot;: ANOFABRI + &quot;&quot;,&#xd;
+        &quot;ANOMODELO&quot;: ANOMODELO + &quot;&quot;,&#xd;
+        &quot;NUMECHAS&quot;: NUMECHAS + &quot;&quot;,&#xd;
+        &quot;PLACA&quot;: PLACA + &quot;&quot;,&#xd;
+        &quot;ALUGUEL_CONTRATO&quot;: ALUGUEL_CONTRATO + &quot;&quot;,&#xd;
+        &quot;DESCRICAO&quot;: DESCRICAO + &quot;&quot;,&#xd;
+        &quot;POTENCIAHP_UNID&quot;: POTENCIAHP_UNID + &quot;&quot;,&#xd;
+        &quot;POTENCIAHP&quot;: POTENCIAHP + &quot;&quot;,&#xd;
+        &quot;DATACHEGADA&quot;: DATACHEGADA + &quot;&quot;,&#xd;
 &#xd;
-        &quot;VALOR_MOBILIZADO&quot;: VALOR_MOBILIZADO,&#xd;
-        &quot;TIPO_VALOR_MOBILIZADO&quot;: TIPO_VALOR_MOBILIZADO,&#xd;
+        &quot;VALOR_MOBILIZADO&quot;: VALOR_MOBILIZADO + &quot;&quot;,&#xd;
+        &quot;TIPO_VALOR_MOBILIZADO&quot;: TIPO_VALOR_MOBILIZADO + &quot;&quot;,&#xd;
 &#xd;
-        &quot;VALOR_EXTRA&quot;: VALOR_EXTRA,&#xd;
-        &quot;TIPO_VALOR_EXTRA&quot;: TIPO_VALOR_EXTRA,&#xd;
+        &quot;VALOR_EXTRA&quot;: VALOR_EXTRA + &quot;&quot;,&#xd;
+        &quot;TIPO_VALOR_EXTRA&quot;: TIPO_VALOR_EXTRA + &quot;&quot;,&#xd;
 &#xd;
-        &quot;VALOR_MAODEOBRA&quot;: VALOR_MAODEOBRA,&#xd;
+        &quot;VALOR_MAODEOBRA&quot;: VALOR_MAODEOBRA + &quot;&quot;,&#xd;
 &#xd;
-        INI_HODOMETRO: INI_HODOMETRO,&#xd;
-        INI_HORIMETRO: INI_HORIMETRO,&#xd;
-        CODIMATE_COMBUSTIVEL: tipoCombustivel,&#xd;
+        INI_HODOMETRO: INI_HODOMETRO + &quot;&quot;,&#xd;
+        INI_HORIMETRO: INI_HORIMETRO + &quot;&quot;,&#xd;
+        CODIMATE_COMBUSTIVEL: tipoCombustivel + &quot;&quot;,&#xd;
 &#xd;
-        CONSUMO_HORA: CONSUMO_HORA,&#xd;
-        CONSUMO_KM: CONSUMO_KM,&#xd;
+        CONSUMO_HORA: CONSUMO_HORA + &quot;&quot;,&#xd;
+        CONSUMO_KM: CONSUMO_KM + &quot;&quot;,&#xd;
 &#xd;
-        CAPATANQ_ABAST: CAPATANQ_ABAST,&#xd;
-        CODIUNID_CAPACIDADE_COMBUSTIVEL: CODIUNID_CAPACIDADE_COMBUSTIVEL,&#xd;
+        CAPATANQ_ABAST: CAPATANQ_ABAST + &quot;&quot;,&#xd;
+        CODIUNID_CAPACIDADE_COMBUSTIVEL: CODIUNID_CAPACIDADE_COMBUSTIVEL + &quot;&quot;,&#xd;
 &#xd;
-        ANEXOS_DOCUMENTACAO: ANEXOS_DOCUMENTACAO,&#xd;
-        ANEXOS_FOTOS: ANEXOS_FOTOS,&#xd;
-        ANEXOS_LAUDO: ANEXOS_LAUDO,&#xd;
-        ANEXOS_PLANO_MANUTENCAO: ANEXOS_PLANO_MANUTENCAO,&#xd;
-        ANEXOS_ART: ANEXOS_ART,&#xd;
+        ANEXOS_DOCUMENTACAO: ANEXOS_DOCUMENTACAO + &quot;&quot;,&#xd;
+        ANEXOS_FOTOS: ANEXOS_FOTOS + &quot;&quot;,&#xd;
+        ANEXOS_LAUDO: ANEXOS_LAUDO + &quot;&quot;,&#xd;
+        ANEXOS_PLANO_MANUTENCAO: ANEXOS_PLANO_MANUTENCAO + &quot;&quot;,&#xd;
+        ANEXOS_ART: ANEXOS_ART + &quot;&quot;,&#xd;
 &#xd;
-        DATA_VENCIMENTO_ART:DATA_VENCIMENTO_ART,&#xd;
-        DATA_VENCIMENTO_LAUDO:DATA_VENCIMENTO_LAUDO,&#xd;
+        DATA_VENCIMENTO_ART:DATA_VENCIMENTO_ART + &quot;&quot;,&#xd;
+        DATA_VENCIMENTO_LAUDO:DATA_VENCIMENTO_LAUDO + &quot;&quot;,&#xd;
 &#xd;
-        QUANTIDADE:QUANTIDADE,&#xd;
+        QUANTIDADE:QUANTIDADE + &quot;&quot;,&#xd;
     };&#xd;
 &#xd;
 }</eventDescription>
@@ -986,7 +985,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>33</version>
+        <version>2</version>
         <linkSequence>22</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -997,7 +996,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>33</version>
+        <version>2</version>
         <linkSequence>20</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1008,7 +1007,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>33</version>
+        <version>2</version>
         <linkSequence>21</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1019,7 +1018,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>33</version>
+        <version>2</version>
         <linkSequence>23</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1030,7 +1029,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>33</version>
+        <version>2</version>
         <linkSequence>18</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1041,7 +1040,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>33</version>
+        <version>2</version>
         <linkSequence>29</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1052,7 +1051,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>33</version>
+        <version>2</version>
         <linkSequence>29</linkSequence>
         <bendSequence>2</bendSequence>
       </processLinkBendPK>

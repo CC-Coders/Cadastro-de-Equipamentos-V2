@@ -619,7 +619,9 @@ function insereCadastroAuxiliar(EQUIPAMENTO){
 }
 function insereCaracteristicasTecnicas(IDEQUI, CARACTECNICA, EQUIPAMENTO){
     try {
-        for (var item of CARACTECNICA) {
+        for (let index = 0; index < CARACTECNICA.length; index++) {
+            var item = CARACTECNICA[index];
+            
             if (item.VALOR_PADRAO != item.VALOR) {
                 // Insere a Caracteristica Tecnica somente quando for diferente do padrão
                 // Visto que o SISMA já puxa o Padrão do Modelo automaticamente
