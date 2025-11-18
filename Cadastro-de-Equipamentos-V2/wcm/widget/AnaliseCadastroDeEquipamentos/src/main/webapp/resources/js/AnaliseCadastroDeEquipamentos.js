@@ -5,7 +5,7 @@ var MyWidget = SuperWidget.extend({
 
     init: function () {
         var self = this;
-        console.log("116")
+        console.log("125")
         var $button = $("#button-search");
         var originalText = "Buscar";
         var loadingInterval;
@@ -319,8 +319,26 @@ var MyWidget = SuperWidget.extend({
         var modalId = 'modalEditEquipamento_' + new Date().getTime();
         var modalContent = `
             <div class="panel-body" style="display:block; height: 100%;">
+                <div id="table-loading-overlay" style="
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:rgba(255,255,255,0.8);
+        display:none;
+        z-index:999;
+        align-items:flex-start;
+        justify-content:center;
+        padding-top:20px;
+        font-size:18px;
+        font-weight:600;
+    ">
+        Carregando...
+    </div>
                 <div class="panel panel-primary" style="border:none; padding:10px; height: 100%;">
-                    <div class="panel-body table-container" style="height: calc(100% - 60px); padding:0; overflow-y: auto;">
+              <div class="panel-body table-container" 
+     style="height: calc(100% - 60px); padding:0; overflow-y: auto; position:relative;">
                         <table id="dataTableEdit" class="table table-bordered" style="width: 100%; margin: 0;">
                             <thead>
                                 <tr>
@@ -344,15 +362,7 @@ var MyWidget = SuperWidget.extend({
                             <tbody></tbody>
                         </table>
                     </div>                                      
-                </div>
-                 <div style="display:flex; justify-content:flex-end; align-items:center; gap:12px; margin-top:10px; padding-right:14px;">
-        <label for="negociacaoSuprimentos_${modalId}" style="margin:0; font-weight:500;">Negociação realizada pelo Suprimentos:</label>
-
-        <div class="switch switch-success">
-          <input class="switch-input" type="checkbox" id="negociacaoSuprimentos_${modalId}" />
-          <label class="switch-button switchRedGreen" for="negociacaoSuprimentos_${modalId}">Toggle</label>
-        </div>
-      </div>
+                </div>                
             </div>
         `;
 
@@ -376,6 +386,7 @@ var MyWidget = SuperWidget.extend({
                 }
             ]
         });
+        showLoadingOverlay();
         var c = [DatasetFactory.createConstraint("ID_TCNT_AUXILIAR", idContrato, idContrato, ConstraintType.MUST)];
         DatasetFactory.getDataset("RetornaDetalhesEquipamentos", null, c, null, {
             success: function (ds) {
@@ -418,7 +429,7 @@ var MyWidget = SuperWidget.extend({
                     }
                 }, 200);
                 var alturaMaxima = $('.meu-modal-edit .table-container').height();
-                $("#dataTableEdit").DataTable({
+                var table = $("#dataTableEdit").DataTable({
                     data: tableData,
                     destroy: true,
                     columns: [
@@ -549,9 +560,6 @@ var MyWidget = SuperWidget.extend({
                                 if (precoEquipamento > 0) {
                                     percentual = ((valorLocacao - maoObra) / precoEquipamento * 100).toFixed(2);
                                 }
-
-                                console.log("Linha", meta.row, "- Valor Locação:", valorLocacao, "Mão de Obra:", maoObra, "Preço Equipamento:", precoEquipamento, "Classificação Bem (%):", percentual);
-
                                 return `<input type="text" class="form-control classificacaoBem" value="${percentual}" readonly>`;
                             }
                         },
@@ -592,7 +600,10 @@ var MyWidget = SuperWidget.extend({
                     language: { emptyTable: "Nenhum registro encontrado" }
                 });
 
-                
+                table.on("draw", function () {
+                    hideLoadingOverlay();
+                });
+                table.draw();
                 var table = $("#dataTableEdit").DataTable();
                 $(document).on('input', '#dataTableEdit .valorAtual, #dataTableEdit .valorFipe, #dataTableEdit .valorImplemento', function () {
                     let valor = $(this).val().replace(/\D/g, "");
@@ -659,8 +670,6 @@ var MyWidget = SuperWidget.extend({
                     }
                     var campoClassificacao = row.find('.classificacaoBem');
                     campoClassificacao.val(formatarPercentual(percentual));
-
-                    // --- Aplica cores conforme o valor ---
                     campoClassificacao.removeClass('percentual-alto percentual-baixo');
                     if (percentual > 3) {
                         campoClassificacao.css('box-shadow', 'inset 0 0 0 1000px #f8d7da');
@@ -727,11 +736,11 @@ var MyWidget = SuperWidget.extend({
                         }
                     });
                 });
-
-                
+             
                 $(document).off('click', '.btn-concluir-equipamento').on('click', '.btn-concluir-equipamento', function () {
                     var table = $('#dataTableEdit').DataTable();
                     var rows = table.rows().nodes();
+                    console.log(rows)
                     var total = rows.length;
                     var atualizados = 0;
                     if (total === 0) {
@@ -750,6 +759,7 @@ var MyWidget = SuperWidget.extend({
                     $(rows).each(function () {
                         var row = $(this);
                         var rowData = table.row(row).data();
+                        console.log(rowData)
                         var prefixo = rowData.prefixo;
                         var valorFipe = limparMoeda(row.find('.valorFipe').val());
                         var valorImplemento = limparMoeda(row.find('.valorImplemento').val());
@@ -758,7 +768,8 @@ var MyWidget = SuperWidget.extend({
                         var precoEquipamento = limparMoeda(row.find('.precoEquipamento').val());
                         var classificacaoBem = limparMoeda(row.find('.classificacaoBem').val());
                         var dataFinalizado = moment().format('DD/MM/YYYY');
-                        var negociacaoSuprimentos = $("#negociacaoSuprimentos_" + modalId).is(":checked") ? "S" : "N";
+                      //  var negociacaoSuprimentos = $("#negociacaoSuprimentos_" + modalId).is(":checked") ? "S" : "N";
+                        var negociacaoSuprimentos = row.find(".negociacaoSuprimentosSwitch").is(":checked") ? "S" : "N";
                         if (!valorAtual || valorAtual === "0" || isNaN(valorAtual)) {
                             return; 
                         }
@@ -798,7 +809,84 @@ var MyWidget = SuperWidget.extend({
                         });
                     });
                 });
-
+//                $(document).off('click', '.btn-concluir-equipamento').on('click', '.btn-concluir-equipamento', function () {
+//                    abrirModalNegociacao(function (respostaSuprimentos) {
+//                    	 var table = $('#dataTableEdit').DataTable();
+//                         var rows = table.rows().nodes()
+//                         console.log(rows)
+//                         var total = rows.length;
+//                         var atualizados = 0;
+//                         if (total === 0) {
+//                             FLUIGC.toast({
+//                                 title: "Aviso:",
+//                                 message: "Nenhum equipamento encontrado para concluir.",
+//                                 type: "warning"
+//                             });
+//                             return;
+//                         }
+//                         FLUIGC.toast({
+//                             title: "Processando...",
+//                             message: "Concluindo atualização de todos os equipamentos.",
+//                             type: "info"
+//                         });
+//                         $(rows).each(function () {
+////                             var row = $(this);
+////                             console.log(row)
+////                             var rowData = table.row(row).data();
+//                        	 var rowNode = table.row(this).node();      // ✔ CORREÇÃO
+//                        	 var $row = $(rowNode);                     // ✔ CORREÇÃO
+//                        	 var rowData = table.row(this).data();
+//                             var prefixo = rowData.prefixo;
+//                             var valorFipe = limparMoeda(row.find('.valorFipe').val());
+//                             var valorImplemento = limparMoeda(row.find('.valorImplemento').val());
+//                             var valorAtual = limparMoeda(row.find('.valorAtual').val());
+//                             var valorDepreciacao = limparMoeda(row.find('.depreciacaoImplemento').val());
+//                             var precoEquipamento = limparMoeda(row.find('.precoEquipamento').val());
+//                             var classificacaoBem = limparMoeda(row.find('.classificacaoBem').val());
+//                             var dataFinalizado = moment().format('DD/MM/YYYY');
+//                           //  var negociacaoSuprimentos = $("#negociacaoSuprimentos_" + modalId).is(":checked") ? "S" : "N";
+//                             var negociacaoSuprimentos = row.find(".negociacaoSuprimentosSwitch").is(":checked") ? "S" : "N";
+//                             if (!valorAtual || valorAtual === "0" || isNaN(valorAtual)) {
+//                                 return; 
+//                             }
+//     
+//                             var c1 = DatasetFactory.createConstraint("PREFIXO", prefixo, prefixo, ConstraintType.MUST);
+//                             var c2 = DatasetFactory.createConstraint("MODO", "EDITAR_TUDO", "EDITAR_TUDO", ConstraintType.MUST);
+//                             var c3 = DatasetFactory.createConstraint("VALOR_EQUIPAMENTO", valorAtual, valorAtual, ConstraintType.MUST);
+//                             var c4 = DatasetFactory.createConstraint("VALOR_FIPE", valorFipe, valorFipe, ConstraintType.MUST);
+//                             var c5 = DatasetFactory.createConstraint("VALOR_IMPLEMENTO", valorImplemento, valorImplemento, ConstraintType.MUST);
+//                             var c6 = DatasetFactory.createConstraint("VALOR_DEPRECIACAO", valorDepreciacao, valorDepreciacao, ConstraintType.MUST);
+//                             var c7 = DatasetFactory.createConstraint("PRECO_EQUIPAMENTO", precoEquipamento, precoEquipamento, ConstraintType.MUST);
+//                             var c8 = DatasetFactory.createConstraint("FINALIZADO_EM", dataFinalizado, dataFinalizado, ConstraintType.MUST);
+//                             var c9 = DatasetFactory.createConstraint("CLASSIFICACAO_BEM", classificacaoBem, classificacaoBem, ConstraintType.MUST);
+//                             var c10 = DatasetFactory.createConstraint("NEGOCIACAO_SUPRIMENTOS", negociacaoSuprimentos, negociacaoSuprimentos, ConstraintType.MUST);                       
+//                                                   
+//                             DatasetFactory.getDataset("dsUpdateAnaliseEquipamento", null, [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10], null, {
+//                                 success: function (ds) {
+//                                	 console.log(ds)
+//                                     var status = ds.values[0].status;
+//                                     var mensagem = ds.values[0].mensagem;
+//                                     if (status === "SUCCESS") atualizados++;
+//                                     if (atualizados === total) {
+//                                         FLUIGC.toast({
+//                                             title: "Sucesso!",
+//                                             message: "Todos os equipamentos foram concluídos com sucesso.",
+//                                             type: "success"
+//                                         });
+//                                     }
+//                                 },
+//                                 error: function (err) {
+//                                     console.error("Erro ao atualizar prefixo:", prefixo, err);
+//                                     FLUIGC.toast({
+//                                         title: "Erro",
+//                                         message: "Falha ao concluir o equipamento " + prefixo,
+//                                         type: "danger"
+//                                     });
+//                                 }
+//                             });
+//                         });
+//                    });
+//                });
                 $('#dataTableEdit').on('click', '.btnSalvarItem', function () {
                     var row = $(this).closest('tr');
                     var rowData = $('#dataTableEdit').DataTable().row(row).data();
@@ -925,3 +1013,130 @@ function formatarPercentual(valor) {
     return parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 1 }) + '%';
 }
 
+
+function abrirModalNegociacao(callback) {
+    var modal = FLUIGC.modal({
+        title: 'Confirmação',
+        content: `
+            <div style="font-size:16px; padding:10px 0;">
+                A negociação foi realizada pelo Suprimentos?
+            </div>
+        `,
+        id: 'modalConfirmNegociacao',
+        size: 'small',
+        actions: [
+            {
+                label: 'SIM',
+                classType: 'btn-primary',
+                autoClose: true,
+                bind: 'data-sim'
+            },
+            {
+                label: 'NÃO',
+                classType: 'btn-danger',
+                autoClose: true,
+                bind: 'data-nao'
+            }
+        ]
+    }, function(err, data){
+    	  $("#modalConfirmNegociacao").find(".close").remove();
+    });
+    $(document)
+        .off('click', '[data-sim]')
+        .on('click', '[data-sim]', function () {
+            callback("S");
+        });
+
+    $(document)
+        .off('click', '[data-nao]')
+        .on('click', '[data-nao]', function () {
+            callback("N");
+        });
+}
+function atualizarTodosEquipamentos(negociacaoSuprimentos) {
+
+    var table = $('#dataTableEdit').DataTable();
+    var rows = table.rows().nodes();
+    var total = rows.length;
+    var atualizados = 0;
+
+    if (total === 0) {
+        FLUIGC.toast({
+            title: "Aviso:",
+            message: "Nenhum equipamento encontrado para concluir.",
+            type: "warning"
+        });
+        return;
+    }
+
+    FLUIGC.toast({
+        title: "Processando...",
+        message: "Concluindo atualização de todos os equipamentos.",
+        type: "info"
+    });
+
+    $(rows).each(function () {
+
+        var row = $(this);
+        var rowData = table.row(row).data();
+
+        var prefixo = rowData.prefixo;
+        var valorFipe = limparMoeda(row.find('.valorFipe').val());
+        var valorImplemento = limparMoeda(row.find('.valorImplemento').val());
+        var valorAtual = limparMoeda(row.find('.valorAtual').val());
+        var valorDepreciacao = limparMoeda(row.find('.depreciacaoImplemento').val());
+        var precoEquipamento = limparMoeda(row.find('.precoEquipamento').val());
+        var classificacaoBem = limparMoeda(row.find('.classificacaoBem').val());
+        var dataFinalizado = moment().format('DD/MM/YYYY');
+
+        if (!valorAtual || valorAtual == "0" || isNaN(valorAtual)) {
+            return;
+        }
+
+        var c1 = DatasetFactory.createConstraint("PREFIXO", prefixo, prefixo, ConstraintType.MUST);
+        var c2 = DatasetFactory.createConstraint("MODO", "EDITAR_TUDO", "EDITAR_TUDO", ConstraintType.MUST);
+        var c3 = DatasetFactory.createConstraint("VALOR_EQUIPAMENTO", valorAtual, valorAtual, ConstraintType.MUST);
+        var c4 = DatasetFactory.createConstraint("VALOR_FIPE", valorFipe, valorFipe, ConstraintType.MUST);
+        var c5 = DatasetFactory.createConstraint("VALOR_IMPLEMENTO", valorImplemento, valorImplemento, ConstraintType.MUST);
+        var c6 = DatasetFactory.createConstraint("VALOR_DEPRECIACAO", valorDepreciacao, valorDepreciacao, ConstraintType.MUST);
+        var c7 = DatasetFactory.createConstraint("PRECO_EQUIPAMENTO", precoEquipamento, precoEquipamento, ConstraintType.MUST);
+        var c8 = DatasetFactory.createConstraint("FINALIZADO_EM", dataFinalizado, dataFinalizado, ConstraintType.MUST);
+        var c9 = DatasetFactory.createConstraint("CLASSIFICACAO_BEM", classificacaoBem, classificacaoBem, ConstraintType.MUST);
+
+        var c10 = DatasetFactory.createConstraint("NEGOCIACAO_SUPRIMENTOS", negociacaoSuprimentos, negociacaoSuprimentos, ConstraintType.MUST);
+
+        DatasetFactory.getDataset("dsUpdateAnaliseEquipamento", null,
+            [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10],
+            null,
+            {
+                success: function (ds) {
+                    if (ds.values[0].status === "SUCCESS") atualizados++;
+
+                    if (atualizados === total) {
+                        FLUIGC.toast({
+                            title: "Sucesso!",
+                            message: "Todos os equipamentos foram concluídos com sucesso.",
+                            type: "success"
+                        });
+                    }
+                },
+                error: function (err) {
+                    FLUIGC.toast({
+                        title: "Erro",
+                        message: "Falha ao concluir o equipamento " + prefixo,
+                        type: "danger"
+                    });
+                    console.error("Erro:", err);
+                }
+            }
+        );
+    });
+}
+
+function showLoadingOverlay() {
+    document.getElementById("table-loading-overlay").style.display = "flex";
+}
+
+function hideLoadingOverlay() {
+    document.getElementById("table-loading-overlay").style.display = "none";
+}
