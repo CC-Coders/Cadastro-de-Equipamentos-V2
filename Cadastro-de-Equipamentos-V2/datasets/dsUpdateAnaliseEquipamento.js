@@ -74,12 +74,31 @@ function createDataset(fields, constraints, sortFields) {
         conn = ds.getConnection();
         stmt = conn.prepareStatement(query);
 
+//        for (var i = 0; i < params.length; i++) {
+//            if (typeof params[i] === "number") {
+//                stmt.setInt(i + 1, params[i]);
+//            } else {
+//                stmt.setString(i + 1, params[i]);
+//            }
+//        }
         for (var i = 0; i < params.length; i++) {
-            if (typeof params[i] === "number") {
-                stmt.setInt(i + 1, params[i]);
-            } else {
-                stmt.setString(i + 1, params[i]);
+
+            var value = params[i];
+
+            // Se for NUMBER → Int
+            if (typeof value === "number") {
+                stmt.setBigDecimal(i + 1, new java.math.BigDecimal(String(value)));
+                continue;
             }
+
+            // Se for data no formato YYYY-MM-DD → DATE
+            if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+                stmt.setDate(i + 1, java.sql.Date.valueOf(value));
+                continue;
+            }
+
+            // Padrão → String
+            stmt.setString(i + 1, value);
         }
 
         var updated = stmt.executeUpdate();
