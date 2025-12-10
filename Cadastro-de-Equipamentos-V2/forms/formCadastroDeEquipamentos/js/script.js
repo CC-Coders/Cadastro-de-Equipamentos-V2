@@ -285,7 +285,27 @@ function bindings() {
         }
     });
 
-    
+    $("#dataVencimentoAnexo").on("change", function(){
+        var dataVencimento = $(this).val();
+
+        if (dataVencimento) {
+            dataVencimento = dataVencimento.split("/").reverse().join("-");
+
+            // Calcula data limite para o vencimento dos Laudos, sendo no máximo 1 ano
+            var [ano, mes, dia] = getDateNow().split("-");
+            ano = parseInt(ano) + 1;//Adiciona um ano apartir de hoje
+            var dataLimite = [ano, mes, dia].join("-");
+
+            if (dataVencimento > dataLimite) {
+                FLUIGC.toast({
+                    "type":"warning",
+                    "title":"A data de validade do Laudo não pode ser maior que 1 ano.",
+                    "message":""
+                });
+                $(this).val("");
+            }
+        }
+    });
 
     $("#AnoFabricacao").mask("9999");
     $("#AnoModelo").mask("9999");
