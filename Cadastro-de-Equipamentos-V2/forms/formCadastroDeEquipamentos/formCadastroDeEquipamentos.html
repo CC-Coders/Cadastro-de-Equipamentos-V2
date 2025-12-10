@@ -422,11 +422,11 @@
 								<option value="Plano de Manutenção">Plano de Manutenção</option>
 								<option value="ART">ART</option>
 							</select>
-							<button class="btn btn-info" id="btnAnexarDocumentacao">Anexar</button>
+							<button type="button" class="btn btn-info" id="btnAnexarDocumentacao">Anexar</button>
 							<input type="file" name="inputFile" id="inputFile" style="display: none;" multiple>
 						</div>
 					</div>
-					<div class="col-md-2" id="divDataVencimentoAnexo" style="display: none;">
+					<div class="col-md-3" id="divDataVencimentoAnexo" style="display: none;">
 						<label for="">
 							Data de Vencimento do Anexo:
 							<i class="flaticon flaticon-info icon-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="Caso o documento não tenha data de validade, favor informar a data de um ano apos a data de emissão do documento o qual está anexando"></i>
@@ -501,10 +501,10 @@
 					<div class="col-md-3 col-xs-12"></div>
 		
 					<div class="col-md-3 col-xs-6">
-						<button class="btn btn-success btn-block" id="btnAprovar">Aprovar</button>
+						<button type="button" class="btn btn-success btn-block" id="btnAprovar">Aprovar</button>
 					</div>
 					<div class="col-md-3 col-xs-6">
-						<button class="btn btn-danger btn-block" id="btnReprovar">Reprovar</button>
+						<button type="button" class="btn btn-danger btn-block" id="btnReprovar">Reprovar</button>
 					</div>
 				</div>
 			</div>
@@ -532,7 +532,7 @@
 	</main>
 	<footer>
 		<div class="navegacao-formulario">
-			<button id="btn-voltar">
+			<button id="btn-voltar" type="button">
 				<i class="fluigicon fluigicon-pointer-left icon-md" aria-hidden="true"></i>
 			</button>
 	
@@ -544,7 +544,7 @@
 				<div class="pagination" data-index="4">Histórico e Decisão</div>
 			</div>
 	
-			<button id="btn-avancar">
+			<button id="btn-avancar" type="button">
 				<i class="fluigicon fluigicon-pointer-right icon-md" aria-hidden="true"></i>
 			</button>
 		</div>
