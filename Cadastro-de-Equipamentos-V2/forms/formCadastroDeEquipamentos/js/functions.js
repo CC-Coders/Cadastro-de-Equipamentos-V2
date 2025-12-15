@@ -622,3 +622,14 @@ function getDateNow(){
 
     return [ano,mes,dia].join("-");
 }
+function calculaDiferencaEmMeses(diaInicio, diaFim, shouldRound = false){
+    const init = moment(diaInicio);
+    const end = moment(diaFim);
+
+    var diff = end.diff(init, 'months', true);
+    if (shouldRound) {
+        return Math.round(diff);
+    }
+    
+    return diff;
+}

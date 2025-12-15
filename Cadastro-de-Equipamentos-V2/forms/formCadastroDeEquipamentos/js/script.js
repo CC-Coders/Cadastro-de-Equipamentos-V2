@@ -306,6 +306,23 @@ function bindings() {
             }
         }
     });
+    
+    $("#dataChegadaObra").on("change", function(){
+        var dataHoje = getDateNow();
+        var val = $(this).val().split("/").reverse().join("-");
+
+        var diff = calculaDiferencaEmMeses(dataHoje, val);
+        console.log(diff)
+        if (diff < -1) {
+            FLUIGC.toast({
+                type:"warning",
+                title:"Não é permitido informar mais que um mês retroativo",
+                message:"",
+            });
+            $(this).val("");
+        }
+
+    });
 
     $("#AnoFabricacao").mask("9999");
     $("#AnoModelo").mask("9999");
