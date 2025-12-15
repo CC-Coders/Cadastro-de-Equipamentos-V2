@@ -339,7 +339,7 @@ function insereTransfdiv3(IDEQUI, EQUIPAMENTO) {
         query += "INSERT INTO TRANSFDIV3 ";
         query += "(IDEQUI, DATAHORA, NUMEDOCU, CODIDIV3, INSTDIG, CODIUSU_DIG) ";
         query += "VALUES ";
-        query += "(?,?,?,?,?,?)";
+        query += "(?,CONVERT(datetime, ?, 121),?,?,CONVERT(datetime, ?, 121),?)";
 
         executeInsert(query, [
             { type: "int", value: IDEQUI },
@@ -379,7 +379,7 @@ function insereCombustivel(IDEQUI, EQUIPAMENTO) {
         query += "INSERT INTO EQUIPCOMBU ";
         query += "(DATAHORA, ATUAL, CODIMATE,IDEQUI,CODITANQ,TIPOCONTROLE,CONTROLACONSUMO,CAPATANQ_ABAST,CAPATANQ_CONV,PRINCIPAL,CONSCOMB_KM,CONSCOMB_HORA,CODIUNID,CONSCOMB2M)"
         query += " VALUES "
-        query += "(?,?,?,?,?,?,?,?,?,?, ?,?,?,?)";
+        query += "(CONVERT(datetime, ?, 121),?,?,?,?,?,?,?,?,?, ?,?,?,?)";
 
         executeInsert(query, [
             { type: "datetime", value: getDateTimeNow() },//DATAHORA
@@ -427,7 +427,7 @@ function insereTanqueCombustivel(IDEQUI, EQUIPAMENTO) {
         query += "INSERT INTO EQUIPTANQ ";
         query += "(IDEQUI, CODITANQ, DATA, ATUAL, CAPATANQ_ABAST, CAPATANQ_CONV)"
         query += " VALUES "
-        query += "(?,?,?,?,?,?)";
+        query += "(?,?,CONVERT(datetime, ?, 121),?,?,?)";
 
         executeInsert(query, [
             { type: "int", value: IDEQUI },
@@ -559,6 +559,8 @@ function insereCadastroAuxiliar(EQUIPAMENTO){
     try {
         var query = "INSERT INTO EQUIPAMENTOS_CONTRATOS_AUXILIAR (";
         query += "    PREFIXO, ";
+        query += "    VALOR_DESMOBILIZACAO, ";
+        query += "    UN_DESMOBILIZACAO,";
         query += "    VALOR_MOBILIZADO, ";
         query += "    UN_MOBILIZADO,";
         query += "    VALOR_EXTRA, ";
@@ -574,10 +576,12 @@ function insereCadastroAuxiliar(EQUIPAMENTO){
         query += "    DATA_VENCIMENTO_LAUDO ";
         query +=") ";
         query += "VALUES ";
-        query += "    (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+        query += "    (?,?,?,?,?,?,?,?,?,? ,?,?,?,?,?,?) ";
 
         return executeInsert(query, [
             {type:"varchar", value:EQUIPAMENTO.PREFIXO},//PREFIXO
+            {type:"float", value:EQUIPAMENTO.VALOR_DESMOBILIZACAO},//VALOR_DESMOBILIZACAO
+            {type:"varchar", value:EQUIPAMENTO.UN_DESMOBILIZACAO},//UN_DESMOBILIZACAO
             {type:"float", value:EQUIPAMENTO.VALOR_MOBILIZADO},//VALOR_MOBILIZADO
             {type:"varchar", value:EQUIPAMENTO.TIPO_VALOR_MOBILIZADO},//UN_MOBILIZADO
             {type:"float", value:EQUIPAMENTO.VALOR_EXTRA},//VALOR_EXTRA
@@ -930,6 +934,11 @@ function getDateTimeNow() {
         minutos = "0" + minutos;
     }
 
-    var dateTime = [ano, mes, dia].join("-") + " " + hora + ":" + minutos;
+    var segundos = date.getSeconds();
+    if (segundos < 10) {
+        segundos = "0" + segundos;
+    }    
+
+    var dateTime = [ano, mes, dia].join("-") + " " + hora + ":" + minutos + ":" + segundos;
     return dateTime
 }

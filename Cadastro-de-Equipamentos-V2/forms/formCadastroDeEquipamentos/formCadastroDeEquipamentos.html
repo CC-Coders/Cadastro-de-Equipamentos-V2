@@ -1,11 +1,11 @@
 <html>
 <head>
 	<!-- Fluig -->
-	<link type="text/css" rel="stylesheet" href="http://fluig.castilho.com.br:1010/style-guide/css/fluig-style-guide.min.css"/>
-	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/portal/resources/js/jquery/jquery.js"></script>
-	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/portal/resources/js/jquery/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/portal/resources/js/mustache/mustache-min.js"></script>
-	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/style-guide/js/fluig-style-guide.min.js" charset="utf-8"></script>
+	<link type="text/css" rel="stylesheet" href="/style-guide/css/fluig-style-guide.min.css"/>
+	<script type="text/javascript" src="/portal/resources/js/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/portal/resources/js/jquery/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/portal/resources/js/mustache/mustache-min.js"></script>
+	<script type="text/javascript" src="/style-guide/js/fluig-style-guide.min.js" charset="utf-8"></script>
 	<script src="/webdesk/vcXMLRPC.js"></script>
 
 	<!-- Selectize -->
@@ -259,7 +259,22 @@
 			</div>
 
 			<div class="row">
-				<div class="col-md-4 inputGroup">
+				<div class="col-md-3 inputGroup">
+					<label for="">Valor Desmobilização (R$):</label>
+					<div class="flexInput">
+						<input type="text" name="valorDesmobilizacao" id="valorDesmobilizacao" class="form-control inputPA inputMA inputOutros">
+						<select name="tipoValorDesmobilizacao" id="tipoValorDesmobilizacao" class="form-control inputPA inputMA inputOutros">
+							<option value="hora">Hora</option>
+                        	<option value="diaria">Diária</option>
+                        	<option value="mensal">Mensal</option>
+                        	<option value="anual">Anual</option>
+                        	<option value="m3_km">M³x Km</option>
+                        	<option value="ton_km">Ton x KM</option>
+						</select>
+					</div>
+					<br>
+				</div>
+				<div class="col-md-3 inputGroup">
 					<label for="">Valor Mobilização (R$):</label>
 					<div class="flexInput">
 						<input type="text" name="valorMobilizacao" id="valorMobilizacao" class="form-control inputPA inputMA inputOutros">
@@ -274,7 +289,7 @@
 					</div>
 					<br>
 				</div>
-				<div class="col-md-4 inputGroup">
+				<div class="col-md-3 inputGroup">
 					<label for="valorExtra">Valor Extra (R$):</label>
 					<div class="flexInput">
 						<input type="text" name="valorExtra" id="valorExtra" class="form-control inputPA inputMA inputOutros">
@@ -289,14 +304,14 @@
 					</div>
 					<br>
 				</div>
-				<div class="col-md-4 inputGroup">
+				<div class="col-md-3 inputGroup">
 					<label for="valorLocacao" class="required">Valor de Locação (R$):</label>
 					<input type="text" name="valorLocacao" id="valorLocacao" class="form-control inputPA inputMA inputOutros">
 					<br>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-4 inputGroup">
+				<div class="col-md-3 inputGroup">
 					<div>
 						<label for="">Mão de Obra:</label>
 						<input type="checkbox" name="checkboxTemMaoDeObra" id="checkboxTemMaoDeObra" class="inputMA">

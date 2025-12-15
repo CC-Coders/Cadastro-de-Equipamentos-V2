@@ -28,7 +28,7 @@
     <processDefinitionVersionPK>
       <companyId>1</companyId>
       <processId>Cadastro de Equipamentos</processId>
-      <version>2</version>
+      <version>3</version>
     </processDefinitionVersionPK>
     <versionDescription></versionDescription>
     <formId>39243</formId>
@@ -405,7 +405,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>1</expressionOrder>
-        <version>2</version>
+        <version>3</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -417,7 +417,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>2</expressionOrder>
-        <version>2</version>
+        <version>3</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -431,7 +431,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>3</expressionOrder>
-        <version>2</version>
+        <version>3</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -445,7 +445,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>1</expressionOrder>
-        <version>2</version>
+        <version>3</version>
         <sequence>26</sequence>
       </conditionProcessStatePK>
       <condition></condition>
@@ -457,7 +457,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>2</expressionOrder>
-        <version>2</version>
+        <version>3</version>
         <sequence>26</sequence>
       </conditionProcessStatePK>
       <condition></condition>
@@ -837,6 +837,9 @@ function getDadosEquipamento() {&#xd;
 &#xd;
     var VALOR_MOBILIZADO = moneyToFloat(hAPI.getCardValue(&quot;valorMobilizacao&quot;));&#xd;
     var TIPO_VALOR_MOBILIZADO = hAPI.getCardValue(&quot;tipoValorMobilizacao&quot;);&#xd;
+    &#xd;
+    var VALOR_DESMOBILIZACAO = moneyToFloat(hAPI.getCardValue(&quot;valorDesmobilizacao&quot;));&#xd;
+    var TIPO_VALOR_DESMOBILIZACAO = hAPI.getCardValue(&quot;tipoValorDesmobilizacao&quot;);&#xd;
 &#xd;
     var VALOR_EXTRA = moneyToFloat(hAPI.getCardValue(&quot;valorExtra&quot;));&#xd;
     var TIPO_VALOR_EXTRA = hAPI.getCardValue(&quot;tipoValorExtra&quot;);&#xd;
@@ -896,6 +899,9 @@ function getDadosEquipamento() {&#xd;
 &#xd;
         &quot;VALOR_MOBILIZADO&quot;: VALOR_MOBILIZADO + &quot;&quot;,&#xd;
         &quot;TIPO_VALOR_MOBILIZADO&quot;: TIPO_VALOR_MOBILIZADO + &quot;&quot;,&#xd;
+&#xd;
+        &quot;VALOR_DESMOBILIZACAO&quot;:VALOR_DESMOBILIZACAO+&quot;&quot;,&#xd;
+        &quot;UN_DESMOBILIZACAO&quot;:TIPO_VALOR_DESMOBILIZACAO+&quot;&quot;,&#xd;
 &#xd;
         &quot;VALOR_EXTRA&quot;: VALOR_EXTRA + &quot;&quot;,&#xd;
         &quot;TIPO_VALOR_EXTRA&quot;: TIPO_VALOR_EXTRA + &quot;&quot;,&#xd;
@@ -985,7 +991,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>2</version>
+        <version>3</version>
         <linkSequence>22</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -996,7 +1002,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>2</version>
+        <version>3</version>
         <linkSequence>20</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1007,7 +1013,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>2</version>
+        <version>3</version>
         <linkSequence>21</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1018,7 +1024,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>2</version>
+        <version>3</version>
         <linkSequence>23</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1029,7 +1035,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>2</version>
+        <version>3</version>
         <linkSequence>18</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1040,7 +1046,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>2</version>
+        <version>3</version>
         <linkSequence>29</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1051,7 +1057,7 @@ function getDadosEquipamento() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>2</version>
+        <version>3</version>
         <linkSequence>29</linkSequence>
         <bendSequence>2</bendSequence>
       </processLinkBendPK>

@@ -57,6 +57,7 @@ async function loadTelaInicio(){
     $("#historico").hide();
     FLUIGC.calendar('#dataChegadaObra');
     FLUIGC.calendar('#dataVencimentoAnexo');
+    $("#valorDesmobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorMobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorExtra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
@@ -75,6 +76,7 @@ async function loadTelaAjuste() {
     FLUIGC.calendar('#dataChegadaObra');
     FLUIGC.calendar('#dataVencimentoAnexo');
 
+    $("#valorDesmobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorMobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorExtra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
@@ -107,6 +109,7 @@ async function loadTelaCentralDeEquipamentos() {
     $("#divOpcoesAprovacao").show();
     $("#divAnexar").hide();        
     FLUIGC.calendar('#dataChegadaObra');
+    $("#valorDesmobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorMobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorExtra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
@@ -164,7 +167,7 @@ function bloqueiaCampos(){
     $("#obra")[0].selectize.lock();
     $("#modelo")[0].selectize.lock();
     $("#descricaoEquipamento, #prefixo, #categoria, #AnoFabricacao, #AnoModelo, #placa, #chassi, #potenciaMotor, #tipoPotenciaMotor").attr("readonly", "readonly");
-    $("#valorMobilizacao, #tipoValorMobilizacao, #valorExtra, #tipoValorExtra, #valorLocacao").attr("readonly", "readonly");
+    $("#valorMobilizacao, #tipoValorMobilizacao, #valorDesmobilizacao, #tipoValorDesmobilizacao, #valorExtra, #tipoValorExtra, #valorLocacao").attr("readonly", "readonly");
     $("#checkboxTemMaoDeObra").closest("div").attr("inert","inert");
     $("#checkboxTemMaoDeObra").attr("readonly","readonly");
     $("#valorMaoDeObra").attr("readonly","readonly");

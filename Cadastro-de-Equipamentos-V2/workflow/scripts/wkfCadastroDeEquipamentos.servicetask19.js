@@ -66,6 +66,9 @@ function getDadosEquipamento() {
 
     var VALOR_MOBILIZADO = moneyToFloat(hAPI.getCardValue("valorMobilizacao"));
     var TIPO_VALOR_MOBILIZADO = hAPI.getCardValue("tipoValorMobilizacao");
+    
+    var VALOR_DESMOBILIZACAO = moneyToFloat(hAPI.getCardValue("valorDesmobilizacao"));
+    var TIPO_VALOR_DESMOBILIZACAO = hAPI.getCardValue("tipoValorDesmobilizacao");
 
     var VALOR_EXTRA = moneyToFloat(hAPI.getCardValue("valorExtra"));
     var TIPO_VALOR_EXTRA = hAPI.getCardValue("tipoValorExtra");
@@ -125,6 +128,9 @@ function getDadosEquipamento() {
 
         "VALOR_MOBILIZADO": VALOR_MOBILIZADO + "",
         "TIPO_VALOR_MOBILIZADO": TIPO_VALOR_MOBILIZADO + "",
+
+        "VALOR_DESMOBILIZACAO":VALOR_DESMOBILIZACAO+"",
+        "UN_DESMOBILIZACAO":TIPO_VALOR_DESMOBILIZACAO+"",
 
         "VALOR_EXTRA": VALOR_EXTRA + "",
         "TIPO_VALOR_EXTRA": TIPO_VALOR_EXTRA + "",
