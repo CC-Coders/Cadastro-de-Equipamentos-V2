@@ -1,11 +1,11 @@
 <html>
 <head>
 	<!-- Fluig -->
-	<link type="text/css" rel="stylesheet" href="http://fluig.castilho.com.br:1010/style-guide/css/fluig-style-guide.min.css"/>
-	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/portal/resources/js/jquery/jquery.js"></script>
-	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/portal/resources/js/jquery/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/portal/resources/js/mustache/mustache-min.js"></script>
-	<script type="text/javascript" src="http://fluig.castilho.com.br:1010/style-guide/js/fluig-style-guide.min.js" charset="utf-8"></script>
+	<link type="text/css" rel="stylesheet" href="/style-guide/css/fluig-style-guide.min.css"/>
+	<script type="text/javascript" src="/portal/resources/js/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/portal/resources/js/jquery/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/portal/resources/js/mustache/mustache-min.js"></script>
+	<script type="text/javascript" src="/style-guide/js/fluig-style-guide.min.js" charset="utf-8"></script>
 	<script src="/webdesk/vcXMLRPC.js"></script>
 
 	<!-- Selectize -->
@@ -163,10 +163,15 @@
 					<label for="categoria" class="required">Categoria:</label>
 					<select name="categoria" id="categoria" class="form-control">
 						<option value=""></option>
-						<option value="MA">MA</option>
-						<option value="PA">PA</option>
+						<option value="MA">MA (Máquina Alugada)</option>
+						<option value="PA">PA (Ponto de Abastecimento)</option>
 						<option value="Outros">Outros</option>
 					</select>
+					<br>
+				</div>
+				<div class="col-md-6 inputGroup">
+					<label for="quantidade" class="required">Quantidade:</label>
+					<input name="quantidade" id="quantidade" class="form-control inputOutros"/>
 					<br>
 				</div>
 			</div>
@@ -254,7 +259,22 @@
 			</div>
 
 			<div class="row">
-				<div class="col-md-4 inputGroup">
+				<div class="col-md-3 inputGroup">
+					<label for="">Valor Desmobilização (R$):</label>
+					<div class="flexInput">
+						<input type="text" name="valorDesmobilizacao" id="valorDesmobilizacao" class="form-control inputPA inputMA inputOutros">
+						<select name="tipoValorDesmobilizacao" id="tipoValorDesmobilizacao" class="form-control inputPA inputMA inputOutros">
+							<option value="hora">Hora</option>
+                        	<option value="diaria">Diária</option>
+                        	<option value="mensal">Mensal</option>
+                        	<option value="anual">Anual</option>
+                        	<option value="m3_km">M³x Km</option>
+                        	<option value="ton_km">Ton x KM</option>
+						</select>
+					</div>
+					<br>
+				</div>
+				<div class="col-md-3 inputGroup">
 					<label for="">Valor Mobilização (R$):</label>
 					<div class="flexInput">
 						<input type="text" name="valorMobilizacao" id="valorMobilizacao" class="form-control inputPA inputMA inputOutros">
@@ -269,7 +289,7 @@
 					</div>
 					<br>
 				</div>
-				<div class="col-md-4 inputGroup">
+				<div class="col-md-3 inputGroup">
 					<label for="valorExtra">Valor Extra (R$):</label>
 					<div class="flexInput">
 						<input type="text" name="valorExtra" id="valorExtra" class="form-control inputPA inputMA inputOutros">
@@ -284,14 +304,14 @@
 					</div>
 					<br>
 				</div>
-				<div class="col-md-4 inputGroup">
+				<div class="col-md-3 inputGroup">
 					<label for="valorLocacao" class="required">Valor de Locação (R$):</label>
 					<input type="text" name="valorLocacao" id="valorLocacao" class="form-control inputPA inputMA inputOutros">
 					<br>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-4 inputGroup">
+				<div class="col-md-3 inputGroup">
 					<div>
 						<label for="">Mão de Obra:</label>
 						<input type="checkbox" name="checkboxTemMaoDeObra" id="checkboxTemMaoDeObra" class="inputMA">
@@ -325,9 +345,9 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-4 inputGroup">
 					<label for="tipoCombustivel" class="required">Tipo de combustível:</label>
-					<select name="tipoCombustivel" id="tipoCombustivel" class="form-control">
+					<select name="tipoCombustivel" id="tipoCombustivel" class="form-control inputPA inputMA">
 						<option value=""></option>
 						<option value="400">GASOLINA COMUM</option>
 						<option value="401">DIESEL S-10</option>
@@ -341,16 +361,16 @@
 					</select>
 					<br>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-4 inputGroup">
 					<label for="litrosTanque" class="required">Tanque (Litros):</label>
-					<input type="text" name="litrosTanque" id="litrosTanque" class="form-control">
+					<input type="text" name="litrosTanque" id="litrosTanque" class="form-control inputPA inputMA">
 					<br>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-4 inputGroup">
 					<label for="consumoMedio" class="required">Consumo Médio:</label>
 					<div class="flexInput">
-						<input type="text" name="consumoMedio" id="consumoMedio" class="form-control">
-						<select name="tipoConsumoMedio" id="tipoConsumoMedio" class="form-control">
+						<input type="text" name="consumoMedio" id="consumoMedio" class="form-control inputPA inputMA">
+						<select name="tipoConsumoMedio" id="tipoConsumoMedio" class="form-control inputPA inputMA">
 							<option value="km/L">km/L</option>
 							<option value="L/H">L/H</option>
 						</select>
@@ -417,11 +437,11 @@
 								<option value="Plano de Manutenção">Plano de Manutenção</option>
 								<option value="ART">ART</option>
 							</select>
-							<button class="btn btn-info" id="btnAnexarDocumentacao">Anexar</button>
+							<button type="button" class="btn btn-info" id="btnAnexarDocumentacao">Anexar</button>
 							<input type="file" name="inputFile" id="inputFile" style="display: none;" multiple>
 						</div>
 					</div>
-					<div class="col-md-2" id="divDataVencimentoAnexo" style="display: none;">
+					<div class="col-md-3" id="divDataVencimentoAnexo" style="display: none;">
 						<label for="">
 							Data de Vencimento do Anexo:
 							<i class="flaticon flaticon-info icon-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="Caso o documento não tenha data de validade, favor informar a data de um ano apos a data de emissão do documento o qual está anexando"></i>
@@ -496,10 +516,10 @@
 					<div class="col-md-3 col-xs-12"></div>
 		
 					<div class="col-md-3 col-xs-6">
-						<button class="btn btn-success btn-block" id="btnAprovar">Aprovar</button>
+						<button type="button" class="btn btn-success btn-block" id="btnAprovar">Aprovar</button>
 					</div>
 					<div class="col-md-3 col-xs-6">
-						<button class="btn btn-danger btn-block" id="btnReprovar">Reprovar</button>
+						<button type="button" class="btn btn-danger btn-block" id="btnReprovar">Reprovar</button>
 					</div>
 				</div>
 			</div>
@@ -527,7 +547,7 @@
 	</main>
 	<footer>
 		<div class="navegacao-formulario">
-			<button id="btn-voltar">
+			<button id="btn-voltar" type="button">
 				<i class="fluigicon fluigicon-pointer-left icon-md" aria-hidden="true"></i>
 			</button>
 	
@@ -539,7 +559,7 @@
 				<div class="pagination" data-index="4">Histórico e Decisão</div>
 			</div>
 	
-			<button id="btn-avancar">
+			<button id="btn-avancar" type="button">
 				<i class="fluigicon fluigicon-pointer-right icon-md" aria-hidden="true"></i>
 			</button>
 		</div>

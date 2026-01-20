@@ -57,6 +57,7 @@ async function loadTelaInicio(){
     $("#historico").hide();
     FLUIGC.calendar('#dataChegadaObra');
     FLUIGC.calendar('#dataVencimentoAnexo');
+    $("#valorDesmobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorMobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorExtra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
@@ -75,6 +76,7 @@ async function loadTelaAjuste() {
     FLUIGC.calendar('#dataChegadaObra');
     FLUIGC.calendar('#dataVencimentoAnexo');
 
+    $("#valorDesmobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorMobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorExtra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
@@ -107,6 +109,7 @@ async function loadTelaCentralDeEquipamentos() {
     $("#divOpcoesAprovacao").show();
     $("#divAnexar").hide();        
     FLUIGC.calendar('#dataChegadaObra');
+    $("#valorDesmobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorMobilizacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorExtra").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
     $("#valorLocacao").maskMoney({ thousands: '.', decimal: ',', prefix: 'R$' });
@@ -164,7 +167,7 @@ function bloqueiaCampos(){
     $("#obra")[0].selectize.lock();
     $("#modelo")[0].selectize.lock();
     $("#descricaoEquipamento, #prefixo, #categoria, #AnoFabricacao, #AnoModelo, #placa, #chassi, #potenciaMotor, #tipoPotenciaMotor").attr("readonly", "readonly");
-    $("#valorMobilizacao, #tipoValorMobilizacao, #valorExtra, #tipoValorExtra, #valorLocacao").attr("readonly", "readonly");
+    $("#valorMobilizacao, #tipoValorMobilizacao, #valorDesmobilizacao, #tipoValorDesmobilizacao, #valorExtra, #tipoValorExtra, #valorLocacao").attr("readonly", "readonly");
     $("#checkboxTemMaoDeObra").closest("div").attr("inert","inert");
     $("#checkboxTemMaoDeObra").attr("readonly","readonly");
     $("#valorMaoDeObra").attr("readonly","readonly");
@@ -285,10 +288,48 @@ function bindings() {
         }
     });
 
+    $("#dataVencimentoAnexo").on("change", function(){
+        var dataVencimento = $(this).val();
+
+        if (dataVencimento) {
+            dataVencimento = dataVencimento.split("/").reverse().join("-");
+
+            // Calcula data limite para o vencimento dos Laudos, sendo no máximo 1 ano
+            var [ano, mes, dia] = getDateNow().split("-");
+            ano = parseInt(ano) + 1;//Adiciona um ano apartir de hoje
+            var dataLimite = [ano, mes, dia].join("-");
+
+            if (dataVencimento > dataLimite) {
+                FLUIGC.toast({
+                    "type":"warning",
+                    "title":"A data de validade do Laudo não pode ser maior que 1 ano.",
+                    "message":""
+                });
+                $(this).val("");
+            }
+        }
+    });
     
+    $("#dataChegadaObra").on("change", function(){
+        var dataHoje = getDateNow();
+        var val = $(this).val().split("/").reverse().join("-");
+
+        var diff = calculaDiferencaEmMeses(dataHoje, val);
+        console.log(diff)
+        if (diff < -1) {
+            FLUIGC.toast({
+                type:"warning",
+                title:"Não é permitido informar mais que um mês retroativo",
+                message:"",
+            });
+            $(this).val("");
+        }
+
+    });
 
     $("#AnoFabricacao").mask("9999");
     $("#AnoModelo").mask("9999");
+    $("#Quantidade").mask("99999");
     $("#kmChegadaObra").mask('000.000.000', {reverse:true});
 
     
@@ -370,27 +411,34 @@ var beforeSendValidate = function () {
         if (!$("#categoria").val()) {
             errorMessage.push("Selecione a Categoria");
         }
-        if (!$("#modelo").val()) {
-            errorMessage.push("Selecione o Modelo");
+
+        if ($("#categoria").val() != "Outros") {
+            if (!$("#modelo").val()) {
+                errorMessage.push("Selecione o Modelo");
+            }
+            if (!$("#AnoFabricacao").val()) {
+                errorMessage.push("Informe o Ano de Fabricacao");
+            }
+            if (!$("#AnoModelo").val()) {
+                errorMessage.push("Informe o Ano do Modelo");
+            }
+            if (!$("#placa").val() && !$("#chassi").val()) {
+                errorMessage.push("Informe a Placa ou o Chassi");
+            }
+            if (!$("#potenciaMotor").val()) {
+                errorMessage.push("Informe a Potência do Motor");
+            }
+            if (!$("#tipoPotenciaMotor").val()) {
+                errorMessage.push("Informe o Tipo da Potência do Motor");
+            }
         }
-        if (!$("#AnoFabricacao").val()) {
-            errorMessage.push("Informe o Ano de Fabricacao");
+        else{
+            if (!$("#quantidade").val()) {
+                errorMessage.push("Informe a Quantidade");
+            }
         }
-        if (!$("#AnoModelo").val()) {
-            errorMessage.push("Informe o Ano do Modelo");
-        }
-        if (!$("#placa").val() && !$("#chassi").val()) {
-            errorMessage.push("Informe a Placa ou o Chassi");
-        }
-        if (!$("#potenciaMotor").val()) {
-            errorMessage.push("Informe a Potência do Motor");
-        }
-        if (!$("#tipoPotenciaMotor").val()) {
-            errorMessage.push("Informe o Tipo da Potência do Motor");
-        }
-        if (!$("#tipoPotenciaMotor").val()) {
-            errorMessage.push("Informe o Tipo da Potência do Motor");
-        }
+
+
 
         if (!$("#valorLocacao").val()) {
             errorMessage.push("Informe o Valor da Locação");
@@ -413,14 +461,17 @@ var beforeSendValidate = function () {
         if (!$("#kmChegadaObra").val()) {
             errorMessage.push("Informe a km/horas de Chegada na Obra");
         }
-        if (!$("#tipoCombustivel").val()) {
-            errorMessage.push("Informe o Tipo de combustível");
-        }
-        if (!$("#litrosTanque").val()) {
-            errorMessage.push("Informe a Capacidade do Tanque");
-        }
-        if (!$("#consumoMedio").val()) {
-            errorMessage.push("Informe o Consumo Médio");
+
+        if ($("#categoria").val() != "Outros") {
+            if (!$("#tipoCombustivel").val()) {
+                errorMessage.push("Informe o Tipo de combustível");
+            }
+            if (!$("#litrosTanque").val()) {
+                errorMessage.push("Informe a Capacidade do Tanque");
+            }
+            if (!$("#consumoMedio").val()) {
+                errorMessage.push("Informe o Consumo Médio");
+            }
         }
 
         // Fornecedor e Anexo
@@ -434,22 +485,33 @@ var beforeSendValidate = function () {
         if ($("#anexosFotosEquipamentos").val() == "") {
             errorMessage.push("Anexe a Foto do Equipamento");
         }
-        if ($("#anexosLaudoTecnico").val() == "") {
-            errorMessage.push("Anexe o Laudo Técnico");
-        }
-        if ($("#anexpsPlanoManutencao").val() == "") {
-            errorMessage.push("Anexe o Plano de Manutenção");
-        }
-        if ($("#anexosART").val() == "") {
-            errorMessage.push("Anexe a ART");
+        if ($("#categoria").val() != "Outros") {
+            if ($("#anexosLaudoTecnico").val() == "") {
+                errorMessage.push("Anexe o Laudo Técnico");
+            }
+            if ($("#anexpsPlanoManutencao").val() == "") {
+                errorMessage.push("Anexe o Plano de Manutenção");
+            }
+            if ($("#anexosART").val() == "") {
+                errorMessage.push("Anexe a ART");
+            }
+            if (!$("#dataVencimentoART").val()) {
+                errorMessage.push("Informe a Data de Vencimento da ART");
+            }   
+            if (!$("#dataVencimentoLaudo").val()) {
+                errorMessage.push("Informe a Data de Vencimento do Laudo Técnico");
+            }
+            
+            
+        }else{
+            if ($("#anexosART").val() && !$("#dataVencimentoART").val()) {
+                errorMessage.push("Informe a Data de Vencimento da ART");
+            }   
+            if ($("#anexosLaudoTecnico").val() && !$("#dataVencimentoLaudo").val()) {
+                errorMessage.push("Informe a Data de Vencimento do Laudo Técnico");
+            }
         }
 
-        if (!$("#dataVencimentoART").val()) {
-            errorMessage.push("Informe a Data de Vencimento da ART");
-        }   
-        if (!$("#dataVencimentoLaudo").val()) {
-            errorMessage.push("Informe a Data de Vencimento do Laudo Técnico");
-        }
 
         return errorMessage;
     }

@@ -231,6 +231,17 @@ function promiseConsultaCombustivelPorModelo(IDMODE){
 
 // Anexos
 function anexarDocumento(){
+    if ($("#tipoAnexo").val() == "ART" || $("#tipoAnexo").val() == "Laudo Técnico") {
+        if ($("#dataVencimentoAnexo").val() == "") {
+            FLUIGC.toast({
+                "type":"warning",
+                "title":"Necessário informar a Data de Vencimento do Anexo",
+                "message":"",
+            });
+            return;
+        }
+    }
+
     $("#inputFile").click();
 }
 async function loadFile(file) {
@@ -593,4 +604,32 @@ function promiseGetDocumentDescription(documentId){
             }
         });
     });
+}
+function getDateNow(){
+    var date = new Date();
+    
+    var dia = date.getDate();
+    if (dia < 10) {
+        dia = "0"+dia;
+    }
+    
+    var mes = date.getMonth() + 1;
+    if (mes < 10) {
+        mes = "0"+mes;
+    }
+
+    var ano = date.getFullYear();
+
+    return [ano,mes,dia].join("-");
+}
+function calculaDiferencaEmMeses(diaInicio, diaFim, shouldRound = false){
+    const init = moment(diaInicio);
+    const end = moment(diaFim);
+
+    var diff = end.diff(init, 'months', true);
+    if (shouldRound) {
+        return Math.round(diff);
+    }
+    
+    return diff;
 }

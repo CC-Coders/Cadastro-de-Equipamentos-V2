@@ -22,3 +22,193 @@
  .panel-heading {
      user-select: none;
  }
+ 
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+    background-color: #F7F8FA;
+    padding: 15px;
+}
+
+.modal-section {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.modal-section h5 {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    font-weight: bold;
+    color: #58595b;
+}
+
+.modal-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.modal-row div {
+    flex: 1 1 50%; 
+    padding: 5px 10px;
+}
+
+.subsection {
+    margin-top: 10px;
+    padding: 10px;
+    border-left: 3px solid #58595b;
+    background-color: #f5f5f5;
+    border-radius: 3px;
+}
+
+body .fluig-style-guide #dataTableFilter table.dataTable tbody tr,
+body .fluig-style-guide #dataTableFilter table.dataTable tbody tr.odd,
+body .fluig-style-guide #dataTableFilter table.dataTable tbody tr.even {
+    background-color: white !important;
+    background: white !important;
+}
+
+#button-search.loading-yellow {
+        background-color: #ffc107 !important;
+        color: #000 !important;
+        border: none !important;
+}
+
+.meu-modal-edit .modal-dialog {
+    width: 98vw !important;
+    max-width: 98vw !important;
+    height: 98vh !important;
+    max-height: 98vh !important;
+    margin: 1vh auto !important;
+}
+
+.meu-modal-edit .modal-content {
+    height: 100% !important;
+}
+
+.meu-modal-edit .modal-body {
+    height: calc(100% - 120px) !important;
+    overflow: hidden !important; 
+}
+
+.table-container {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+#dataTableEdit {
+    min-width: 2000px; 
+    table-layout: fixed; 
+}
+
+#dataTableEdit th {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#dataTableEdit td {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#dataTableEdit th:nth-child(2) { /* Descrição */
+    width: 150px !important;
+    min-width: 150px !important;
+}
+
+#dataTableEdit td:nth-child(2) {
+    width: 150px !important;
+    min-width: 150px !important;
+}
+
+.percentual-alto {
+    background-color: #f8d7da !important;
+    color: #721c24 !important;
+}
+.percentual-baixo {
+    background-color: #d4edda !important;
+    color: #155724 !important;
+}
+
+.fluig-style-guide .panel-body {
+     padding: 0
+}
+
+
+#dataTableEdit_wrapper .dataTables_scroll {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+#visualizacaoPagina .layout-2-3left{
+	width: 100%
+}
+
+#dataTableFilter {
+    border-collapse: collapse !important;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+#dataTableFilter thead th {
+    background-color: #f1f1f1;
+    color: #333;
+    font-weight: 600;
+    text-align: center;
+    padding: 10px;
+    font-size: 13px;
+    border: 1px solid #dcdcdc;
+}
+
+#dataTableFilter thead th:first-child {
+    border-top-left-radius: 8px;
+}
+#dataTableFilter thead th:last-child {
+    border-top-right-radius: 8px;
+}
+
+#dataTableFilter tbody tr {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #e6e6e6;
+}
+#dataTableFilter tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+#dataTableFilter td, 
+#dataTableFilter th {
+    vertical-align: middle;
+    padding: 8px 10px;
+    border-right: 1px solid #e0e0e0;
+}
+
+#dataTableFilter td:last-child,
+#dataTableFilter th:last-child {
+    border-right: none;
+}
+
+#dataTableFilter td:last-child,
+#dataTableFilter th:last-child {
+    text-align: center;
+}
+
+#dataTableFilter td {
+    font-size: 13px;
+    color: #333;
+}

@@ -2,7 +2,7 @@ function servicetask19(attempt, message) {
     try {
         
         var isPAouMAouOutros = hAPI.getCardValue("categoria");
-        if (isPAouMAouOutros == "PA" || isPAouMAouOutros == "MA") {
+        if (isPAouMAouOutros == "PA" || isPAouMAouOutros == "MA" || isPAouMAouOutros == "Outros") {
             cadastraEquipamentoNoSisma();
         }
         
@@ -66,6 +66,9 @@ function getDadosEquipamento() {
 
     var VALOR_MOBILIZADO = moneyToFloat(hAPI.getCardValue("valorMobilizacao"));
     var TIPO_VALOR_MOBILIZADO = hAPI.getCardValue("tipoValorMobilizacao");
+    
+    var VALOR_DESMOBILIZACAO = moneyToFloat(hAPI.getCardValue("valorDesmobilizacao"));
+    var TIPO_VALOR_DESMOBILIZACAO = hAPI.getCardValue("tipoValorDesmobilizacao");
 
     var VALOR_EXTRA = moneyToFloat(hAPI.getCardValue("valorExtra"));
     var TIPO_VALOR_EXTRA = hAPI.getCardValue("tipoValorExtra");
@@ -102,51 +105,58 @@ function getDadosEquipamento() {
     var DATA_VENCIMENTO_ART = hAPI.getCardValue("dataVencimentoART");
     var DATA_VENCIMENTO_LAUDO = hAPI.getCardValue("dataVencimentoLaudo");
 
+    var QUANTIDADE = hAPI.getCardValue("quantidade");
+
     return {
-        "CODCOLIGADA": CODCOLIGADA,
-        "CODCCUSTO": CODCCUSTO,
-        "PREFIXO": PREFIXO,
-        "IDMODE": IDMODE,
-        "CODICLME": CODICLME,
-        "IDCLOP": IDCLOP,
-        "CODIFABR": CODIFABR,
-        "CODIESPE": CODIESPE,
-        "ANOFABRI": ANOFABRI,
-        "ANOMODELO": ANOMODELO,
-        "NUMECHAS": NUMECHAS,
-        "PLACA": PLACA,
-        "ALUGUEL_CONTRATO": ALUGUEL_CONTRATO,
-        "DESCRICAO": DESCRICAO,
-        "POTENCIAHP_UNID": POTENCIAHP_UNID,
-        "POTENCIAHP": POTENCIAHP,
-        "DATACHEGADA": DATACHEGADA,
+        "CODCOLIGADA": CODCOLIGADA + "",
+        "CODCCUSTO": CODCCUSTO + "",
+        "PREFIXO": PREFIXO + "",
+        "IDMODE": IDMODE + "",
+        "CODICLME": CODICLME + "",
+        "IDCLOP": IDCLOP + "",
+        "CODIFABR": CODIFABR + "",
+        "CODIESPE": CODIESPE + "",
+        "ANOFABRI": ANOFABRI + "",
+        "ANOMODELO": ANOMODELO + "",
+        "NUMECHAS": NUMECHAS + "",
+        "PLACA": PLACA + "",
+        "ALUGUEL_CONTRATO": ALUGUEL_CONTRATO + "",
+        "DESCRICAO": DESCRICAO + "",
+        "POTENCIAHP_UNID": POTENCIAHP_UNID + "",
+        "POTENCIAHP": POTENCIAHP + "",
+        "DATACHEGADA": DATACHEGADA + "",
 
-        "VALOR_MOBILIZADO": VALOR_MOBILIZADO,
-        "TIPO_VALOR_MOBILIZADO": TIPO_VALOR_MOBILIZADO,
+        "VALOR_MOBILIZADO": VALOR_MOBILIZADO + "",
+        "TIPO_VALOR_MOBILIZADO": TIPO_VALOR_MOBILIZADO + "",
 
-        "VALOR_EXTRA": VALOR_EXTRA,
-        "TIPO_VALOR_EXTRA": TIPO_VALOR_EXTRA,
+        "VALOR_DESMOBILIZACAO":VALOR_DESMOBILIZACAO+"",
+        "UN_DESMOBILIZACAO":TIPO_VALOR_DESMOBILIZACAO+"",
 
-        "VALOR_MAODEOBRA": VALOR_MAODEOBRA,
+        "VALOR_EXTRA": VALOR_EXTRA + "",
+        "TIPO_VALOR_EXTRA": TIPO_VALOR_EXTRA + "",
 
-        INI_HODOMETRO: INI_HODOMETRO,
-        INI_HORIMETRO: INI_HORIMETRO,
-        CODIMATE_COMBUSTIVEL: tipoCombustivel,
+        "VALOR_MAODEOBRA": VALOR_MAODEOBRA + "",
 
-        CONSUMO_HORA: CONSUMO_HORA,
-        CONSUMO_KM: CONSUMO_KM,
+        INI_HODOMETRO: INI_HODOMETRO + "",
+        INI_HORIMETRO: INI_HORIMETRO + "",
+        CODIMATE_COMBUSTIVEL: tipoCombustivel + "",
 
-        CAPATANQ_ABAST: CAPATANQ_ABAST,
-        CODIUNID_CAPACIDADE_COMBUSTIVEL: CODIUNID_CAPACIDADE_COMBUSTIVEL,
+        CONSUMO_HORA: CONSUMO_HORA + "",
+        CONSUMO_KM: CONSUMO_KM + "",
 
-        ANEXOS_DOCUMENTACAO: ANEXOS_DOCUMENTACAO,
-        ANEXOS_FOTOS: ANEXOS_FOTOS,
-        ANEXOS_LAUDO: ANEXOS_LAUDO,
-        ANEXOS_PLANO_MANUTENCAO: ANEXOS_PLANO_MANUTENCAO,
-        ANEXOS_ART: ANEXOS_ART,
+        CAPATANQ_ABAST: CAPATANQ_ABAST + "",
+        CODIUNID_CAPACIDADE_COMBUSTIVEL: CODIUNID_CAPACIDADE_COMBUSTIVEL + "",
 
-        DATA_VENCIMENTO_ART:DATA_VENCIMENTO_ART,
-        DATA_VENCIMENTO_LAUDO:DATA_VENCIMENTO_LAUDO,
+        ANEXOS_DOCUMENTACAO: ANEXOS_DOCUMENTACAO + "",
+        ANEXOS_FOTOS: ANEXOS_FOTOS + "",
+        ANEXOS_LAUDO: ANEXOS_LAUDO + "",
+        ANEXOS_PLANO_MANUTENCAO: ANEXOS_PLANO_MANUTENCAO + "",
+        ANEXOS_ART: ANEXOS_ART + "",
+
+        DATA_VENCIMENTO_ART:DATA_VENCIMENTO_ART + "",
+        DATA_VENCIMENTO_LAUDO:DATA_VENCIMENTO_LAUDO + "",
+
+        QUANTIDADE:QUANTIDADE + "",
     };
 
 }

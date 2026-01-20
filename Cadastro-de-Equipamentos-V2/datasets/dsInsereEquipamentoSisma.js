@@ -3,18 +3,16 @@ function createDataset(fields, constraints, sortFields) {
         var constraints = getConstraints(constraints);
         lancaErroSeConstraintsObrigatoriasNaoInformadas(constraints, ["EQUIPAMENTO"]);
 
-        var IDEQUI = geraNovoIDEQUI();
-        var EQUIPAMENTO = JSON.parse(constraints.EQUIPAMENTO);
+        log.info("dsInsereEquipamentoSisma constraints:");
+        log.dir(constraints);
 
-        insereEquipamento(IDEQUI, EQUIPAMENTO, constraints.NUMPROCESS, constraints.isPAouMA, constraints.CGCCFO);
-        insereTransfdiv3(IDEQUI, EQUIPAMENTO);
-        insereCombustivel(IDEQUI, EQUIPAMENTO);
-        insereTanqueCombustivel(IDEQUI, EQUIPAMENTO);
-        insereCompartimento(IDEQUI, EQUIPAMENTO);
-        insereFiltros(IDEQUI, EQUIPAMENTO);
-        insereCaracteristicasTecnicas(IDEQUI, JSON.parse(constraints.CARCTERISTICAS), EQUIPAMENTO);
+        if (constraints.isPAouMA != "Outros") {
+            var IDEQUI = cadastraEquipamento(constraints);
+        }else{
+            cadastraOutros(JSON.parse(constraints.EQUIPAMENTO), constraints.CGCCFO, constraints.NUMPROCESS, constraints.isPAouMA);
+        }
 
-        insereCadastroAuxiliar(EQUIPAMENTO);
+        
 
         return returnDataset("SUCCESS", "", IDEQUI);
     } catch (error) {
@@ -32,6 +30,88 @@ function createDataset(fields, constraints, sortFields) {
         } else {
             return returnDataset("ERRO", error, null);
         }
+    }
+}
+
+function cadastraEquipamento(constraints){
+    var IDEQUI = geraNovoIDEQUI();
+    var EQUIPAMENTO = JSON.parse(constraints.EQUIPAMENTO);
+
+    insereEquipamento(IDEQUI, EQUIPAMENTO, constraints.NUMPROCESS, constraints.isPAouMA, constraints.CGCCFO);
+    insereTransfdiv3(IDEQUI, EQUIPAMENTO);
+    insereCombustivel(IDEQUI, EQUIPAMENTO);
+    insereTanqueCombustivel(IDEQUI, EQUIPAMENTO);
+    insereCompartimento(IDEQUI, EQUIPAMENTO);
+    insereFiltros(IDEQUI, EQUIPAMENTO);
+    insereCaracteristicasTecnicas(IDEQUI, JSON.parse(constraints.CARCTERISTICAS), EQUIPAMENTO);
+    insereCadastroAuxiliar(EQUIPAMENTO); 
+    return IDEQUI;
+}
+function cadastraOutros(equipamento, CGCCFO, NUMPROCESS, isPAouMA){
+    try {
+    var NOME = getFornecedorPorCNPJ(isPAouMA, CGCCFO)[0].NOME;
+    var query = "INSERT INTO EQUIPAMENTOS_CONTRATOS_AUXILIAR_OUTROS (";
+    query += "  CODCOLIGADA, ";
+    query += "  CODCCUSTO, ";
+    query += "  PREFIXO, ";
+    query += "  DESCRICAO, ";
+    query += "  FORNECEDOR, ";
+    query += "  FORNECEDOR_CNPJ, ";
+    query += "  DATA_CHEGADA, ";
+    query += "  HORAS_ATUAIS, ";
+    query += "  KM_ATUAIS, ";
+    query += "  VALOR_LOCACAO, ";
+    query += "  NUMPROCES_CADASTROEQUIPAMENTOS, ";
+    query += "  VALOR_MOBILIZADO, ";
+    query += "  UN_MOBILIZADO, ";
+    query += "  VALOR_EXTRA, ";
+    query += "  UN_EXTRA, ";
+    query += "  STATUS, ";
+    query += "  QUANTIDADE)";
+    query += " VALUES (?,?,?,?,?,?,?,?,?,? ,?,?,?,?,?,?,?)";
+
+        executeInsert(query, [
+            {type:"int", value:equipamento.CODCOLIGADA },
+            {type:"varchar", value:equipamento.CODCCUSTO },
+            {type:"varchar", value:equipamento.PREFIXO },
+            {type:"varchar", value:equipamento.DESCRICAO },
+            {type:"varchar", value:NOME },
+            {type:"varchar", value:CGCCFO },
+            {type:"date", value:equipamento.DATACHEGADA },
+            {type:"varchar", value:equipamento.INI_HORIMETRO },
+            {type:"varchar", value:equipamento.INI_HODOMETRO },
+            {type:"varchar", value:equipamento.ALUGUEL_CONTRATO },
+            {type:"varchar", value:NUMPROCESS },
+            {type:"varchar", value:equipamento.VALOR_MOBILIZADO },
+            {type:"varchar", value:equipamento.TIPO_VALOR_MOBILIZADO },
+            {type:"varchar", value:equipamento.VALOR_EXTRA },
+            {type:"varchar", value:equipamento.TIPO_VALOR_EXTRA },
+            {type:"int", value:1 },
+            {type:"int", value:equipamento.QUANTIDADE },
+        ], "/jdbc/CastilhoCustom");
+
+    } catch (error) {
+       var msg = "";
+            // Try to extract useful message safely
+            if (error && error.javaException) {
+                msg = error.javaException.getMessage();
+            } else if (error && error.message) {
+                if (error.message.Error) {
+                }else{
+                    msg = error.message;
+                }
+
+
+            } else {
+                msg = String(error);
+            }
+
+            log.error("ERRO==============> " + msg);
+            log.error("Type of error: " + typeof error);
+            log.error("Type of msg: " + typeof msg);
+
+            // Safely rethrow as standard JS error
+            throw "Erro ao executar Dataset: " + msg;
     }
 }
 
@@ -259,7 +339,7 @@ function insereTransfdiv3(IDEQUI, EQUIPAMENTO) {
         query += "INSERT INTO TRANSFDIV3 ";
         query += "(IDEQUI, DATAHORA, NUMEDOCU, CODIDIV3, INSTDIG, CODIUSU_DIG) ";
         query += "VALUES ";
-        query += "(?,?,?,?,?,?)";
+        query += "(?,CONVERT(datetime, ?, 121),?,?,CONVERT(datetime, ?, 121),?)";
 
         executeInsert(query, [
             { type: "int", value: IDEQUI },
@@ -299,7 +379,7 @@ function insereCombustivel(IDEQUI, EQUIPAMENTO) {
         query += "INSERT INTO EQUIPCOMBU ";
         query += "(DATAHORA, ATUAL, CODIMATE,IDEQUI,CODITANQ,TIPOCONTROLE,CONTROLACONSUMO,CAPATANQ_ABAST,CAPATANQ_CONV,PRINCIPAL,CONSCOMB_KM,CONSCOMB_HORA,CODIUNID,CONSCOMB2M)"
         query += " VALUES "
-        query += "(?,?,?,?,?,?,?,?,?,?, ?,?,?,?)";
+        query += "(CONVERT(datetime, ?, 121),?,?,?,?,?,?,?,?,?, ?,?,?,?)";
 
         executeInsert(query, [
             { type: "datetime", value: getDateTimeNow() },//DATAHORA
@@ -347,7 +427,7 @@ function insereTanqueCombustivel(IDEQUI, EQUIPAMENTO) {
         query += "INSERT INTO EQUIPTANQ ";
         query += "(IDEQUI, CODITANQ, DATA, ATUAL, CAPATANQ_ABAST, CAPATANQ_CONV)"
         query += " VALUES "
-        query += "(?,?,?,?,?,?)";
+        query += "(?,?,CONVERT(datetime, ?, 121),?,?,?)";
 
         executeInsert(query, [
             { type: "int", value: IDEQUI },
@@ -479,6 +559,8 @@ function insereCadastroAuxiliar(EQUIPAMENTO){
     try {
         var query = "INSERT INTO EQUIPAMENTOS_CONTRATOS_AUXILIAR (";
         query += "    PREFIXO, ";
+        query += "    VALOR_DESMOBILIZACAO, ";
+        query += "    UN_DESMOBILIZACAO,";
         query += "    VALOR_MOBILIZADO, ";
         query += "    UN_MOBILIZADO,";
         query += "    VALOR_EXTRA, ";
@@ -494,10 +576,12 @@ function insereCadastroAuxiliar(EQUIPAMENTO){
         query += "    DATA_VENCIMENTO_LAUDO ";
         query +=") ";
         query += "VALUES ";
-        query += "    (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+        query += "    (?,?,?,?,?,?,?,?,?,? ,?,?,?,?,?,?) ";
 
         return executeInsert(query, [
             {type:"varchar", value:EQUIPAMENTO.PREFIXO},//PREFIXO
+            {type:"float", value:EQUIPAMENTO.VALOR_DESMOBILIZACAO},//VALOR_DESMOBILIZACAO
+            {type:"varchar", value:EQUIPAMENTO.UN_DESMOBILIZACAO},//UN_DESMOBILIZACAO
             {type:"float", value:EQUIPAMENTO.VALOR_MOBILIZADO},//VALOR_MOBILIZADO
             {type:"varchar", value:EQUIPAMENTO.TIPO_VALOR_MOBILIZADO},//UN_MOBILIZADO
             {type:"float", value:EQUIPAMENTO.VALOR_EXTRA},//VALOR_EXTRA
@@ -539,7 +623,9 @@ function insereCadastroAuxiliar(EQUIPAMENTO){
 }
 function insereCaracteristicasTecnicas(IDEQUI, CARACTECNICA, EQUIPAMENTO){
     try {
-        for (var item of CARACTECNICA) {
+        for (let index = 0; index < CARACTECNICA.length; index++) {
+            var item = CARACTECNICA[index];
+            
             if (item.VALOR_PADRAO != item.VALOR) {
                 // Insere a Caracteristica Tecnica somente quando for diferente do padrão
                 // Visto que o SISMA já puxa o Padrão do Modelo automaticamente
@@ -588,7 +674,12 @@ function getFornecedorPorCNPJ(isPAouMA, CNPJ) {
             return executaQuery(query, [
                 { type: "varchar", value: CNPJ }
             ], "/jdbc/Sisma");
-
+        }
+        else if (isPAouMA == "Outros") {
+            var query = "SELECT NOME FROM FCFO WHERE CGCCFO = ?";
+            return executaQuery(query, [
+                { type: "varchar", value: CNPJ }
+            ], "/jdbc/FluigRM");
         }
 
     } catch (error) {
@@ -710,7 +801,7 @@ function executaQuery(query, constraints, dataSource) {
         return retorno;
 
     } catch (error) {
-                  var msg = "";
+            var msg = "";
             // Try to extract useful message safely
             if (error && error.javaException) {
                 msg = error.javaException.getMessage();
@@ -843,6 +934,11 @@ function getDateTimeNow() {
         minutos = "0" + minutos;
     }
 
-    var dateTime = [ano, mes, dia].join("-") + " " + hora + ":" + minutos;
+    var segundos = date.getSeconds();
+    if (segundos < 10) {
+        segundos = "0" + segundos;
+    }    
+
+    var dateTime = [ano, mes, dia].join("-") + " " + hora + ":" + minutos + ":" + segundos;
     return dateTime
 }
