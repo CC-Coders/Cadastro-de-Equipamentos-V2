@@ -255,7 +255,7 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
             { type: "varchar", value: EQUIPAMENTO.NUMECHAS },//NUMSERIE
             { type: "int", value: "0" },//CODIPAIS
             { type: "int", value: "0" },//SIGLAUF
-            { type: "int", value: "56" },//CODIUSU
+            { type: "int", value: "1" },//CODIUSU
             { type: "varchar", value: EQUIPAMENTO.PREFIXO },//ORDENA
             { type: "int", value: "0" },//CODICATEGORIA
             { type: "int", value: "1" },//CODISITUEQ
@@ -347,7 +347,7 @@ function insereTransfdiv3(IDEQUI, EQUIPAMENTO) {
             { type: "int", value: "0" },
             { type: "int", value: obra.CODIDIV3 },
             { type: "datetime", value: getDateTimeNow() },
-            { type: "int", value: "56" },
+            { type: "int", value: "1" },
         ], "/jdbc/Sisma");
     } catch (error) {
              var msg = "";
