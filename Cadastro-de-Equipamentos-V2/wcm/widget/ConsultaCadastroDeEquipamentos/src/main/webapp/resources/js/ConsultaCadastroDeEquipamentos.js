@@ -232,7 +232,7 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
 
     abrirModalVisualiza: function (rowData) {
         (async () => {
-            const baseUrl = "http://desenvolvimento.castilho.com.br:3232/portal/p/1/ecmnavigation?app_ecm_navigation_doc=";
+            const baseUrl = "/portal/p/1/ecmnavigation?app_ecm_navigation_doc=";
 
             const docEquip = await createMultipleLinks(rowData.ANEXOS_DOCUMENTACAO);
             const fotos = await createMultipleLinks(rowData.ANEXOS_FOTOS);

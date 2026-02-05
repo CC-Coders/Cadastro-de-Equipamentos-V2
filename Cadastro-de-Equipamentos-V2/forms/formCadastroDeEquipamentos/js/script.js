@@ -6,7 +6,8 @@ const ATIVIDADES = {
     FIM: 15
 }
 const pastaAnexosEquipamento = {
-    PRODUCAO: "TODO",
+    PRODUCAO: "2068836",
+    HOMOLOGACAO :10540,
     DESENVOLVIMENTO :29972
 }
 const env = getServerURL() == "http://fluig.castilho.com.br:1010" ? "PRODUCAO" : "DESENVOLVIMENTO"; 
