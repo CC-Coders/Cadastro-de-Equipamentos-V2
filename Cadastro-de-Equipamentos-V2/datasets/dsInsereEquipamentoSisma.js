@@ -39,9 +39,13 @@ function cadastraEquipamento(constraints){
 
     insereEquipamento(IDEQUI, EQUIPAMENTO, constraints.NUMPROCESS, constraints.isPAouMA, constraints.CGCCFO);
     insereTransfdiv3(IDEQUI, EQUIPAMENTO);
+    insereTransfConta(IDEQUI, EQUIPAMENTO);
     insereCombustivel(IDEQUI, EQUIPAMENTO);
     insereTanqueCombustivel(IDEQUI, EQUIPAMENTO);
+    insereMedidorEquipamento(IDEQUI, EQUIPAMENTO);
     insereCompartimento(IDEQUI, EQUIPAMENTO);
+    insereValorLocacaoMensal(IDEQUI, EQUIPAMENTO);
+    insereObservacaoEquip(IDEQUI, EQUIPAMENTO);
     insereFiltros(IDEQUI, EQUIPAMENTO);
     insereCaracteristicasTecnicas(IDEQUI, JSON.parse(constraints.CARCTERISTICAS), EQUIPAMENTO);
     insereCadastroAuxiliar(EQUIPAMENTO); 
@@ -217,9 +221,16 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
         query += " DATAENTREGA, "//DATAENTREGA
         query += " INI_HODOMETRO, "//INI_HODOMETRO
         query += " INI_HORIMETRO, "//INI_HORIMETRO
+
+        query += "VIDABASE_HORA, " // VIDABASE_HORA é o mesmo valor que vai em INI_HORIMETRO
+        query += "VIDABASE_KM, " // VIDABASE_KM é o mesmo valor que vai em INI_HODOMETRO
+        
+        query += "ENTRAOM, " // ENTRAOM é para permitir abrir OS para o equip
+        query += "ENTRAABASTECE, " // ENTRAABASTECE é para permitir abrir o cadastro de equipamento (dava erro de não poder converter valor null em int) e lançar ficha de abast.
+
         query += " CODIINES)";//STATUS
         query += " VALUES ";
-        query += "(?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?)";
+        query += "(?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?)";
 
         log.info("dsInsereEquipamentoSisma query:");
         log.dir(query);
@@ -232,7 +243,7 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
             { type: "varchar", value: EQUIPAMENTO.PREFIXO },//Prefixo
             { type: "int", value: "2" },//CODIDIV2
             { type: "int", value: obra.CODIDIV3 },//CODIDIV3
-            { type: "int", value: "2" },//CODIMEDI
+            { type: "int", value: EQUIPAMENTO.CODIMEDI },//CODIMEDI
             { type: "int", value: EQUIPAMENTO.IDMODE },//IDMODE
             { type: "int", value: EQUIPAMENTO.CODICLME },//CODICLME
             { type: "int", value: EQUIPAMENTO.IDCLOP },//IDCLOP
@@ -258,7 +269,7 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
             { type: "int", value: "1" },//CODIUSU
             { type: "varchar", value: EQUIPAMENTO.PREFIXO },//ORDENA
             { type: "int", value: "0" },//CODICATEGORIA
-            { type: "int", value: "1" },//CODISITUEQ
+            { type: "int", value: "0" },//CODISITUEQ - Alterado de 1 (LIBERADO) para 0 (ATIVO OBRA)
             { type: "int", value: "0" },//CODICID
             { type: "int", value: "0" },//CODICID_PLACA
             { type: "int", value: "455" },//CODIESFA
@@ -297,8 +308,15 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
             { type: "datetime", value: EQUIPAMENTO.DATACHEGADA },//DATAINIC
             { type: "datetime", value: EQUIPAMENTO.DATACHEGADA },//DATACOMP
             { type: "datetime", value: EQUIPAMENTO.DATACHEGADA },//DATAENTREGA
-            { type: "int", value: EQUIPAMENTO.INI_HODOMETRO },//INI_HODOMETRO
-            { type: "int", value: EQUIPAMENTO.INI_HORIMETRO },//INI_HORIMETRO
+            { type: "int", value: EQUIPAMENTO.INI_HODOMETRO || '0' },//INI_HODOMETRO
+            { type: "int", value: EQUIPAMENTO.INI_HORIMETRO || '0'  },//INI_HORIMETRO
+
+            { type: "int", value: EQUIPAMENTO.VIDABASE_HORA || '0' }, // VIDABASE_HORA
+            { type: "int", value: EQUIPAMENTO.VIDABASE_KM || '0' }, // VIDABASE_KM
+
+            { type: "int", value: "1" }, // ENTRAOM
+            { type: "int", value: "1" }, // ENTRAABASTECE 
+
             { type: "int", value: "0" },//CODIINES
         ], "/jdbc/Sisma");
 
@@ -343,10 +361,10 @@ function insereTransfdiv3(IDEQUI, EQUIPAMENTO) {
 
         executeInsert(query, [
             { type: "int", value: IDEQUI },
-            { type: "datetime", value: getDateTimeNow() },
+            { type: "datetime", value: EQUIPAMENTO.DATACHEGADA },
             { type: "int", value: "0" },
             { type: "int", value: obra.CODIDIV3 },
-            { type: "datetime", value: getDateTimeNow() },
+            { type: "datetime", value: EQUIPAMENTO.DATACHEGADA },
             { type: "int", value: "1" },
         ], "/jdbc/Sisma");
     } catch (error) {
@@ -373,6 +391,99 @@ function insereTransfdiv3(IDEQUI, EQUIPAMENTO) {
             throw "Erro ao executar Dataset: " + msg;
     }
 }
+function insereTransfConta(IDEQUI, EQUIPAMENTO) {
+    
+    // Necessario esse INSERT para quando abrir a OS ele auto preencher os campos com essas informações de Coligada e Centro de Custo, além o valor fixo de CodiConta.
+
+    try {
+        var query = "";
+        query += "INSERT INTO TRANSFCONTA "
+        query += "( "
+        query += "  IDEQUI, "
+        query += "  DATAHORA, "
+        query += "  NUMEDOCU, "
+        query += "  DIV2CCUSTOCOMB, "
+        query += "  CODICCUSTOCOMB, "
+        query += "  DIV2CONTACOMB, "
+        query += "  CODICONTACOMB, "
+        query += "  DIV2CCUSTOLUBR, "
+        query += "  CODICCUSTOLUBR, "
+        query += "  DIV2CONTALUBR, "
+        query += "  CODICONTALUBR, "
+        query += "  DIV2CCUSTOPECAS, "
+        query += "  CODICCUSTOPECAS, "
+        query += "  DIV2CONTAPECAS, "
+        query += "  CODICONTAPECAS, "
+        query += "  DIV2CCUSTOOP, "
+        query += "  CODICCUSTOOP "
+        query += ") "
+        query += "VALUES "
+        query += "(?, CONVERT(datetime, ?, 121) ,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        executeInsert(query, [
+            { type: "int", value: IDEQUI }, // IDEQUI
+            { type: "datetime", value: EQUIPAMENTO.DATACHEGADA }, // DATAHORA
+            { type: "int", value: '0' }, // Numero de documento
+
+            { type: "varchar", value: EQUIPAMENTO.CODCOLIGADA }, // DIV2CCUSTOCOMB
+            { type: "varchar", value: EQUIPAMENTO.CODCCUSTO }, // CODICCUSTOCOMB 
+
+            { type: "varchar", value: EQUIPAMENTO.CODCOLIGADA }, // DIV2CONTACOMB
+            { type: "varchar", value: '1.3.02' }, // CODICONTAPECAS, '1.3.002' é 'MANUTENÇÃO OBRA'
+
+            { type: "varchar", value: EQUIPAMENTO.CODCOLIGADA }, // DIV2CCUSTOLUBR
+            { type: "varchar", value: EQUIPAMENTO.CODCCUSTO }, // CODICCUSTOLUBR
+
+            { type: "varchar", value: EQUIPAMENTO.CODCOLIGADA }, // DIV2CONTALUBR
+            { type: "varchar", value: '1.3.02' }, // CODICONTAPECAS, '1.3.002' é 'MANUTENÇÃO OBRA'
+
+            { type: "varchar", value: EQUIPAMENTO.CODCOLIGADA }, // DIV2CCUSTOPECAS
+            { type: "varchar", value: EQUIPAMENTO.CODCCUSTO }, // CODICCUSTOPECAS
+
+            { type: "varchar", value: EQUIPAMENTO.CODCOLIGADA }, // DIV2CONTAPECAS
+            { type: "varchar", value: '1.3.02' }, // CODICONTAPECAS, '1.3.002' é 'MANUTENÇÃO OBRA'
+
+            { type: "varchar", value: EQUIPAMENTO.CODCOLIGADA }, // DIV2CCUSTOOP
+            { type: "varchar", value: EQUIPAMENTO.CODCCUSTO }, // CODICCUSTOOP
+        ], "/jdbc/Sisma");
+    } catch (error) {
+        if (error instanceof Error) {
+            throw error;
+        } else {
+            throw new Error(typeof error === "string" ? error : JSON.stringify(error));
+        }
+    }
+}
+function insereTransfModuloCE(IDEQUI, EQUIPAMENTO) {
+
+    // A pedido da Central, esse INSERT impacta em outros momentos de transf... para poder puxar info's automatico
+
+    try {
+        var query = "";
+        query += "INSERT INTO TRANSFTIPOEQUIPCE "
+        query += "( "
+        query += "  IDEQUI, "
+        query += "  DATAHORA, "
+        query += "  NUMEDOCU, "
+        query += "  CODITECE "
+        query += ") "
+        query += "VALUES "
+        query += "(?, CONVERT(datetime, ?, 121) ,?,?)";
+
+        executeInsert(query, [
+            { type: "int", value: IDEQUI }, // IDEQUI
+            { type: "datetime", value: EQUIPAMENTO.DATACHEGADA }, // DATAHORA
+            { type: "int", value: '0' }, // Numero de documento
+            { type: "int", value: '1' }, // CODITECE
+        ], "/jdbc/Sisma");
+    } catch (error) {
+        if (error instanceof Error) {
+            throw error;
+        } else {
+            throw new Error(typeof error === "string" ? error : JSON.stringify(error));
+        }
+    }
+}
 function insereCombustivel(IDEQUI, EQUIPAMENTO) {
     try {
         var query = "";
@@ -382,7 +493,7 @@ function insereCombustivel(IDEQUI, EQUIPAMENTO) {
         query += "(CONVERT(datetime, ?, 121),?,?,?,?,?,?,?,?,?, ?,?,?,?)";
 
         executeInsert(query, [
-            { type: "datetime", value: getDateTimeNow() },//DATAHORA
+            { type: "datetime", value: EQUIPAMENTO.DATACHEGADA },//DATAHORA
             { type: "int", value: "1" },//ATUAL
             { type: "int", value: EQUIPAMENTO.CODIMATE_COMBUSTIVEL },//CODIMATE
             { type: "int", value: IDEQUI },//IDEQUI
@@ -392,8 +503,8 @@ function insereCombustivel(IDEQUI, EQUIPAMENTO) {
             { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST },//CAPATANQ_ABAST
             { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST },//CAPATANQ_CONV
             { type: "int", value: "1" },//PRINCIPAL
-            { type: "float", value: EQUIPAMENTO.CONSUMO_KM },//CONSCOMB_KM
-            { type: "float", value: EQUIPAMENTO.CONSUMO_HORA },//CONSCOMB_HORA
+            { type: "float", value: EQUIPAMENTO.CONSUMO_KM || '0.00' },//CONSCOMB_KM
+            { type: "float", value: EQUIPAMENTO.CONSUMO_HORA || '0.00' },//CONSCOMB_HORA
             { type: "int", value: EQUIPAMENTO.CODIUNID_CAPACIDADE_COMBUSTIVEL },//CODIUNID
             { type: "float", value: "0.00" },//CONSCOMB2M
         ], "/jdbc/Sisma");
@@ -432,10 +543,48 @@ function insereTanqueCombustivel(IDEQUI, EQUIPAMENTO) {
         executeInsert(query, [
             { type: "int", value: IDEQUI },
             { type: "int", value: "1" },
-            { type: "datetime", value: getDateTimeNow() },
+            { type: "datetime", value: EQUIPAMENTO.DATACHEGADA },
             { type: "int", value: "1" },
             { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST },
             { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST },
+        ], "/jdbc/Sisma");
+    } catch (error) {
+        if (error instanceof Error) {
+            throw error;
+        } else {
+            throw new Error(typeof error === "string" ? error : JSON.stringify(error));
+        }
+    }
+}
+function insereMedidorEquipamento(IDEQUI, EQUIPAMENTO) {
+
+    // Necessario para o SISMA pedir horimetro/hodometro no preenchimento da ficha de abastecimento no modulo MB.
+
+    try{
+        var query = "";
+        query += "INSERT INTO "
+        query += "EQUIPMEDIDOR ( "
+        query += "  IDEQUI, "
+        query += "  DATAHORA, "
+        query += "  CODIMEDI_OLEO, "
+        query += "  CODIMEDI_FILTRO, "
+        query += "  CODIMEDI_CONSUMO, "
+        query += "  CODIMEDI_AMOSTRAGEM, "
+        query += "  CODIMEDI_LAVAGEM, "
+        query += "  CODIMEDI_CONTROLE "
+        query += ") "
+        query += "VALUES "
+        query += "(?,CONVERT(datetime, ?, 121),?,?,?,?,?,?)";
+
+        executeInsert(query, [
+            { type: "int", value: IDEQUI }, // IDEQUI
+            { type: "datetime", value: EQUIPAMENTO.DATACHEGADA }, // DATAHORA
+            { type: "int", value: EQUIPAMENTO.CODIMEDI }, // COMEDI
+            { type: "int", value: EQUIPAMENTO.CODIMEDI }, // COMEDI
+            { type: "int", value: EQUIPAMENTO.CODIMEDI }, // COMEDI
+            { type: "int", value: EQUIPAMENTO.CODIMEDI }, // COMEDI
+            { type: "int", value: EQUIPAMENTO.CODIMEDI }, // COMEDI
+            { type: "int", value: EQUIPAMENTO.CODIMEDI }, // COMEDI
         ], "/jdbc/Sisma");
     } catch (error) {
         if (error instanceof Error) {
@@ -545,6 +694,73 @@ function insereFiltros(IDEQUI, EQUIPAMENTO) {
             { type: "int", value: IDEQUI },//IDEQUI
             { type: "int", value: 0 },//CODIINES
             { type: "int", value:  EQUIPAMENTO.IDMODE},//IDMODE
+        ], "/jdbc/Sisma");
+    } catch (error) {
+        if (error instanceof Error) {
+            throw error;
+        } else {
+            throw new Error(typeof error === "string" ? error : JSON.stringify(error));
+        }
+    }
+}
+function insereValorLocacaoMensal(IDEQUI, EQUIPAMENTO) {
+
+    // A pedido da Central, fazer INSERT na tabela de valores de custo de locação (mensais) dos equipamentos
+    // Feito uma inserção (via SISMA/INSERT) inicial, os demais meses/anos é criado automaticamente pelo o SISMA.
+
+    var obra = getObra(EQUIPAMENTO.CODCOLIGADA, EQUIPAMENTO.CODCCUSTO)[0];
+    
+    try {
+        var query = "";
+        query += "INSERT INTO "
+        query += "CECUSTOLOCA ( "
+        query += "  MESANO, "
+        query += "  IDEQUI, "
+        query += "  CODIDIV3, "
+        query += "  CODITIPOLOC, "
+        query += "  CODICOTR, "
+        query += "  IDADE, "
+        query += "  CUSTO_MERCADO_BASE "
+        query += ") "
+        query += "VALUES "
+        query += "(CONVERT(datetime, ?, 121),?,?,?,?,?,?)";
+
+        executeInsert(query, [
+            { type: "datetime", value: EQUIPAMENTO.DATACHEGADA },
+            { type: "int", value: IDEQUI }, // IDEQUI
+            { type: "varchar", value: obra.CODIDIV3 }, // CODIDIV3
+            { type: "int", value: '2' }, // CODITIPOLOC
+            { type: "int", value: '2' }, // CODICOTR
+            { type: "int", value: (new Date().getFullYear() - EQUIPAMENTO.ANOFABRI + 1) }, // IDADE
+            { type: "float", value: EQUIPAMENTO.ALUGUEL_CONTRATO }, // CUSTO_MERCADO_BASE que é o mesmo valor que ALUGUEL_CONTRATO
+        ], "/jdbc/Sisma");
+    } catch (error) {
+        if (error instanceof Error) {
+            throw error;
+        } else {
+            throw new Error(typeof error == "string" ? error : JSON.stringify(error));
+        }
+    }
+}
+function insereObservacaoEquip(IDEQUI, EQUIPAMENTO) {
+
+    // A pedido da Central, adicionar o link da solicitação atual na Observação do equipamento.
+
+    try {
+        var query = "";
+        query += "INSERT INTO EQUIPOBSERVACAO "
+        query += "( "
+        query += "  IDEQUI, "
+        query += "  DATAHORAMOV, "
+        query += "  OBSERVACAO "
+        query += ") "
+        query += "VALUES "
+        query += "(?, CONVERT(datetime, ?, 121) ,?)";
+
+        executeInsert(query, [
+            { type: "int", value: IDEQUI }, // IDEQUI
+            { type: "datetime", value: EQUIPAMENTO.DATACHEGADA }, // DATAHORA
+            { type: "varchar", value: EQUIPAMENTO.URL_SOLICITACAO }, // Url do processo atual
         ], "/jdbc/Sisma");
     } catch (error) {
         if (error instanceof Error) {
