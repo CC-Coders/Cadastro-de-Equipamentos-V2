@@ -982,6 +982,36 @@
       </void>
      </object>
     </void>
+    <void method="add">
+     <object class="com.totvs.tds.ecm.foundation.ws.GroupDto">
+      <void property="groupDescription">
+       <string>QSST</string>
+      </void>
+      <void property="groupId">
+       <string>QSST</string>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="com.totvs.tds.ecm.foundation.ws.GroupDto">
+      <void property="groupDescription">
+       <string>correcaoErrosDados</string>
+      </void>
+      <void property="groupId">
+       <string>correcaoErrosDados</string>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="com.totvs.tds.ecm.foundation.ws.GroupDto">
+      <void property="groupDescription">
+       <string>permissaoCadastroEquipamentosV2</string>
+      </void>
+      <void property="groupId">
+       <string>permissaoCadastroEquipamentosV2</string>
+      </void>
+     </object>
+    </void>
    </object>
   </void>
   <void method="put">
@@ -1003,7 +1033,7 @@
   </void>
   <void method="put">
    <string>mecanismo</string>
-   <array class="[Ljava.lang.Object;" length="38">
+   <array class="[Ljava.lang.Object;" length="39">
     <void index="0">
      <array class="java.lang.Object" length="2">
       <void index="0">
@@ -1287,6 +1317,16 @@
     <void index="28">
      <array class="java.lang.Object" length="2">
       <void index="0">
+       <string>mecanismoSolicMedicao</string>
+      </void>
+      <void index="1">
+       <string>mecanismoSolicMedicao</string>
+      </void>
+     </array>
+    </void>
+    <void index="29">
+     <array class="java.lang.Object" length="2">
+      <void index="0">
        <string>mecRetornoSolicitacao</string>
       </void>
       <void index="1">
@@ -1294,7 +1334,7 @@
       </void>
      </array>
     </void>
-    <void index="29">
+    <void index="30">
      <array class="java.lang.Object" length="2">
       <void index="0">
        <string>ObraTransferencia</string>
@@ -1304,7 +1344,7 @@
       </void>
      </array>
     </void>
-    <void index="30">
+    <void index="31">
      <array class="java.lang.Object" length="2">
       <void index="0">
        <string>Atribuição por Papel</string>
@@ -1314,7 +1354,7 @@
       </void>
      </array>
     </void>
-    <void index="31">
+    <void index="32">
      <array class="java.lang.Object" length="2">
       <void index="0">
        <string>Atribuição para um Grupo</string>
@@ -1324,7 +1364,7 @@
       </void>
      </array>
     </void>
-    <void index="32">
+    <void index="33">
      <array class="java.lang.Object" length="2">
       <void index="0">
        <string>Atribuição para um Papel</string>
@@ -1334,29 +1374,29 @@
       </void>
      </array>
     </void>
-    <void index="33">
-     <array class="java.lang.Object" length="2">
-      <void index="0">
-       <string>RMaprovaMov_atribuiAprov</string>
-      </void>
-      <void index="1">
-       <string>RMaprovaMov_atribuiAprov</string>
-      </void>
-     </array>
-    </void>
     <void index="34">
      <array class="java.lang.Object" length="2">
       <void index="0">
-       <string>RMaprovaMov_atribuiUsu</string>
+       <string>RMaprovaMov_atribuiAprov</string>
       </void>
       <void index="1">
-       <string>RMaprovaMov_atribuiUsu</string>
+       <string>RMaprovaMov_atribuiAprov</string>
       </void>
      </array>
     </void>
     <void index="35">
      <array class="java.lang.Object" length="2">
       <void index="0">
+       <string>RMaprovaMov_atribuiUsu</string>
+      </void>
+      <void index="1">
+       <string>RMaprovaMov_atribuiUsu</string>
+      </void>
+     </array>
+    </void>
+    <void index="36">
+     <array class="java.lang.Object" length="2">
+      <void index="0">
        <string>SelecCentralRefObra</string>
       </void>
       <void index="1">
@@ -1364,7 +1404,7 @@
       </void>
      </array>
     </void>
-    <void index="36">
+    <void index="37">
      <array class="java.lang.Object" length="2">
       <void index="0">
        <string>mecanismoAprovador</string>
@@ -1374,7 +1414,7 @@
       </void>
      </array>
     </void>
-    <void index="37">
+    <void index="38">
      <array class="java.lang.Object" length="2">
       <void index="0">
        <string>Atribuição por Usuário</string>

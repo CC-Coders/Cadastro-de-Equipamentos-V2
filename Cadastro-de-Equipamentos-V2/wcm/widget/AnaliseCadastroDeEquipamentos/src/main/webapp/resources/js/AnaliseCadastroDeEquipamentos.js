@@ -286,7 +286,7 @@ var MyWidget = SuperWidget.extend({
                 $("#dataTableFilter").off("click", ".btnSolicitacao").on("click", ".btnSolicitacao", function () {
                     var processo = $(this).data("processo");
                     if (processo && processo !== "-") {
-                        var url = "http://desenvolvimento.castilho.com.br:3232/portal/p/1/pageworkflowview?app_ecm_workflowview_detailsProcessInstanceID=" + processo;
+                        var url = "/portal/p/1/pageworkflowview?app_ecm_workflowview_detailsProcessInstanceID=" + processo;
                         window.open(url, '_blank');
                     } else {
                         FLUIGC.toast({

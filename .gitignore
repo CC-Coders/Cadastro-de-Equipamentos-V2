@@ -3,3 +3,4 @@
 /.metadata
 com.totvs.tds.ecm.dataservers
 *.cache
+*.bkp

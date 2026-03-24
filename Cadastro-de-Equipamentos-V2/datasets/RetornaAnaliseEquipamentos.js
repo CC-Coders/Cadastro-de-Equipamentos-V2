@@ -1,27 +1,60 @@
+
 function createDataset(fields, constraints, sortFields) {
 
     try {
         var params = getConstraints(constraints);
-        log.info("🧩 Constraints recebidas: " + JSON.stringify(params));
+        log.info("Constraints recebidas: " + JSON.stringify(params));
+
+
+        var ds = DatasetFactory.getDataset("dsGetServerURL",null,null,null);
+        var URL = ds.getValue(0,"URL");
+        var env = (URL == "http://homologacao.castilho.com.br:2020") ? "HOMOLOGACAO" :
+                    (URL == "http://desenvolvimento.castilho.com.br:3232") ? "DESENVOLVIMENTO" :
+                    (URL == "http://fluig.castilho.com.br:1010") ?"PRODUCAO" : "";
+
+
+    
+        var codigosMlPorServidor = {
+            PRODUCAO:"",
+            HOMOLOGACAO:"ML0017550",
+            DESENVOLVIMENTO:"ML001121",
+        };
+        var nomeBasesDoFluig = {
+            PRODUCAO:"fluig_producao",
+            HOMOLOGACAO:"fluig_homologacao",
+            DESENVOLVIMENTO:"fluig_desenvolvimento",
+        };
+        var schemasMlPorServidor = {
+            PRODUCAO: "fluig_db",
+            HOMOLOGACAO: "fluig_db",
+            DESENVOLVIMENTO: "dbo"
+        };
+        
+        var schemaMl = schemasMlPorServidor[env];
+        var codigoMl = codigosMlPorServidor[env];
+        var nomeBaseDoFluig = nomeBasesDoFluig[env];
 
         var myQuery = "SELECT " +
         "TCNT_AUXILIAR.ID_FLUIG, " +
         "TCNT_AUXILIAR.TIPO_CONTRATO, " +
         "TCNT_AUXILIAR.*, " +
-        "ML001121.*, " +
+        "ML.*, " +
         "STATUS_EQUIPAMENTOS.DESC_STATUS_EQUIPAMENTO, " +
         "STATUS_EQUIPAMENTOS.STATUS AS STATUS_EQUIP_ITEM, " +
+        "STATUS_EQUIPAMENTOS.VALOR_LOCACAO, " +
         "EQ_AUX.FINALIZADO_EM, " +
         "EQ_AUX.USUARIO_ANALISE, " +
         "EQ_AUX.VALOR_FIPE, " +
         "EQ_AUX.VALOR_IMPLEMENTO, " +
-        "EQ_AUX.VALOR_EQUIPAMENTO " +
+        "EQ_AUX.VALOR_EQUIPAMENTO, " +
+        "ML.prazoLocacao " +
     "FROM TCNT_AUXILIAR " +
     "INNER JOIN ( " +
-        "SELECT DISTINCT " +
+        "SELECT " +
             "ID_TCNT_AUXILIAR, " +
-            "STATUS, " +
-            "VIEW_EQUIPAMENTOS_CONTRATOS.DESC_STATUS_EQUIPAMENTO " +
+            "MAX(STATUS) AS STATUS, " +
+            "MAX(VIEW_EQUIPAMENTOS_CONTRATOS.DESC_STATUS_EQUIPAMENTO) AS DESC_STATUS_EQUIPAMENTO, " +
+            "MAX(VIEW_EQUIPAMENTOS_CONTRATOS.VALOR_LOCACAO) AS VALOR_LOCACAO " +
         "FROM TCNT_AUXILIAR_ITENS " +
         "INNER JOIN VIEW_EQUIPAMENTOS_CONTRATOS " +
             "ON TCNT_AUXILIAR_ITENS.PREFIXO = VIEW_EQUIPAMENTOS_CONTRATOS.PREFIXO " +
@@ -29,6 +62,7 @@ function createDataset(fields, constraints, sortFields) {
         "WHERE VIEW_EQUIPAMENTOS_CONTRATOS.DESC_STATUS_EQUIPAMENTO IS NOT NULL " +
           "AND VIEW_EQUIPAMENTOS_CONTRATOS.DESC_STATUS_EQUIPAMENTO <> '' " +
           "AND VIEW_EQUIPAMENTOS_CONTRATOS.DESC_STATUS_EQUIPAMENTO <> 'NULL' " +
+        "GROUP BY ID_TCNT_AUXILIAR " +
     ") AS STATUS_EQUIPAMENTOS " +
         "ON STATUS_EQUIPAMENTOS.ID_TCNT_AUXILIAR = TCNT_AUXILIAR.ID " +
     "LEFT JOIN ( " +
@@ -65,10 +99,10 @@ function createDataset(fields, constraints, sortFields) {
                 "PARTITION BY numProces " +
                 "ORDER BY version DESC " +
             ") as rn " +
-        "FROM [fluig_desenvolvimento].dbo.ML001121 " +
-    ") AS ML001121 " +
-        "ON TCNT_AUXILIAR.ID_FLUIG = ML001121.numProces " +
-        "AND ML001121.rn = 1 " +
+        "FROM [" + nomeBaseDoFluig + "].[" + schemaMl + "].[" + codigoMl + "] " +
+    " ) AS ML " +
+        "ON TCNT_AUXILIAR.ID_FLUIG = ML.numProces " +
+        "AND ML.rn = 1 " +
     "WHERE STATUS_EQUIPAMENTOS.DESC_STATUS_EQUIPAMENTO IS NOT NULL";
         var whereParts = [];
         var i = 0;
@@ -77,16 +111,18 @@ function createDataset(fields, constraints, sortFields) {
             var valor = params[campo];
 
             if (valor == null || valor === "") continue;
+
+
             if (campo === "ID_FLUIG") {
                 whereParts.push("TCNT_AUXILIAR.ID_FLUIG = '" + valor + "'");
             } else if (campo === "solicitante") {
-                whereParts.push("ML001121.solicitante LIKE '%" + valor + "%'");
+                whereParts.push("ML.solicitante LIKE '%" + valor + "%'");
             } else if (campo === "obra") {
-                whereParts.push("ML001121.obra LIKE '%" + valor + "%'");
-            } else if (campo === "DATA_ABERTURA" || campo === "dataAberturaSol") {              
-                whereParts.push("ML001121.dataAberturaSol = '" + valor + "'");
+                whereParts.push("ML.obra LIKE '%" + valor + "%'");
+            } else if (campo === "DATA_ABERTURA" || campo === "dataAberturaSol") {
+                whereParts.push("ML.dataAberturaSol = '" + valor + "'");
             } else if (campo === "CRIADO_EM") {
-                whereParts.push("ML001121.dataCriadoEm = '" + valor + "'");
+                whereParts.push("ML.dataCriadoEm = '" + valor + "'");
             } else if (campo === "FINALIZADO_EM") {
                 whereParts.push("EQ_AUX.FINALIZADO_EM = '" + valor + "'");
             } else {
@@ -96,19 +132,19 @@ function createDataset(fields, constraints, sortFields) {
         }
 
         if (whereParts.length > 0) {
-            myQuery += " WHERE " + whereParts.join(" AND ");
+            myQuery += " AND " + whereParts.join(" AND ");
         }
 
-        log.info("🔍 Query final montada:");
+        log.info("Query final montada:");
         log.info(myQuery);
 
         var retorno = executaQuery(myQuery, [], "/jdbc/CastilhoCustom");
-        if (retorno.length > 0) log.info("🧾 Exemplo linha[0]: " + JSON.stringify(retorno[0]));
+        if (retorno.length > 0) log.info("?? Exemplo linha[0]: " + JSON.stringify(retorno[0]));
 
         return returnDataset("SUCCESS", "", JSON.stringify(retorno));
 
     } catch (error) {
-        log.error("❌ ERRO DATASET DSAnaliseEquipamentos: " + error);
+        log.error("ERRO DATASET DSAnaliseEquipamentos: " + error);
         if (typeof error === "object") {
             var mensagem = "";
             for (var k in error) { mensagem += k + ": " + error[k] + " - "; }
