@@ -3,7 +3,7 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
     variavelCaracter: null,
 
     init: function () {
-        console.log("47");
+        console.log("48");
         var self = this;
 
         var $button = $("#button-search");
@@ -586,7 +586,30 @@ async function createMultipleLinks(anexoIds) {
 
     return linksHtml || "<span style='color: #6c757d;'>-</span>";
 }
+function promiseBuscaDownloadUrlDocumentoNoFLuig(documentId) {
+    return new Promise(function (resolve, reject) {
+        if (!documentId || documentId === "#") {
+            resolve("#");
+            return;
+        }
 
+        $.ajax({
+            url: "/api/public/2.0/documents/getDownloadURL/" + documentId,
+            type: "GET",
+            success: function (response) {
+                if (response && response.content) {
+                    resolve(response.content);
+                } else {
+                    resolve("/portal/p/1/ecmnavigation?app_ecm_navigation_doc=" + documentId);
+                }
+            },
+            error: function (error) {
+                console.error("Erro ao buscar URL de download do documento:", documentId, error);
+                resolve("/portal/p/1/ecmnavigation?app_ecm_navigation_doc=" + documentId);
+            }
+        });
+    });
+}
 async function htmlNovoAnexo(documentId, documentName, permiteExclusao) {
     var html =
         `<div class="btn btnAnexo">
