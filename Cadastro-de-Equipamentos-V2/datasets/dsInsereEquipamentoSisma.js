@@ -865,7 +865,7 @@ function insereCaracteristicasTecnicas(IDEQUI, CARACTECNICA, EQUIPAMENTO){
                     {type:"int", value:item.TIPOCARAC},
                     {type:"int", value:item.CODICATC},
                     {type:"int", value:item.ITEM},
-                    {type:"float", value:item.VALOR},
+                    {type:"float", value:String(item.VALOR).replace(",", ".")},
                 ], "/jdbc/Sisma");
             }
         }    
