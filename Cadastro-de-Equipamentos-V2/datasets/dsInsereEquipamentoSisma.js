@@ -254,9 +254,9 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
             { type: "int", value: EQUIPAMENTO.ANOMODELO },//ANOMODELO
             { type: "int", value: obra.DIV2CONTA },//DIV2CONTA
             { type: "varchar", value: obra.CODICONTA },//CODICONTA
-            { type: "int", value: "1" },//DIV2CCUSTOMB
+            { type: "int", value: EQUIPAMENTO.CODCOLIGADA },//DIV2CCUSTOMB
             { type: "varchar", value: EQUIPAMENTO.CODCCUSTO },//CODICCUSTOMB
-            { type: "int", value: "1" },//DIV2CCUSTOOP
+            { type: "int", value: EQUIPAMENTO.CODCOLIGADA },//DIV2CCUSTOOP
             { type: "varchar", value: EQUIPAMENTO.CODCCUSTO },//CODICCUSTOOP
             { type: "int", value: NUMPROCESS },//NUMEBEM
             { type: "int", value: EQUIPAMENTO.POTENCIAHP },//POTENCIAHP
@@ -280,9 +280,9 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
             { type: "int", value: "0" },//CODIPROCED
             { type: "int", value: "3" },//NUMEEIXO
             { type: "int", value: "2" },//EIXOTRAC
-            { type: "int", value: "28" },//PADRCODIOPER
+            { type: "int", value: "0" },//PADRCODIOPER
             { type: "int", value: "0" },//PADRCODILOTR
-            { type: "int", value: "28" },//INICODIOPER
+            { type: "int", value: "0" },//INICODIOPER
             { type: "int", value: "0" },//INICODILOTR
             { type: "int", value: "0" },//CODICOMBDENAT
             { type: "int", value: "0" },//CODIRESTRICAO
