@@ -95,31 +95,37 @@
                                 </div>
                                </div>
                                     <br />
-                                    <div class="row">
-                                <div class="col-md-4">
-                                    <div id="divResolucaoChamado">
-                                        <div id="divAtivo" style="display: inline-block">
-                                            <label for="decisaoAtivo"
-                                                style="margin-right: 2%; padding-top: 2px">Ativo</label>
-                                            <div class="switch switch-success">
-                                                <input class="switch-input" type="radio" name="decisao"
-                                                    id="decisaoAtivo" value="Ativo" />
-                                                <label class="switch-button switchRedGreen"
-                                                    for="decisaoAtivo">Toggle</label>
-                                            </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                         <div class="form-input">
+                                            <label>Coligada:</label> <input type="text" id="coligada"
+                                            name="coligada" class="form-control inputInfoChamado" />
                                         </div>
-                                        <div id="divInativo" style="display: inline-block">
-                                            <label for="decisaoInativo"
-                                                style="margin-right: 2%; padding-top: 2px">Inativo</label>
-                                            <div class="switch switch-danger">
-                                                <input class="switch-input inputCheckbox" type="radio" name="decisao"
-                                                    id="decisaoInativo" value="Inativo" /> <label
-                                                    class="switch-button switchRedGreen"
-                                                    for="decisaoInativo">Toggle</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div id="divResolucaoChamado">
+                                            <div id="divAtivo" style="display: inline-block">
+                                                <label for="decisaoAtivo"
+                                                    style="margin-right: 2%; padding-top: 2px">Ativo</label>
+                                                <div class="switch switch-success">
+                                                    <input class="switch-input" type="radio" name="decisao"
+                                                        id="decisaoAtivo" value="Ativo" />
+                                                    <label class="switch-button switchRedGreen"
+                                                        for="decisaoAtivo">Toggle</label>
+                                                </div>
+                                            </div>
+                                            <div id="divInativo" style="display: inline-block">
+                                                <label for="decisaoInativo"
+                                                    style="margin-right: 2%; padding-top: 2px">Inativo</label>
+                                                <div class="switch switch-danger">
+                                                    <input class="switch-input inputCheckbox" type="radio" name="decisao"
+                                                        id="decisaoInativo" value="Inativo" /> <label
+                                                        class="switch-button switchRedGreen"
+                                                        for="decisaoInativo">Toggle</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                             </div>
                             <br />
                             <div style="text-align: right;">

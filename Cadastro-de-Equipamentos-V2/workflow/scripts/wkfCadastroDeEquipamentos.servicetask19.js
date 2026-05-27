@@ -93,7 +93,7 @@ function getDadosEquipamento() {
     var tipoConsumoMedio = hAPI.getCardValue("tipoConsumoMedio");
     var consumoMedio = hAPI.getCardValue("consumoMedio");
 
-    var CODIMEDI = tipoConsumoMedio == "km/L" ? 1 : 2;
+    var CODIMEDI = tipoConsumoMedio == "km/L" ? 2 : 1;
 
     var CONSUMO_KM = tipoConsumoMedio == "km/L" ? consumoMedio : "";
     var CONSUMO_HORA = tipoConsumoMedio == "L/H" ? consumoMedio : "";

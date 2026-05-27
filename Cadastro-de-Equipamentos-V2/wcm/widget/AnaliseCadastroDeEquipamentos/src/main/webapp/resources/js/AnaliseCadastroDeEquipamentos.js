@@ -144,7 +144,7 @@ var MyWidget = SuperWidget.extend({
                 var dados = registros.map(function (item) {
                     return {
                         ID_FLUIG: item.ID_FLUIG || "-",
-                        PERIODO_LOCACAO: item.periodoLocacao || "-",
+                        PERIODO_LOCACAO: item.prazoLocacao || "-",
                         VALOR_FIPE: item.VALOR_FIPE || "-",
                         VALOR_IMPLEMENTO: item.VALOR_IMPLEMENTO || "-",
                         VALOR_EQUIPAMENTO: item.VALOR_EQUIPAMENTO || "-",
@@ -778,8 +778,9 @@ var MyWidget = SuperWidget.extend({
                       var c8 = DatasetFactory.createConstraint("FINALIZADO_EM", dataFinalizado, dataFinalizado, ConstraintType.MUST);
                       var c9 = DatasetFactory.createConstraint("CLASSIFICACAO_BEM", classificacaoBem, classificacaoBem, ConstraintType.MUST);
                       var c10 = DatasetFactory.createConstraint("NEGOCIACAO_SUPRIMENTOS", negociacaoSuprimentos, negociacaoSuprimentos, ConstraintType.MUST);                       
+                      var c11 = DatasetFactory.createConstraint("STATUS", "3", "3", ConstraintType.MUST);
                      
-                      DatasetFactory.getDataset("dsUpdateAnaliseEquipamento", null, [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10], null, {
+                      DatasetFactory.getDataset("dsUpdateAnaliseEquipamento", null, [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11], null, {
                           success: function (ds) {
                               var status = ds.values[0].status;
                               var mensagem = ds.values[0].mensagem;

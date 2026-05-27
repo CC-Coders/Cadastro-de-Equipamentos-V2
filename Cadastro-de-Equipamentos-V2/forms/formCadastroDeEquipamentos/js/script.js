@@ -480,39 +480,44 @@ var beforeSendValidate = function () {
             errorMessage.push("Selecione o Fornecedor");
         }
 
-        if ($("#anexosDocumentosEquipamento").val() == "") {
-            errorMessage.push("Anexe a Documentação do Equipamento");
+        // Se estiver na atividade do Solicitante, INICIO / INICIO_0
+        //
+        // Ou estiver na atividade QSST e a decisão deles for "Aprovado"
+        // Espeficficamente "Aprovado" pra não impedir de reprovar e voltar ao solicitante por falta de anexo.
+        if (atividade == ATIVIDADES.INICIO || atividade == ATIVIDADES.INICIO_0 || (atividade == ATIVIDADES.QSST && $("#decisao").val() == "Aprovado")) {
+            if ($("#anexosDocumentosEquipamento").val() == "") {
+                errorMessage.push("Anexe a Documentação do Equipamento");
+            }
+            if ($("#anexosFotosEquipamentos").val() == "") {
+                errorMessage.push("Anexe a Foto do Equipamento");
+            }
+            if ($("#categoria").val() != "Outros") {
+                if ($("#anexosLaudoTecnico").val() == "") {
+                    errorMessage.push("Anexe o Laudo Técnico");
+                }
+                if ($("#anexpsPlanoManutencao").val() == "") {
+                    errorMessage.push("Anexe o Plano de Manutenção");
+                }
+                if ($("#anexosART").val() == "") {
+                    errorMessage.push("Anexe a ART");
+                }
+                if (!$("#dataVencimentoART").val()) {
+                    errorMessage.push("Informe a Data de Vencimento da ART");
+                }   
+                if (!$("#dataVencimentoLaudo").val()) {
+                    errorMessage.push("Informe a Data de Vencimento do Laudo Técnico");
+                }
+                
+                
+            } else {
+                if ($("#anexosART").val() && !$("#dataVencimentoART").val()) {
+                    errorMessage.push("Informe a Data de Vencimento da ART");
+                }   
+                if ($("#anexosLaudoTecnico").val() && !$("#dataVencimentoLaudo").val()) {
+                    errorMessage.push("Informe a Data de Vencimento do Laudo Técnico");
+                }
+            }
         }
-        if ($("#anexosFotosEquipamentos").val() == "") {
-            errorMessage.push("Anexe a Foto do Equipamento");
-        }
-        if ($("#categoria").val() != "Outros") {
-            if ($("#anexosLaudoTecnico").val() == "") {
-                errorMessage.push("Anexe o Laudo Técnico");
-            }
-            if ($("#anexpsPlanoManutencao").val() == "") {
-                errorMessage.push("Anexe o Plano de Manutenção");
-            }
-            if ($("#anexosART").val() == "") {
-                errorMessage.push("Anexe a ART");
-            }
-            if (!$("#dataVencimentoART").val()) {
-                errorMessage.push("Informe a Data de Vencimento da ART");
-            }   
-            if (!$("#dataVencimentoLaudo").val()) {
-                errorMessage.push("Informe a Data de Vencimento do Laudo Técnico");
-            }
-            
-            
-        }else{
-            if ($("#anexosART").val() && !$("#dataVencimentoART").val()) {
-                errorMessage.push("Informe a Data de Vencimento da ART");
-            }   
-            if ($("#anexosLaudoTecnico").val() && !$("#dataVencimentoLaudo").val()) {
-                errorMessage.push("Informe a Data de Vencimento do Laudo Técnico");
-            }
-        }
-
 
         return errorMessage;
     }

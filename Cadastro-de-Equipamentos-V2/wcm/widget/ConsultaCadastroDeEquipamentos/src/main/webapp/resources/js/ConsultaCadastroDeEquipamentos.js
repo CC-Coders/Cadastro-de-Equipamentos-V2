@@ -3,7 +3,7 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
     variavelCaracter: null,
 
     init: function () {
-        console.log("45");
+        console.log("48");
         var self = this;
 
         var $button = $("#button-search");
@@ -16,6 +16,14 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
         const inputValorLocacao = document.getElementById("valorLocacao");
         aplicarMascaraMoeda(inputValorLocacao);
     //    preencherObrasDoUsuario()
+        const params = new URLSearchParams(window.location.search);
+        const contratoUrl = params.get("contrato");
+        const coligadaUrl = params.get("coligada");
+
+        if (contratoUrl && coligadaUrl) {
+            $("#contrato").val(contratoUrl);
+            $("#coligada").val(coligadaUrl);
+        }
         $button.css({
             minWidth: "120px",
             color: "#fff",
@@ -50,7 +58,7 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
                         color: "#fff"
                     });
             });
-
+          
         });
         $("#filtrosHeader").click(function () {
             var filtrosBody = $("#filtrosBody");
@@ -64,6 +72,9 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
                 setinha.css("transform", "rotate(0deg)");
             }
         });
+        if (contratoUrl && coligadaUrl) {
+            self.buscaResultados();
+        }
     },
 
     bindings: {
@@ -92,7 +103,8 @@ var ConsultaCadastroDeEquipamentos = SuperWidget.extend({
             FORNECEDOR: $("#fornecedor").val(),
             VALOR_LOCACAO: valorLocacao,
             OBRA: $("#localizacao").val(),
-            CONTRATO: $('#contrato').val()
+            CONTRATO: $('#contrato').val(),
+            COLIGADA: $('#coligada').val()
         };
         var constraints = [];
         for (var campo in filtros) {
@@ -574,7 +586,30 @@ async function createMultipleLinks(anexoIds) {
 
     return linksHtml || "<span style='color: #6c757d;'>-</span>";
 }
+function promiseBuscaDownloadUrlDocumentoNoFLuig(documentId) {
+    return new Promise(function (resolve, reject) {
+        if (!documentId || documentId === "#") {
+            resolve("#");
+            return;
+        }
 
+        $.ajax({
+            url: "/api/public/2.0/documents/getDownloadURL/" + documentId,
+            type: "GET",
+            success: function (response) {
+                if (response && response.content) {
+                    resolve(response.content);
+                } else {
+                    resolve("/portal/p/1/ecmnavigation?app_ecm_navigation_doc=" + documentId);
+                }
+            },
+            error: function (error) {
+                console.error("Erro ao buscar URL de download do documento:", documentId, error);
+                resolve("/portal/p/1/ecmnavigation?app_ecm_navigation_doc=" + documentId);
+            }
+        });
+    });
+}
 async function htmlNovoAnexo(documentId, documentName, permiteExclusao) {
     var html =
         `<div class="btn btnAnexo">
