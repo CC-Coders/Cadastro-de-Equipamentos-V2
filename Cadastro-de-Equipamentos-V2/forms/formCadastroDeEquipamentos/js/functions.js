@@ -20,19 +20,26 @@ function alteraCategoriaDaSolicitacao(categoria) {
     if (categoria == "MA") {
         $(".inputPA, .inputOutros").closest("div.inputGroup").hide();
         $(".inputMA").closest("div.inputGroup").show();
-        $(".divConsumo").show(); 
+        $(".divConsumo").show();
+        $("#divAnexar").show();
+        $(".divListaAnexos").closest(".row").show();
         $("#CODIESPE").val(1);
     }
     if (categoria == "PA") {
         $(".inputMA, .inputOutros").closest("div.inputGroup").hide();
         $(".inputPA").closest("div.inputGroup").show();
         $(".divConsumo").hide(); 
+        $("#divAnexar").hide();   
+        $(".divListaAnexos").closest(".row").hide();
         $("#CODIESPE").val(5);
     }
     if (categoria == "Outros") {
         $(".inputMA, .inputPA").closest("div.inputGroup").hide();
         $(".inputOutros").closest("div.inputGroup").show();
         $(".divConsumo").show(); 
+        $("#divAnexar").show();
+        $(".divListaAnexos").closest(".row").show();
+        
     }
 }
 
