@@ -5,7 +5,7 @@ var MyWidget = SuperWidget.extend({
 
     init: function () {
         var self = this;
-        console.log("136")
+        console.log("139")
         var $button = $("#button-search");
         var originalText = "Buscar";
         var loadingInterval;
@@ -141,7 +141,12 @@ var MyWidget = SuperWidget.extend({
                     console.error("❌ Erro ao fazer parse do RESULT:", e);
                     registros = [];
                 }
-                var dados = registros.map(function (item) {
+                //var dados = registros.map(function (item) {
+                var dados = registros
+                .filter(function (item) {
+                    return !item.CATEGORIA || item.CATEGORIA.toUpperCase() == "MA";
+                })
+                .map(function (item) {
                     return {
                         ID_FLUIG: item.ID_FLUIG || "-",
                         PERIODO_LOCACAO: item.prazoLocacao || "-",
@@ -166,6 +171,7 @@ var MyWidget = SuperWidget.extend({
                                 <i class="flaticon flaticon-paperclip icon-md" aria-hidden="true"></i>
                             </button>`
                     };
+                
                 });
                 if ($.fn.DataTable.isDataTable("#dataTableFilter")) {
                     $("#dataTableFilter").DataTable().clear().destroy();
