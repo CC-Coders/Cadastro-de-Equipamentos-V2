@@ -1,0 +1,1086 @@
+<list>
+  <ProcessDefinition>
+    <processDefinitionPK>
+      <companyId>1</companyId>
+      <processId>wkfCadastroDeEquipamentos</processId>
+    </processDefinitionPK>
+    <processDescription>Cadastro de Equipamentos V2</processDescription>
+    <instruction></instruction>
+    <active>true</active>
+    <publicProcess>false</publicProcess>
+    <volumeId>Default</volumeId>
+    <categoryId>Contratos</categoryId>
+    <managerEngineAllocationId></managerEngineAllocationId>
+    <snapshotFrequency>0</snapshotFrequency>
+    <baseDay>0</baseDay>
+    <baseMonth>0</baseMonth>
+    <periodId>Default</periodId>
+    <uniqueCardVersion>false</uniqueCardVersion>
+    <keyWord></keyWord>
+    <complementsLevel>1</complementsLevel>
+    <notifyRequisitionerComplements>true</notifyRequisitionerComplements>
+    <notifyManagerComplements>false</notifyManagerComplements>
+    <deadlineTime>0</deadlineTime>
+    <warningDeadlineTime>0</warningDeadlineTime>
+    <notifyAuthorityComplements>true</notifyAuthorityComplements>
+  </ProcessDefinition>
+  <ProcessDefinitionVersion>
+    <processDefinitionVersionPK>
+      <companyId>1</companyId>
+      <processId>Cadastro de Equipamentos V2</processId>
+      <version>40</version>
+    </processDefinitionVersionPK>
+    <versionDescription></versionDescription>
+    <formId>0</formId>
+    <formIdV2>0</formIdV2>
+    <editionMode>true</editionMode>
+    <updateAttachmentsVersion>false</updateAttachmentsVersion>
+    <controlsAttachmentsSecurity>false</controlsAttachmentsSecurity>
+    <active>true</active>
+    <blockedVersion>false</blockedVersion>
+    <counterSign>false</counterSign>
+    <openInstances>0</openInstances>
+    <bpmnVersion>2</bpmnVersion>
+    <processStates/>
+    <favorito>false</favorito>
+    <inheritFormSecurity>false</inheritFormSecurity>
+    <mobileReady>false</mobileReady>
+  </ProcessDefinitionVersion>
+  <list>
+    <ProcessState>
+      <processStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <sequence>4</sequence>
+      </processStatePK>
+      <stateName>Início</stateName>
+      <stateDescription>Início</stateDescription>
+      <instruction></instruction>
+      <deadlineTime>0</deadlineTime>
+      <joint>false</joint>
+      <agreementPercentage>0</agreementPercentage>
+      <engineAllocationId>Grupo</engineAllocationId>
+      <engineAllocationConfiguration>&lt;AssignmentController&gt;&lt;Group&gt;permissaoCadastroEquipamentosV2&lt;/Group&gt;&lt;/AssignmentController&gt;</engineAllocationConfiguration>
+      <selectColleague>1</selectColleague>
+      <initialState>true</initialState>
+      <notifyAuthorityDelay>true</notifyAuthorityDelay>
+      <notifyRequisitionerDelay>false</notifyRequisitionerDelay>
+      <allowanceAuthorityTime>3600</allowanceAuthorityTime>
+      <frequenceAuthorityTime>3600</frequenceAuthorityTime>
+      <allowanceRequisitionerTime>0</allowanceRequisitionerTime>
+      <frequenceRequisitionerTime>0</frequenceRequisitionerTime>
+      <transferAttachments>false</transferAttachments>
+      <subProcessId></subProcessId>
+      <formFolder>0</formFolder>
+      <notifyAuthorityFollowUp>false</notifyAuthorityFollowUp>
+      <notifyRequisitionerFollowUp>false</notifyRequisitionerFollowUp>
+      <automatic>false</automatic>
+      <positionX>140</positionX>
+      <positionY>82</positionY>
+      <forecastedEffortType>0</forecastedEffortType>
+      <forecastedEffort>0</forecastedEffort>
+      <notifyManagerFollowUp>false</notifyManagerFollowUp>
+      <notifyManagerDelay>false</notifyManagerDelay>
+      <allowanceManagerTime>0</allowanceManagerTime>
+      <frequenceManagerTime>0</frequenceManagerTime>
+      <inhibitTransfer>false</inhibitTransfer>
+      <periodId></periodId>
+      <stateType>0</stateType>
+      <bpmnType>10</bpmnType>
+      <signalId>0</signalId>
+      <counterSign>false</counterSign>
+      <openInstances>0</openInstances>
+      <noticeExpirationAuthorityTime>0</noticeExpirationAuthorityTime>
+      <noticeExpirationRequisitionerTime>0</noticeExpirationRequisitionerTime>
+      <noticeExpirationManagerTime>0</noticeExpirationManagerTime>
+      <destinationStates/>
+      <digitalSignature>false</digitalSignature>
+    </ProcessState>
+    <ProcessState>
+      <processStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <sequence>5</sequence>
+      </processStatePK>
+      <stateName>Central de Equipamentos</stateName>
+      <stateDescription>Central de Equipamentos</stateDescription>
+      <instruction></instruction>
+      <deadlineTime>0</deadlineTime>
+      <deadlineFieldName></deadlineFieldName>
+      <joint>false</joint>
+      <agreementPercentage>0</agreementPercentage>
+      <engineAllocationId>Pool Grupo</engineAllocationId>
+      <engineAllocationConfiguration>&lt;AssignmentController&gt;&lt;Group&gt;Central de Equipamentos&lt;/Group&gt;&lt;/AssignmentController&gt;</engineAllocationConfiguration>
+      <selectColleague>1</selectColleague>
+      <initialState>false</initialState>
+      <notifyAuthorityDelay>true</notifyAuthorityDelay>
+      <notifyRequisitionerDelay>false</notifyRequisitionerDelay>
+      <allowanceAuthorityTime>3600</allowanceAuthorityTime>
+      <frequenceAuthorityTime>3600</frequenceAuthorityTime>
+      <allowanceRequisitionerTime>0</allowanceRequisitionerTime>
+      <frequenceRequisitionerTime>0</frequenceRequisitionerTime>
+      <transferAttachments>false</transferAttachments>
+      <subProcessId></subProcessId>
+      <formFolder>0</formFolder>
+      <notifyAuthorityFollowUp>true</notifyAuthorityFollowUp>
+      <notifyRequisitionerFollowUp>false</notifyRequisitionerFollowUp>
+      <automatic>false</automatic>
+      <positionX>350</positionX>
+      <positionY>230</positionY>
+      <forecastedEffortType>0</forecastedEffortType>
+      <forecastedEffort>0</forecastedEffort>
+      <notifyManagerFollowUp>false</notifyManagerFollowUp>
+      <notifyManagerDelay>false</notifyManagerDelay>
+      <allowanceManagerTime>0</allowanceManagerTime>
+      <frequenceManagerTime>0</frequenceManagerTime>
+      <inhibitTransfer>false</inhibitTransfer>
+      <periodId></periodId>
+      <stateType>0</stateType>
+      <bpmnType>80</bpmnType>
+      <signalId>0</signalId>
+      <counterSign>false</counterSign>
+      <openInstances>0</openInstances>
+      <noticeExpirationAuthorityTime>0</noticeExpirationAuthorityTime>
+      <noticeExpirationRequisitionerTime>0</noticeExpirationRequisitionerTime>
+      <noticeExpirationManagerTime>0</noticeExpirationManagerTime>
+      <destinationStates/>
+      <digitalSignature>false</digitalSignature>
+      <executionType>0</executionType>
+    </ProcessState>
+    <ProcessState>
+      <processStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <sequence>8</sequence>
+      </processStatePK>
+      <stateName>QSST</stateName>
+      <stateDescription>QSST</stateDescription>
+      <instruction></instruction>
+      <deadlineTime>0</deadlineTime>
+      <deadlineFieldName></deadlineFieldName>
+      <joint>false</joint>
+      <agreementPercentage>0</agreementPercentage>
+      <engineAllocationId>Pool Grupo</engineAllocationId>
+      <engineAllocationConfiguration>&lt;AssignmentController&gt;&lt;Group&gt;QSST&lt;/Group&gt;&lt;/AssignmentController&gt;</engineAllocationConfiguration>
+      <selectColleague>1</selectColleague>
+      <initialState>false</initialState>
+      <notifyAuthorityDelay>true</notifyAuthorityDelay>
+      <notifyRequisitionerDelay>false</notifyRequisitionerDelay>
+      <allowanceAuthorityTime>3600</allowanceAuthorityTime>
+      <frequenceAuthorityTime>3600</frequenceAuthorityTime>
+      <allowanceRequisitionerTime>0</allowanceRequisitionerTime>
+      <frequenceRequisitionerTime>0</frequenceRequisitionerTime>
+      <transferAttachments>false</transferAttachments>
+      <subProcessId></subProcessId>
+      <formFolder>0</formFolder>
+      <notifyAuthorityFollowUp>true</notifyAuthorityFollowUp>
+      <notifyRequisitionerFollowUp>false</notifyRequisitionerFollowUp>
+      <automatic>false</automatic>
+      <positionX>350</positionX>
+      <positionY>360</positionY>
+      <forecastedEffortType>0</forecastedEffortType>
+      <forecastedEffort>0</forecastedEffort>
+      <notifyManagerFollowUp>false</notifyManagerFollowUp>
+      <notifyManagerDelay>false</notifyManagerDelay>
+      <allowanceManagerTime>0</allowanceManagerTime>
+      <frequenceManagerTime>0</frequenceManagerTime>
+      <inhibitTransfer>false</inhibitTransfer>
+      <periodId></periodId>
+      <stateType>0</stateType>
+      <bpmnType>80</bpmnType>
+      <signalId>0</signalId>
+      <counterSign>false</counterSign>
+      <openInstances>0</openInstances>
+      <noticeExpirationAuthorityTime>0</noticeExpirationAuthorityTime>
+      <noticeExpirationRequisitionerTime>0</noticeExpirationRequisitionerTime>
+      <noticeExpirationManagerTime>0</noticeExpirationManagerTime>
+      <destinationStates/>
+      <digitalSignature>false</digitalSignature>
+      <executionType>0</executionType>
+    </ProcessState>
+    <ProcessState>
+      <processStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <sequence>19</sequence>
+      </processStatePK>
+      <stateName>Insere Equipamento no SISMA</stateName>
+      <stateDescription>Insere Equipamento no SISMA</stateDescription>
+      <instruction></instruction>
+      <deadlineTime>0</deadlineTime>
+      <deadlineFieldName></deadlineFieldName>
+      <joint>false</joint>
+      <agreementPercentage>0</agreementPercentage>
+      <engineAllocationId></engineAllocationId>
+      <selectColleague>1</selectColleague>
+      <initialState>false</initialState>
+      <notifyAuthorityDelay>true</notifyAuthorityDelay>
+      <notifyRequisitionerDelay>false</notifyRequisitionerDelay>
+      <allowanceAuthorityTime>3600</allowanceAuthorityTime>
+      <frequenceAuthorityTime>3600</frequenceAuthorityTime>
+      <allowanceRequisitionerTime>0</allowanceRequisitionerTime>
+      <frequenceRequisitionerTime>0</frequenceRequisitionerTime>
+      <transferAttachments>false</transferAttachments>
+      <subProcessId></subProcessId>
+      <formFolder>0</formFolder>
+      <notifyAuthorityFollowUp>true</notifyAuthorityFollowUp>
+      <notifyRequisitionerFollowUp>false</notifyRequisitionerFollowUp>
+      <automatic>false</automatic>
+      <positionX>720</positionX>
+      <positionY>286</positionY>
+      <forecastedEffortType>0</forecastedEffortType>
+      <forecastedEffort>0</forecastedEffort>
+      <notifyManagerFollowUp>false</notifyManagerFollowUp>
+      <notifyManagerDelay>false</notifyManagerDelay>
+      <allowanceManagerTime>0</allowanceManagerTime>
+      <frequenceManagerTime>0</frequenceManagerTime>
+      <inhibitTransfer>false</inhibitTransfer>
+      <periodId></periodId>
+      <stateType>0</stateType>
+      <bpmnType>82</bpmnType>
+      <signalId>0</signalId>
+      <counterSign>false</counterSign>
+      <openInstances>0</openInstances>
+      <noticeExpirationAuthorityTime>0</noticeExpirationAuthorityTime>
+      <noticeExpirationRequisitionerTime>0</noticeExpirationRequisitionerTime>
+      <noticeExpirationManagerTime>0</noticeExpirationManagerTime>
+      <destinationStates/>
+      <digitalSignature>false</digitalSignature>
+      <executionType>2</executionType>
+    </ProcessState>
+    <ProcessState>
+      <processStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <sequence>11</sequence>
+      </processStatePK>
+      <stateName>Join</stateName>
+      <stateDescription>Join</stateDescription>
+      <joint>false</joint>
+      <initialState>false</initialState>
+      <transferAttachments>false</transferAttachments>
+      <subProcessId></subProcessId>
+      <formFolder>0</formFolder>
+      <automatic>false</automatic>
+      <positionX>510</positionX>
+      <positionY>284</positionY>
+      <inhibitTransfer>false</inhibitTransfer>
+      <stateType>4</stateType>
+      <bpmnType>127</bpmnType>
+      <signalId>0</signalId>
+      <openInstances>0</openInstances>
+      <destinationStates/>
+      <digitalSignature>false</digitalSignature>
+    </ProcessState>
+    <ProcessState>
+      <processStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <sequence>14</sequence>
+      </processStatePK>
+      <stateName>Decisão</stateName>
+      <stateDescription>Decisão</stateDescription>
+      <joint>false</joint>
+      <initialState>false</initialState>
+      <transferAttachments>false</transferAttachments>
+      <subProcessId></subProcessId>
+      <formFolder>0</formFolder>
+      <automatic>true</automatic>
+      <positionX>610</positionX>
+      <positionY>284</positionY>
+      <inhibitTransfer>false</inhibitTransfer>
+      <stateType>1</stateType>
+      <bpmnType>120</bpmnType>
+      <signalId>0</signalId>
+      <openInstances>0</openInstances>
+      <destinationStates/>
+      <digitalSignature>false</digitalSignature>
+    </ProcessState>
+    <ProcessState>
+      <processStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <sequence>26</sequence>
+      </processStatePK>
+      <stateName>Decisão</stateName>
+      <stateDescription>Decisão</stateDescription>
+      <joint>false</joint>
+      <initialState>false</initialState>
+      <transferAttachments>false</transferAttachments>
+      <subProcessId></subProcessId>
+      <formFolder>0</formFolder>
+      <automatic>true</automatic>
+      <positionX>130</positionX>
+      <positionY>284</positionY>
+      <inhibitTransfer>false</inhibitTransfer>
+      <stateType>1</stateType>
+      <bpmnType>120</bpmnType>
+      <signalId>0</signalId>
+      <openInstances>0</openInstances>
+      <destinationStates/>
+      <digitalSignature>false</digitalSignature>
+    </ProcessState>
+    <ProcessState>
+      <processStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <sequence>30</sequence>
+      </processStatePK>
+      <stateName>Inclusivo</stateName>
+      <stateDescription>Inclusivo</stateDescription>
+      <joint>false</joint>
+      <initialState>false</initialState>
+      <transferAttachments>false</transferAttachments>
+      <subProcessId></subProcessId>
+      <formFolder>0</formFolder>
+      <automatic>false</automatic>
+      <positionX>240</positionX>
+      <positionY>280</positionY>
+      <inhibitTransfer>false</inhibitTransfer>
+      <stateType>3</stateType>
+      <bpmnType>121</bpmnType>
+      <signalId>0</signalId>
+      <openInstances>0</openInstances>
+      <destinationStates/>
+      <digitalSignature>false</digitalSignature>
+    </ProcessState>
+    <ProcessState>
+      <processStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <sequence>15</sequence>
+      </processStatePK>
+      <stateName>Fim</stateName>
+      <stateDescription>Fim</stateDescription>
+      <instruction>Atividade final do processo</instruction>
+      <deadlineTime>0</deadlineTime>
+      <joint>false</joint>
+      <agreementPercentage>0</agreementPercentage>
+      <engineAllocationId></engineAllocationId>
+      <engineAllocationConfiguration></engineAllocationConfiguration>
+      <selectColleague>0</selectColleague>
+      <initialState>false</initialState>
+      <notifyAuthorityDelay>true</notifyAuthorityDelay>
+      <notifyRequisitionerDelay>false</notifyRequisitionerDelay>
+      <allowanceAuthorityTime>0</allowanceAuthorityTime>
+      <frequenceAuthorityTime>1</frequenceAuthorityTime>
+      <allowanceRequisitionerTime>0</allowanceRequisitionerTime>
+      <frequenceRequisitionerTime>0</frequenceRequisitionerTime>
+      <transferAttachments>false</transferAttachments>
+      <subProcessId></subProcessId>
+      <formFolder>0</formFolder>
+      <notifyAuthorityFollowUp>false</notifyAuthorityFollowUp>
+      <notifyRequisitionerFollowUp>false</notifyRequisitionerFollowUp>
+      <automatic>false</automatic>
+      <positionX>870</positionX>
+      <positionY>310</positionY>
+      <forecastedEffortType>0</forecastedEffortType>
+      <forecastedEffort>0</forecastedEffort>
+      <notifyManagerFollowUp>false</notifyManagerFollowUp>
+      <notifyManagerDelay>false</notifyManagerDelay>
+      <allowanceManagerTime>0</allowanceManagerTime>
+      <frequenceManagerTime>0</frequenceManagerTime>
+      <inhibitTransfer>false</inhibitTransfer>
+      <periodId></periodId>
+      <stateType>6</stateType>
+      <bpmnType>60</bpmnType>
+      <signalId>0</signalId>
+      <counterSign>false</counterSign>
+      <openInstances>0</openInstances>
+      <destinationStates/>
+      <digitalSignature>false</digitalSignature>
+    </ProcessState>
+  </list>
+  <list>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>1</expressionOrder>
+        <version>40</version>
+        <sequence>14</sequence>
+      </conditionProcessStatePK>
+      <condition>false</condition>
+      <destinationSequenceId>19</destinationSequenceId>
+      <conditionType>1</conditionType>
+    </ConditionProcessState>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>2</expressionOrder>
+        <version>40</version>
+        <sequence>14</sequence>
+      </conditionProcessStatePK>
+      <condition>false</condition>
+      <destinationSequenceId>4</destinationSequenceId>
+      <engineAllocationConfiguration>&lt;AssignmentController&gt;&lt;BaseActivity&gt;4&lt;/BaseActivity&gt;&lt;Returns&gt;Last&lt;/Returns&gt;&lt;/AssignmentController&gt;</engineAllocationConfiguration>
+      <engineAllocationId>Executor Atividade</engineAllocationId>
+      <conditionType>1</conditionType>
+    </ConditionProcessState>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>3</expressionOrder>
+        <version>40</version>
+        <sequence>14</sequence>
+      </conditionProcessStatePK>
+      <condition>false</condition>
+      <destinationSequenceId>4</destinationSequenceId>
+      <engineAllocationConfiguration>&lt;AssignmentController&gt;&lt;BaseActivity&gt;4&lt;/BaseActivity&gt;&lt;Returns&gt;Last&lt;/Returns&gt;&lt;/AssignmentController&gt;</engineAllocationConfiguration>
+      <engineAllocationId>Executor Atividade</engineAllocationId>
+      <conditionType>1</conditionType>
+    </ConditionProcessState>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>1</expressionOrder>
+        <version>40</version>
+        <sequence>26</sequence>
+      </conditionProcessStatePK>
+      <condition></condition>
+      <destinationSequenceId>30</destinationSequenceId>
+      <conditionType>1</conditionType>
+    </ConditionProcessState>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>2</expressionOrder>
+        <version>40</version>
+        <sequence>26</sequence>
+      </conditionProcessStatePK>
+      <condition></condition>
+      <destinationSequenceId>19</destinationSequenceId>
+      <conditionType>1</conditionType>
+    </ConditionProcessState>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>1</expressionOrder>
+        <version>40</version>
+        <sequence>30</sequence>
+      </conditionProcessStatePK>
+      <condition>hAPI.getCardValue(&quot;categoria&quot;) == &quot;MA&quot;</condition>
+      <destinationSequenceId>5</destinationSequenceId>
+      <conditionType>0</conditionType>
+    </ConditionProcessState>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>2</expressionOrder>
+        <version>40</version>
+        <sequence>30</sequence>
+      </conditionProcessStatePK>
+      <condition>hAPI.getCardValue(&quot;categoria&quot;) == &quot;MA&quot;</condition>
+      <destinationSequenceId>8</destinationSequenceId>
+      <conditionType>0</conditionType>
+    </ConditionProcessState>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>3</expressionOrder>
+        <version>40</version>
+        <sequence>30</sequence>
+      </conditionProcessStatePK>
+      <condition>hAPI.getCardValue(&quot;categoria&quot;) == &quot;PA&quot;</condition>
+      <destinationSequenceId>5</destinationSequenceId>
+      <conditionType>0</conditionType>
+    </ConditionProcessState>
+  </list>
+  <list>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <linkSequence>22</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>5</initialStateSequence>
+      <finalStateSequence>11</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name></name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <linkSequence>23</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>8</initialStateSequence>
+      <finalStateSequence>11</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name></name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <linkSequence>17</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>11</initialStateSequence>
+      <finalStateSequence>14</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name></name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <linkSequence>18</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>14</initialStateSequence>
+      <finalStateSequence>4</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name></name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+      <movementTitle></movementTitle>
+      <movementDescription></movementDescription>
+      <movementAccessLinkDescription></movementAccessLinkDescription>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <linkSequence>24</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>14</initialStateSequence>
+      <finalStateSequence>19</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name></name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <linkSequence>25</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>19</initialStateSequence>
+      <finalStateSequence>15</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name></name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <linkSequence>27</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>4</initialStateSequence>
+      <finalStateSequence>26</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name></name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <linkSequence>29</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>26</initialStateSequence>
+      <finalStateSequence>19</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name>Outros</name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <linkSequence>31</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>26</initialStateSequence>
+      <finalStateSequence>30</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name></name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <linkSequence>32</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>30</initialStateSequence>
+      <finalStateSequence>5</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name></name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <linkSequence>33</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>30</initialStateSequence>
+      <finalStateSequence>8</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name></name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+  </list>
+  <list/>
+  <list>
+    <WorkflowProcessEvent>
+      <workflowProcessEventPK>
+        <companyId>1</companyId>
+        <eventId>servicetask19</eventId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+      </workflowProcessEventPK>
+      <eventDescription>function servicetask19(attempt, message) {
+    try {
+        
+        var isPAouMAouOutros = hAPI.getCardValue(&quot;categoria&quot;);
+        if (isPAouMAouOutros == &quot;PA&quot; || isPAouMAouOutros == &quot;MA&quot; || isPAouMAouOutros == &quot;Outros&quot;) {
+            cadastraEquipamentoNoSisma();
+        }
+        
+    } catch (error) {
+        throw error;   
+    }
+}
+
+function cadastraEquipamentoNoSisma() {
+    try {
+        var isPAouMAouOutros = hAPI.getCardValue(&quot;categoria&quot;);
+        var CGCCFO = hAPI.getCardValue(&quot;CGCCFO&quot;);
+
+        var equipamento = getDadosEquipamento();
+
+        var ds = DatasetFactory.getDataset(&quot;dsInsereEquipamentoSisma&quot;, null, [
+            DatasetFactory.createConstraint(&quot;EQUIPAMENTO&quot;, JSON.stringify(equipamento), JSON.stringify(equipamento), ConstraintType.MUST),
+            DatasetFactory.createConstraint(&quot;isPAouMA&quot;, isPAouMAouOutros, isPAouMAouOutros, ConstraintType.MUST),
+            DatasetFactory.createConstraint(&quot;CGCCFO&quot;, CGCCFO, CGCCFO, ConstraintType.MUST),
+            DatasetFactory.createConstraint(&quot;NUMPROCESS&quot;, getValue(&quot;WKNumProces&quot;), getValue(&quot;WKNumProces&quot;), ConstraintType.MUST),
+            DatasetFactory.createConstraint(&quot;CARCTERISTICAS&quot;, hAPI.getCardValue(&quot;JSONCARACTERISTICASTECNICAS&quot;), hAPI.getCardValue(&quot;JSONCARACTERISTICASTECNICAS&quot;), ConstraintType.MUST),
+        ], null);
+
+        if (ds.getValue(0, &quot;STATUS&quot;) != &quot;SUCCESS&quot;) {
+            throw new Error(ds.getValue(0, &quot;MENSAGEM&quot;));
+        }
+
+        return true;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw error;
+        } else {
+            throw new Error(typeof error === &quot;string&quot; ? error : JSON.stringify(error));
+        }
+    }
+}
+
+function getDadosEquipamento() {
+    var urlSolicitacao = montaUrlSolicitacao();
+
+    var CODCOLIGADA = hAPI.getCardValue(&quot;CODCOLIGADA&quot;);
+    var CODCCUSTO = hAPI.getCardValue(&quot;CODCCUSTO&quot;);
+    var PREFIXO = hAPI.getCardValue(&quot;prefixo&quot;);
+    var IDMODE = hAPI.getCardValue(&quot;IDMODE&quot;);
+    var CODICLME = hAPI.getCardValue(&quot;CODICLME&quot;);
+    var IDCLOP = hAPI.getCardValue(&quot;IDCLOP&quot;);
+    var CODIFABR = hAPI.getCardValue(&quot;CODIFABR&quot;);
+    var CODIESPE = hAPI.getCardValue(&quot;CODIESPE&quot;);
+
+    var ANOFABRI = hAPI.getCardValue(&quot;AnoFabricacao&quot;);
+    var ANOMODELO = hAPI.getCardValue(&quot;AnoModelo&quot;);
+    var NUMECHAS = hAPI.getCardValue(&quot;chassi&quot;);
+    var PLACA = hAPI.getCardValue(&quot;placa&quot;);
+    var ALUGUEL_CONTRATO = moneyToFloat(hAPI.getCardValue(&quot;valorLocacao&quot;));
+
+    var DESCRICAO = hAPI.getCardValue(&quot;descricaoEquipamento&quot;);
+
+    var POTENCIAHP_UNID = hAPI.getCardValue(&quot;tipoPotenciaMotor&quot;);
+    var POTENCIAHP = hAPI.getCardValue(&quot;potenciaMotor&quot;);
+
+    var DATACHEGADA = hAPI.getCardValue(&quot;dataChegadaObra&quot;).split(&quot;/&quot;).reverse().join(&quot;&quot;);
+    var MESANO = hAPI.getCardValue(&quot;dataChegadaObra&quot;).split(&quot;/&quot;).reverse().join(&quot;&quot;);
+
+
+    var VALOR_MOBILIZADO = moneyToFloat(hAPI.getCardValue(&quot;valorMobilizacao&quot;));
+    var TIPO_VALOR_MOBILIZADO = hAPI.getCardValue(&quot;tipoValorMobilizacao&quot;);
+    
+    var VALOR_DESMOBILIZACAO = moneyToFloat(hAPI.getCardValue(&quot;valorDesmobilizacao&quot;));
+    var TIPO_VALOR_DESMOBILIZACAO = hAPI.getCardValue(&quot;tipoValorDesmobilizacao&quot;);
+
+    var VALOR_EXTRA = moneyToFloat(hAPI.getCardValue(&quot;valorExtra&quot;));
+    var TIPO_VALOR_EXTRA = hAPI.getCardValue(&quot;tipoValorExtra&quot;);
+
+    var VALOR_MAODEOBRA = moneyToFloat(hAPI.getCardValue(&quot;valorMaoDeObra&quot;));
+
+
+    var tipoKmChegadaObra = hAPI.getCardValue(&quot;tipoKmChegadaObra&quot;);
+    var valorChegadaObra = hAPI.getCardValue(&quot;kmChegadaObra&quot;).replace(&quot;.&quot;, &quot;&quot;);
+
+    var INI_HODOMETRO = tipoKmChegadaObra == &quot;KM&quot; ? valorChegadaObra : &quot;&quot;;
+    var INI_HORIMETRO = tipoKmChegadaObra == &quot;Horas&quot; ? valorChegadaObra : &quot;&quot;;
+
+    var VIDABASE_KM = tipoKmChegadaObra == &quot;KM&quot; ? valorChegadaObra : &quot;&quot;;
+    var VIDABASE_HORA = tipoKmChegadaObra == &quot;Horas&quot; ? valorChegadaObra : &quot;&quot;;
+
+    var tipoCombustivel = hAPI.getCardValue(&quot;tipoCombustivel&quot;);
+
+    var tipoConsumoMedio = hAPI.getCardValue(&quot;tipoConsumoMedio&quot;);
+    var consumoMedio = hAPI.getCardValue(&quot;consumoMedio&quot;);
+
+    var CODIMEDI = tipoConsumoMedio == &quot;km/L&quot; ? 1 : 2;
+
+    var CONSUMO_KM = tipoConsumoMedio == &quot;km/L&quot; ? consumoMedio : &quot;&quot;;
+    var CONSUMO_HORA = tipoConsumoMedio == &quot;L/H&quot; ? consumoMedio : &quot;&quot;;
+
+    var CAPATANQ_ABAST = hAPI.getCardValue(&quot;litrosTanque&quot;);
+
+    var CODIUNID_CAPACIDADE_COMBUSTIVEL = tipoConsumoMedio == &quot;km/L&quot; ? 5 : 6;
+
+
+    var ANEXOS_DOCUMENTACAO = hAPI.getCardValue(&quot;anexosDocumentosEquipamento&quot;);
+    var ANEXOS_FOTOS = hAPI.getCardValue(&quot;anexosFotosEquipamentos&quot;);
+    var ANEXOS_LAUDO = hAPI.getCardValue(&quot;anexosLaudoTecnico&quot;);
+    var ANEXOS_PLANO_MANUTENCAO = hAPI.getCardValue(&quot;anexpsPlanoManutencao&quot;);
+    var ANEXOS_ART = hAPI.getCardValue(&quot;anexosART&quot;);
+    
+    var DATA_VENCIMENTO_ART = hAPI.getCardValue(&quot;dataVencimentoART&quot;);
+    var DATA_VENCIMENTO_LAUDO = hAPI.getCardValue(&quot;dataVencimentoLaudo&quot;);
+
+    var QUANTIDADE = hAPI.getCardValue(&quot;quantidade&quot;);
+
+    return {
+
+        &quot;URL_SOLICITACAO&quot; : urlSolicitacao + &quot;&quot;,
+
+        &quot;CODCOLIGADA&quot;: CODCOLIGADA + &quot;&quot;,
+        &quot;CODCCUSTO&quot;: CODCCUSTO + &quot;&quot;,
+        &quot;PREFIXO&quot;: PREFIXO + &quot;&quot;,
+        &quot;CODIMEDI&quot;: CODIMEDI + &quot;&quot;,
+        &quot;IDMODE&quot;: IDMODE + &quot;&quot;,
+        &quot;CODICLME&quot;: CODICLME + &quot;&quot;,
+        &quot;IDCLOP&quot;: IDCLOP + &quot;&quot;,
+        &quot;CODIFABR&quot;: CODIFABR + &quot;&quot;,
+        &quot;CODIESPE&quot;: CODIESPE + &quot;&quot;,
+        &quot;ANOFABRI&quot;: ANOFABRI + &quot;&quot;,
+        &quot;ANOMODELO&quot;: ANOMODELO + &quot;&quot;,
+        &quot;NUMECHAS&quot;: NUMECHAS + &quot;&quot;,
+        &quot;PLACA&quot;: PLACA + &quot;&quot;,
+        &quot;ALUGUEL_CONTRATO&quot;: ALUGUEL_CONTRATO + &quot;&quot;,
+        &quot;DESCRICAO&quot;: DESCRICAO + &quot;&quot;,
+        &quot;POTENCIAHP_UNID&quot;: POTENCIAHP_UNID + &quot;&quot;,
+        &quot;POTENCIAHP&quot;: POTENCIAHP + &quot;&quot;,
+        &quot;DATACHEGADA&quot;: DATACHEGADA + &quot;&quot;,
+        &quot;MESANO&quot;: MESANO + &quot;&quot;,
+
+        &quot;VALOR_MOBILIZADO&quot;: VALOR_MOBILIZADO + &quot;&quot;,
+        &quot;TIPO_VALOR_MOBILIZADO&quot;: TIPO_VALOR_MOBILIZADO + &quot;&quot;,
+
+        &quot;VALOR_DESMOBILIZACAO&quot;:VALOR_DESMOBILIZACAO+&quot;&quot;,
+        &quot;UN_DESMOBILIZACAO&quot;:TIPO_VALOR_DESMOBILIZACAO+&quot;&quot;,
+
+        &quot;VALOR_EXTRA&quot;: VALOR_EXTRA + &quot;&quot;,
+        &quot;TIPO_VALOR_EXTRA&quot;: TIPO_VALOR_EXTRA + &quot;&quot;,
+
+        &quot;VALOR_MAODEOBRA&quot;: VALOR_MAODEOBRA + &quot;&quot;,
+
+        &quot;INI_HODOMETRO&quot;: INI_HODOMETRO + &quot;&quot;,
+        &quot;INI_HORIMETRO&quot;: INI_HORIMETRO + &quot;&quot;,
+
+        &quot;VIDABASE_KM&quot;: VIDABASE_KM + &quot;&quot;,
+        &quot;VIDABASE_HORA&quot;: VIDABASE_HORA + &quot;&quot;,
+
+        &quot;CODIMATE_COMBUSTIVEL&quot;: tipoCombustivel + &quot;&quot;,
+
+        &quot;CONSUMO_HORA&quot;: CONSUMO_HORA + &quot;&quot;,
+        &quot;CONSUMO_KM&quot;: CONSUMO_KM + &quot;&quot;,
+
+        &quot;CAPATANQ_ABAST&quot;: CAPATANQ_ABAST + &quot;&quot;,
+        &quot;CODIUNID_CAPACIDADE_COMBUSTIVEL&quot;: CODIUNID_CAPACIDADE_COMBUSTIVEL + &quot;&quot;,
+
+        &quot;ANEXOS_DOCUMENTACAO&quot;: ANEXOS_DOCUMENTACAO + &quot;&quot;,
+        &quot;ANEXOS_FOTOS&quot;: ANEXOS_FOTOS + &quot;&quot;,
+        &quot;ANEXOS_LAUDO&quot;: ANEXOS_LAUDO + &quot;&quot;,
+        &quot;ANEXOS_PLANO_MANUTENCAO&quot;: ANEXOS_PLANO_MANUTENCAO + &quot;&quot;,
+        &quot;ANEXOS_ART&quot;: ANEXOS_ART + &quot;&quot;,
+
+        &quot;DATA_VENCIMENTO_ART&quot;:DATA_VENCIMENTO_ART + &quot;&quot;,
+        &quot;DATA_VENCIMENTO_LAUDO&quot;:DATA_VENCIMENTO_LAUDO + &quot;&quot;,
+
+        &quot;QUANTIDADE&quot;:QUANTIDADE + &quot;&quot;,
+    };
+
+}
+
+function montaUrlSolicitacao() {
+    var urlSolicitacao = &quot;&quot;;
+    var env = getServerURL();
+    var numSolicitacao = getValue(&quot;WKNumProces&quot;)
+
+    urlSolicitacao = env + &quot;/portal/p/1/pageworkflowview?app_ecm_workflowview_detailsProcessInstanceID=&quot; + numSolicitacao;
+
+    return urlSolicitacao;
+}
+
+function getServerURL() {
+    var ds = DatasetFactory.getDataset(&quot;dsGetServerURL&quot;, null, null, null);
+    return ds.getValue(0, &quot;URL&quot;);
+}</eventDescription>
+    </WorkflowProcessEvent>
+  </list>
+  <list/>
+  <list>
+    <SwimLane>
+      <color>FFFFFF</color>
+      <height>421</height>
+      <width>931</width>
+      <positionX>10</positionX>
+      <positionY>10</positionY>
+      <stateName>Pool</stateName>
+      <type>1</type>
+      <parentSequence>0</parentSequence>
+      <swimLanePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <sequence>1</sequence>
+      </swimLanePK>
+    </SwimLane>
+    <SwimLane>
+      <color>9F9F9F</color>
+      <height>210</height>
+      <width>901</width>
+      <positionX>40</positionX>
+      <positionY>10</positionY>
+      <stateName>Reporter</stateName>
+      <type>2</type>
+      <parentSequence>1</parentSequence>
+      <swimLanePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <sequence>2</sequence>
+      </swimLanePK>
+    </SwimLane>
+    <SwimLane>
+      <color>C0C0C0</color>
+      <height>211</height>
+      <width>901</width>
+      <positionX>40</positionX>
+      <positionY>220</positionY>
+      <stateName>Assignee</stateName>
+      <type>2</type>
+      <parentSequence>1</parentSequence>
+      <swimLanePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <sequence>3</sequence>
+      </swimLanePK>
+    </SwimLane>
+  </list>
+  <list/>
+  <list/>
+  <list>
+    <ProcessLinkBend>
+      <processLinkBendPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>40</version>
+        <linkSequence>22</linkSequence>
+        <bendSequence>1</bendSequence>
+      </processLinkBendPK>
+      <positionX>540</positionX>
+      <positionY>264</positionY>
+    </ProcessLinkBend>
+    <ProcessLinkBend>
+      <processLinkBendPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>40</version>
+        <linkSequence>23</linkSequence>
+        <bendSequence>1</bendSequence>
+      </processLinkBendPK>
+      <positionX>541</positionX>
+      <positionY>387</positionY>
+    </ProcessLinkBend>
+    <ProcessLinkBend>
+      <processLinkBendPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>40</version>
+        <linkSequence>18</linkSequence>
+        <bendSequence>1</bendSequence>
+      </processLinkBendPK>
+      <positionX>639</positionX>
+      <positionY>99</positionY>
+    </ProcessLinkBend>
+    <ProcessLinkBend>
+      <processLinkBendPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>40</version>
+        <linkSequence>29</linkSequence>
+        <bendSequence>1</bendSequence>
+      </processLinkBendPK>
+      <positionX>160</positionX>
+      <positionY>420</positionY>
+    </ProcessLinkBend>
+    <ProcessLinkBend>
+      <processLinkBendPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>40</version>
+        <linkSequence>29</linkSequence>
+        <bendSequence>2</bendSequence>
+      </processLinkBendPK>
+      <positionX>772</positionX>
+      <positionY>420</positionY>
+    </ProcessLinkBend>
+  </list>
+  <list/>
+  <list/>
+  <list/>
+  <list>
+    <ProcessStateService>
+      <companyId>1</companyId>
+      <processId>wkfCadastroDeEquipamentos</processId>
+      <version>1</version>
+      <sequence>19</sequence>
+      <attempts>0</attempts>
+      <sucessFullMessage>Equipamento inserido no SISMA</sucessFullMessage>
+      <serviceName></serviceName>
+      <frequency>1</frequency>
+      <frequencyType>0</frequencyType>
+    </ProcessStateService>
+  </list>
+  <list/>
+  <list/>
+  <list/>
+  <list>
+    <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
+      <expressionOrder>1</expressionOrder>
+      <ruleOrder>1</ruleOrder>
+      <field>decisaoCentral</field>
+      <value>Aprovado</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
+      <expressionOrder>1</expressionOrder>
+      <ruleOrder>2</ruleOrder>
+      <field>decisaoSeguranca</field>
+      <value>Aprovado</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
+      <expressionOrder>2</expressionOrder>
+      <ruleOrder>1</ruleOrder>
+      <field>decisaoCentral</field>
+      <value>Reprovado</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
+      <expressionOrder>3</expressionOrder>
+      <ruleOrder>1</ruleOrder>
+      <field>decisaoSeguranca</field>
+      <value>Reprovado</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>26</sequence>
+      <expressionOrder>1</expressionOrder>
+      <ruleOrder>1</ruleOrder>
+      <field>categoria</field>
+      <value>Outros</value>
+      <operator>2</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>26</sequence>
+      <expressionOrder>2</expressionOrder>
+      <ruleOrder>1</ruleOrder>
+      <field>categoria</field>
+      <value>Outros</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+  </list>
+</list>
