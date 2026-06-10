@@ -492,6 +492,8 @@ var beforeSendValidate = function () {
             }
             if ($("#anexpsPlanoManutencao").val() == "") {
                 errorMessage.push("Anexe o Plano de Manutenção");
+            }
+        }
         // Se estiver na atividade do Solicitante, INICIO / INICIO_0
         //
         // Ou estiver na atividade QSST e a decisão deles for "Aprovado"
