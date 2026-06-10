@@ -143,7 +143,7 @@ var MyWidget = SuperWidget.extend({
                 var dados = registros
                 .filter(function (item) {
                     return (!item.CATEGORIA || item.CATEGORIA.toUpperCase() == "MA")
-                        && item.STATUS_EQUIP_ITEM == 2;
+                        && (item.STATUS_EQUIP_ITEM == 2 || item.STATUS_EQUIP_ITEM == 7);
                 })
                 .map(function (item) {
                     return {
