@@ -413,7 +413,7 @@ var beforeSendValidate = function () {
             errorMessage.push("Selecione a Categoria");
         }
 
-        if ($("#categoria").val() != "Outros") {
+        if ($("#categoria").val() != "Outros" && $("#categoria").val() != "PA") {
             if (!$("#modelo").val()) {
                 errorMessage.push("Selecione o Modelo");
             }
@@ -433,7 +433,7 @@ var beforeSendValidate = function () {
                 errorMessage.push("Informe o Tipo da Potência do Motor");
             }
         }
-        else{
+        else if ($("#categoria").val() == "Outros"){
             if (!$("#quantidade").val()) {
                 errorMessage.push("Informe a Quantidade");
             }
@@ -463,7 +463,7 @@ var beforeSendValidate = function () {
             errorMessage.push("Informe a km/horas de Chegada na Obra");
         }
 
-        if ($("#categoria").val() != "Outros") {
+        if ($("#categoria").val() != "Outros" && $("#categoria").val() != "PA") {
             if (!$("#tipoCombustivel").val()) {
                 errorMessage.push("Informe o Tipo de combustível");
             }
@@ -480,6 +480,18 @@ var beforeSendValidate = function () {
             errorMessage.push("Selecione o Fornecedor");
         }
 
+        if ($("#categoria").val() != "PA" && $("#anexosDocumentosEquipamento").val() == "") {
+            errorMessage.push("Anexe a Documentação do Equipamento");
+        }
+        if ($("#categoria").val() != "PA" && $("#anexosFotosEquipamentos").val() == "") {
+            errorMessage.push("Anexe a Foto do Equipamento");
+        }
+        if ($("#categoria").val() != "Outros" && $("#categoria").val() != "PA") {
+            if ($("#anexosLaudoTecnico").val() == "") {
+                errorMessage.push("Anexe o Laudo Técnico");
+            }
+            if ($("#anexpsPlanoManutencao").val() == "") {
+                errorMessage.push("Anexe o Plano de Manutenção");
         // Se estiver na atividade do Solicitante, INICIO / INICIO_0
         //
         // Ou estiver na atividade QSST e a decisão deles for "Aprovado"

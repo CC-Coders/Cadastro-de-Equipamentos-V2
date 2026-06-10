@@ -5,7 +5,7 @@ var MyWidget = SuperWidget.extend({
 
     init: function () {
         var self = this;
-        console.log("136")
+        console.log("142")
         var $button = $("#button-search");
         var originalText = "Buscar";
         var loadingInterval;
@@ -103,8 +103,7 @@ var MyWidget = SuperWidget.extend({
             FINALIZADO_EM: $("#finalizado").val()
         };
 
-        var constraints = [];
-        for (var campo in filtros) {
+        var constraints = [];        for (var campo in filtros) {
             var valor = filtros[campo];
             if (valor && valor.trim() !== "") {
                 if (campo === "DATA_ABERTURA" || campo === "CRIADO_EM" || campo === "FINALIZADO_EM") {
@@ -141,7 +140,12 @@ var MyWidget = SuperWidget.extend({
                     console.error("❌ Erro ao fazer parse do RESULT:", e);
                     registros = [];
                 }
-                var dados = registros.map(function (item) {
+                var dados = registros
+                .filter(function (item) {
+                    return (!item.CATEGORIA || item.CATEGORIA.toUpperCase() == "MA")
+                        && (item.STATUS_EQUIP_ITEM == 2 || item.STATUS_EQUIP_ITEM == 7);
+                })
+                .map(function (item) {
                     return {
                         ID_FLUIG: item.ID_FLUIG || "-",
                         PERIODO_LOCACAO: item.prazoLocacao || "-",
@@ -166,6 +170,7 @@ var MyWidget = SuperWidget.extend({
                                 <i class="flaticon flaticon-paperclip icon-md" aria-hidden="true"></i>
                             </button>`
                     };
+                
                 });
                 if ($.fn.DataTable.isDataTable("#dataTableFilter")) {
                     $("#dataTableFilter").DataTable().clear().destroy();
@@ -236,6 +241,9 @@ var MyWidget = SuperWidget.extend({
                             render: function (data, type, row) {
                                 const codigo = parseInt(row.STATUS_EQUIP_ITEM);
                                 const desc = row.DESC_STATUS_EQUIPAMENTO || "-";
+                                if (!codigo || !desc) {
+                                    return "-";
+                                }
                                 if (isNaN(codigo)) return desc;
                                 switch (codigo) {
                                     case 2: return "Pendente";
@@ -244,6 +252,7 @@ var MyWidget = SuperWidget.extend({
                                     case 1: return "Pendente";
                                     default: return desc;
                                 }
+
                             }
                         },
                         {
@@ -836,16 +845,6 @@ var MyWidget = SuperWidget.extend({
                         row.find('.valorFipe').focus();
                         return;
                     }
-
-                    //                    if (!referencia) {
-                    //                        FLUIGC.toast({
-                    //                            title: "Erro:",
-                    //                            message: "O campo 'Referência' é obrigatório.",
-                    //                            type: "danger"
-                    //                        });
-                    //                        row.find('.referencia').focus();
-                    //                        return;
-                    //                    }
 
                     var c1 = DatasetFactory.createConstraint("PREFIXO", prefixo, prefixo, ConstraintType.MUST);
                     var c2 = DatasetFactory.createConstraint("MODO", "EDITAR_TUDO", "EDITAR_TUDO", ConstraintType.MUST);
