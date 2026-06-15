@@ -1,3 +1,13 @@
+const STATUS_EQUIPAMENTO = {
+    "Pendente Contrato": 1,
+    "Contrato em Andamento com análise pendente": 2,
+    "Contrato em Andamento com análise realizada": 3,
+    "Contrato Vigente": 4,
+    "Equipamento desmobilizado": 5,
+    "Contrato encerrado": 6,
+    "Análise em andamento": 7,
+}
+
 
 var MyWidget = SuperWidget.extend({
     variavelNumerica: null,
@@ -327,10 +337,12 @@ var MyWidget = SuperWidget.extend({
         var usuarioLogado = rowData.USUARIO_LOGADO
         var modalId = 'modalEditEquipamento_' + new Date().getTime();
         
-        function isFinalizado(val) {
-            if (!val) return false;
-            const s = String(val).trim().toLowerCase();
-            return !(s === "" || s === "-" || s === "null" || s === "undefined");
+        function isFinalizado(STATUS) {
+            if (STATUS == STATUS_EQUIPAMENTO["Contrato em Andamento com análise realizada"] || STATUS == STATUS_EQUIPAMENTO["Contrato Vigente"]) {
+                return true;
+            }else{
+                return false;
+            }
         }
 
         var modalContent = `
@@ -388,7 +400,7 @@ var MyWidget = SuperWidget.extend({
             ]
         }, function (err, data) {
         	  const $modal = $("#" + modalId);
-        	  if (isFinalizado(rowData.FINALIZADO_EM)) {
+        	  if (isFinalizado(rowData.STATUS)) {
         	        $modal.find(".btn-concluir-equipamento, .btn-editar-equipamento").prop("disabled", true);
         	    } else {
         	        $modal.find(".btn-concluir-equipamento, .btn-editar-equipamento").prop("disabled", false);
