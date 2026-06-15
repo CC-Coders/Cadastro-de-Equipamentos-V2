@@ -165,7 +165,7 @@
 						<option value=""></option>
 						<option value="MA">MA (Máquina Alugada)</option>
 						<option value="PA">PA (Ponto de Abastecimento)</option>
-						<option value="Outros">Outros</option>
+						<option value="Outros">Outros (Sem Abastecimento)</option>
 					</select>
 					<br>
 				</div>
@@ -177,25 +177,31 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6 inputGroup">
-					<label for="modelo" class="required">Modelo:</label>
-					<select name="modelo" id="modelo" class="inputPA inputMA"></select>
+					<label for="classOperacional">Classe Operacional:</label>
+					<select name="classOperacional" id="classOperacional" class="inputMA"></select>
 					<br>
 				</div>
-				<div class="col-md-6 inputGroup ">
-					<label for="fabricante">Fabricante:</label>
-					<input type="text" name="fabricante" id="fabricante" class="form-control inputPA inputMA" readonly inert="inert">
+				<div class="col-md-6 inputGroup">
+					<label for="modelo" class="required">Modelo:</label>
+					<select name="modelo" id="modelo" class="inputPA inputMA"></select>
 					<br>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-6 inputGroup">
 					<label for="classeMecanica">Classe Mecânica:</label>
-					<input type="text" name="classeMecanica" id="classeMecanica" class="form-control inputMA" readonly inert="inert">
+					<input 
+						type="text" name="classeMecanica" id="classeMecanica" class="form-control inputPA inputMA" readonly inert="inert"
+						placeholder="Preenchimento automático."
+					>
 					<br>
 				</div>
-				<div class="col-md-6 inputGroup">
-					<label for="classOperacional">Classe Operacional:</label>
-					<input type="text" name="classOperacional" id="classOperacional" class="form-control inputMA" readonly inert="inert">
+				<div class="col-md-6 inputGroup ">
+					<label for="fabricante">Fabricante:</label>
+					<input 
+						type="text" name="fabricante" id="fabricante" class="form-control inputPA inputMA" readonly inert="inert"
+						placeholder="Preenchimento automático."
+					>
 					<br>
 				</div>
 			</div>
@@ -344,33 +350,26 @@
 					<br>
 				</div>
 			</div>
-			<div class="row divConsumo">
+			<div class="row" id="divCombustivel">
 				<div class="col-md-4 inputGroup">
-					<label for="tipoCombustivel" class="required">Tipo de combustível:</label>
-					<select name="tipoCombustivel" id="tipoCombustivel" class="form-control inputPA inputMA">
+					<label>Tipo de Combustível:</label>
+					<select name="tipoCombustivel" id="tipoCombustivel" class="form-control inputMA">
 						<option value=""></option>
-						<option value="400">GASOLINA COMUM</option>
 						<option value="401">DIESEL S-10</option>
 						<option value="402">DIESEL S-500</option>
-						<option value="403">ETANOL COMUM</option>
-						<option value="404">GASOLINA ADITIVADA</option>
-						<option value="432">ELETRICIDADE</option>
-						<option value="476">OLEO QUEIMA OLEO DE XISTO - OTL - OTE</option>
-						<option value="486">AW HLP 46</option>
-						<option value="488">DIESEL DB5-S50</option>
 					</select>
 					<br>
 				</div>
 				<div class="col-md-4 inputGroup">
 					<label for="litrosTanque" class="required">Tanque (Litros):</label>
-					<input type="text" name="litrosTanque" id="litrosTanque" class="form-control inputPA inputMA">
+					<input type="text" name="litrosTanque" id="litrosTanque" class="form-control inputMA">
 					<br>
 				</div>
 				<div class="col-md-4 inputGroup">
 					<label for="consumoMedio" class="required">Consumo Médio:</label>
 					<div class="flexInput">
-						<input type="text" name="consumoMedio" id="consumoMedio" class="form-control inputPA inputMA">
-						<select name="tipoConsumoMedio" id="tipoConsumoMedio" class="form-control inputPA inputMA">
+						<input type="text" name="consumoMedio" id="consumoMedio" class="form-control inputMA">
+						<select name="tipoConsumoMedio" id="tipoConsumoMedio" class="form-control inputMA">
 							<option value="km/L">km/L</option>
 							<option value="L/H">L/H</option>
 						</select>
@@ -423,8 +422,8 @@
 				</div>
 
 			</div>
-			<h2>Documentação</h2>
-			<div id="divAnexar">
+			<div id="divAnexar" style="display: none;">
+				<h2>Documentação</h2>
 				<div class="row">
 					<div class="col-md-6">
 						<label for="">Anexo:</label>
@@ -452,8 +451,8 @@
 				<br>
 			</div>
 
-			<b>Documentos anexados:</b>
-			<div>
+			<div id="divDocsAnexados" style="display: none;">
+				<b>Documentos anexados:</b>
 				<div class="row" style="margin-bottom: 10px;">
 					<div class="col-md-2">
 						<span class="spanStatusAnexos">❌</span>
