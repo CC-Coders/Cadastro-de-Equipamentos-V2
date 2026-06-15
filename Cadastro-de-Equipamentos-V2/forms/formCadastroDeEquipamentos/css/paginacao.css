@@ -10,7 +10,7 @@
     transform-style: preserve-3d;
     transform-origin: left center;
     margin-top: 100px;
-    margin-bottom: 100px;
+    margin-bottom: 20px;
 }
 .pagina.ativa {
     opacity: 1;
@@ -49,4 +49,16 @@
     font-weight: bold;
     background: #ffa751 !important;
     color: white;
+}
+
+.pagina:not(.ativa) {
+  height: 0 !important;
+  overflow: hidden !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.pagina.ativa {
+  height: auto !important;
+  overflow: visible !important;
 }
