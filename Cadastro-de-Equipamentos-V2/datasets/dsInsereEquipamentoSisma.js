@@ -40,14 +40,20 @@ function cadastraEquipamento(constraints){
     insereEquipamento(IDEQUI, EQUIPAMENTO, constraints.NUMPROCESS, constraints.isPAouMA, constraints.CGCCFO);
     insereTransfdiv3(IDEQUI, EQUIPAMENTO);
     insereTransfConta(IDEQUI, EQUIPAMENTO);
-    insereCombustivel(IDEQUI, EQUIPAMENTO);
-    insereTanqueCombustivel(IDEQUI, EQUIPAMENTO);
+
+    if (constraints.isPAouMA == "MA") {
+        insereDieselNoModeloSeNaoExistir(EQUIPAMENTO);
+        insereCombustivel(IDEQUI, EQUIPAMENTO);
+        insereTanqueCombustivel(IDEQUI, EQUIPAMENTO);
+        insereCaracteristicasTecnicas(IDEQUI, JSON.parse(constraints.CARCTERISTICAS), EQUIPAMENTO);
+    }
+    
     insereMedidorEquipamento(IDEQUI, EQUIPAMENTO);
     insereCompartimento(IDEQUI, EQUIPAMENTO);
+
     insereValorLocacaoMensal(IDEQUI, EQUIPAMENTO);
     insereObservacaoEquip(IDEQUI, EQUIPAMENTO);
     insereFiltros(IDEQUI, EQUIPAMENTO);
-    insereCaracteristicasTecnicas(IDEQUI, JSON.parse(constraints.CARCTERISTICAS), EQUIPAMENTO);
     insereCadastroAuxiliar(EQUIPAMENTO); 
     return IDEQUI;
 }
@@ -138,10 +144,20 @@ function geraNovoIDEQUI() {
 function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ) {
     try {
         var fornecedor = getFornecedorPorCNPJ(isPAouMA, CNPJ)[0];
+
+        if (!fornecedor) {
+            throw "Fornecedor não encontrado no Sisma. Favor entrar em contato com o administrador do sistema.";
+        }
+
         log.info("dsInsereEquipamentoSisma fornecedor:");
         log.dir(fornecedor);
         
         var obra = getObra(EQUIPAMENTO.CODCOLIGADA, EQUIPAMENTO.CODCCUSTO)[0];
+
+        if (!obra) {
+            throw "Obra não encontrada no Sisma. Favor entrar em contato com o administrador do sistema.";
+        }
+
         log.info("dsInsereEquipamentoSisma obra:");
         log.dir(obra);
 
@@ -488,63 +504,138 @@ function insereCombustivel(IDEQUI, EQUIPAMENTO) {
     try {
         var query = "";
         query += "INSERT INTO EQUIPCOMBU ";
-        query += "(DATAHORA, ATUAL, CODIMATE,IDEQUI,CODITANQ,TIPOCONTROLE,CONTROLACONSUMO,CAPATANQ_ABAST,CAPATANQ_CONV,PRINCIPAL,CONSCOMB_KM,CONSCOMB_HORA,CODIUNID,CONSCOMB2M)"
-        query += " VALUES "
+        query += "( ";
+        query += "  DATAHORA, ";
+        query += "  ATUAL, ";
+        query += "  CODIMATE, ";
+        query += "  IDEQUI, ";
+        query += "  CODITANQ, ";
+        query += "  TIPOCONTROLE, ";
+        query += "  CONTROLACONSUMO, ";
+        query += "  CAPATANQ_ABAST, ";
+        query += "  CAPATANQ_CONV, ";
+        query += "  PRINCIPAL, ";
+        query += "  CONSCOMB_KM, ";
+        query += "  CONSCOMB_HORA, ";
+        query += "  CODIUNID, ";
+        query += "  CONSCOMB2M ";
+        query += ") ";
+        query += "  VALUES ";
         query += "(CONVERT(datetime, ?, 121),?,?,?,?,?,?,?,?,?, ?,?,?,?)";
 
         executeInsert(query, [
-            { type: "datetime", value: EQUIPAMENTO.DATACHEGADA },//DATAHORA
-            { type: "int", value: "1" },//ATUAL
-            { type: "int", value: EQUIPAMENTO.CODIMATE_COMBUSTIVEL },//CODIMATE
-            { type: "int", value: IDEQUI },//IDEQUI
-            { type: "int", value: "1" },//CODITANQ
-            { type: "int", value: "2" },//TIPOCONTROLE
-            { type: "int", value: "1" },//CONTROLACONSUMO
-            { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST },//CAPATANQ_ABAST
-            { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST },//CAPATANQ_CONV
-            { type: "int", value: "1" },//PRINCIPAL
-            { type: "float", value: EQUIPAMENTO.CONSUMO_KM || '0.00' },//CONSCOMB_KM
-            { type: "float", value: EQUIPAMENTO.CONSUMO_HORA || '0.00' },//CONSCOMB_HORA
-            { type: "int", value: EQUIPAMENTO.CODIUNID_CAPACIDADE_COMBUSTIVEL },//CODIUNID
-            { type: "float", value: "0.00" },//CONSCOMB2M
+            { type: "datetime", value: EQUIPAMENTO.DATACHEGADA },
+            { type: "int", value: "1" }, // ATUAL
+            { type: "int", value: EQUIPAMENTO.CODIMATE_COMBUSTIVEL },
+            { type: "int", value: IDEQUI },
+            { type: "int", value: "1" }, // CODITANQ
+            { type: "int", value: "2" }, // TIPOCONTROLE
+            { type: "int", value: "1" }, // CONTROLACONSUMO
+            { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST },
+            { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST },
+            { type: "int", value: EQUIPAMENTO.PRINCIPAL },
+            { type: "float", value: EQUIPAMENTO.CONSUMO_KM || 0 },
+            { type: "float", value: EQUIPAMENTO.CONSUMO_HORA || 0 },
+            { type: "int", value: EQUIPAMENTO.CODIUNID_CAPACIDADE_COMBUSTIVEL },
+            { type: "float", value: "0.00" }, // CONSCOMB2M
         ], "/jdbc/Sisma");
     } catch (error) {
-            var msg = "";
-            // Try to extract useful message safely
-            if (error && error.javaException) {
-                msg = error.javaException.getMessage();
-            } else if (error && error.message) {
-                if (error.message.Error) {
-                }else{
-                    msg = error.message;
+        var msg = "";
+
+        if (error && error.javaException) {
+            msg = error.javaException.getMessage();
+        } else if (error && error.message) {
+            msg = error.message;
+        } else {
+            msg = String(error);
+        }
+
+        log.error("ERRO==============> " + msg);
+        throw "Erro ao executar Dataset: " + msg;
+    }
+}
+function insereDieselNoModeloSeNaoExistir(EQUIPAMENTO) {
+    try {
+        var combustiveisModelo = consultaCombustiveisCadastradosNoModelo(EQUIPAMENTO);
+        var principal = 1;
+
+        if (combustiveisModelo && combustiveisModelo.length > 0) {
+            for (var i = 0; i < combustiveisModelo.length; i++) {
+                var item = combustiveisModelo[i];
+
+                if (item.CODIMATE == EQUIPAMENTO.CODIMATE_COMBUSTIVEL) {
+                    log.info("Combustível já cadastrado no modelo. IDMODE: " + EQUIPAMENTO.IDMODE + " CODIMATE: " + EQUIPAMENTO.CODIMATE_COMBUSTIVEL);
+
+                    EQUIPAMENTO.PRINCIPAL = item.PRINCIPAL == "1" ? 1 : 0;
+                    return;
                 }
 
-
-            } else {
-                msg = String(error);
+                if (item.PRINCIPAL == "1") {
+                    principal = 0;
+                }
             }
+        }
 
-            log.error("ERRO==============> " + msg);
-            log.error("Type of error: " + typeof error);
-            log.error("Type of msg: " + typeof msg);
+        EQUIPAMENTO.PRINCIPAL = principal;
+        insereCombustivelNoModelo(EQUIPAMENTO, principal);
 
-            // Safely rethrow as standard JS error
-            throw "Erro ao executar Dataset: " + msg;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw error;
+        } else {
+            throw new Error(typeof error === "string" ? error : JSON.stringify(error));
+        }
+    }
+
+    // INSERT
+    function insereCombustivelNoModelo(EQUIPAMENTO, principal) {
+        try {
+            var query = "";
+            query += "INSERT INTO MODELCOMBU ";
+            query += "( ";
+            query += "  IDMODE, ";
+            query += "  CODIMATE, ";
+            query += "  PRINCIPAL, ";
+            query += "  CONSCOMB_KM, ";
+            query += "  CONSCOMB_HORA, ";
+            query += "  CAPTANQ, ";
+            query += "  FATCONVLITROS ";
+            query += ") ";
+            query += "VALUES ";
+            query += "(?,?,?,?,?,?,?)";
+
+            executeInsert(query, [
+                { type: "int", value: EQUIPAMENTO.IDMODE },
+                { type: "int", value: EQUIPAMENTO.CODIMATE_COMBUSTIVEL },
+                { type: "int", value: principal },
+                { type: "float", value: EQUIPAMENTO.CONSUMO_KM || 0 },
+                { type: "float", value: EQUIPAMENTO.CONSUMO_HORA || 0 },
+                { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST || 0 },
+                { type: "float", value: 1 },
+            ], "/jdbc/Sisma");
+
+        } catch (error) {
+            if (error instanceof Error) {
+                throw error;
+            } else {
+                throw new Error(typeof error === "string" ? error : JSON.stringify(error));
+            }
+        }
     }
 }
 function insereTanqueCombustivel(IDEQUI, EQUIPAMENTO) {
     try {
         var query = "";
         query += "INSERT INTO EQUIPTANQ ";
-        query += "(IDEQUI, CODITANQ, DATA, ATUAL, CAPATANQ_ABAST, CAPATANQ_CONV)"
-        query += " VALUES "
+        query += "(IDEQUI, CODITANQ, DATA, ATUAL, CAPATANQ_ABAST, CAPATANQ_CONV)";
+        query += " VALUES ";
         query += "(?,?,CONVERT(datetime, ?, 121),?,?,?)";
 
         executeInsert(query, [
             { type: "int", value: IDEQUI },
-            { type: "int", value: "1" },
+            { type: "int", value: "1" }, // CODITANQ
             { type: "datetime", value: EQUIPAMENTO.DATACHEGADA },
-            { type: "int", value: "1" },
+            { type: "int", value: "1" }, // ATUAL
             { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST },
             { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST },
         ], "/jdbc/Sisma");
@@ -924,6 +1015,27 @@ function getObra(CODCOLIGADA, CODCCUSTO) {
             { type: "varchar", value: CODCCUSTO },
         ], "/jdbc/Sisma");
         
+    } catch (error) {
+        if (error instanceof Error) {
+            throw error;
+        } else {
+            throw new Error(typeof error === "string" ? error : JSON.stringify(error));
+        }
+    }
+}
+function consultaCombustiveisCadastradosNoModelo(EQUIPAMENTO) {
+    try {
+        var query = "SELECT ";
+        query += "IDMODE, ";
+        query += "CODIMATE, ";
+        query += "PRINCIPAL ";
+        query += "FROM MODELCOMBU ";
+        query += "WHERE IDMODE = ? ";
+
+        return executaQuery(query, [
+            { type: "int", value: EQUIPAMENTO.IDMODE },
+        ], "/jdbc/Sisma");
+
     } catch (error) {
         if (error instanceof Error) {
             throw error;
