@@ -92,13 +92,12 @@ function getDadosEquipamento() {
 
     var tipoConsumoMedio = hAPI.getCardValue("tipoConsumoMedio");
     var consumoMedio = hAPI.getCardValue("consumoMedio");
+    var CAPATANQ_ABAST = hAPI.getCardValue("litrosTanque");
 
     var CODIMEDI = tipoConsumoMedio == "km/L" ? 2 : 1;
 
     var CONSUMO_KM = tipoConsumoMedio == "km/L" ? consumoMedio : "";
     var CONSUMO_HORA = tipoConsumoMedio == "L/H" ? consumoMedio : "";
-
-    var CAPATANQ_ABAST = hAPI.getCardValue("litrosTanque");
 
     var CODIUNID_CAPACIDADE_COMBUSTIVEL = tipoConsumoMedio == "km/L" ? 5 : 6;
 
