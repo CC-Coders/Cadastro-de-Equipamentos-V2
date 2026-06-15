@@ -1,123 +1,177 @@
 
 function createDataset(fields, constraints, sortFields) {
-    var newDataset = DatasetBuilder.newDataset();
-    newDataset.addColumn("status");
-    newDataset.addColumn("mensagem");
-
-    var conn = null;
-    var stmt = null;
-
     try {
+        var constraints = getConstraints(constraints);
+
         if (!constraints || constraints.length === 0) {
             throw "Constraints não informadas!";
         }
 
-        var prefixo = constraints[0] ? constraints[0].initialValue : null;
-        var modo = constraints[1] ? constraints[1].initialValue : null;
+        var prefixo = constraints.PREFIXO;
+        var modo = constraints.MODO;
 
         if (!prefixo) {
             throw "Constraint obrigatória 'PREFIXO' não informada!";
         }
 
-        var query = "";
-        var params = [];
+        var quantidadeRetorno = null;
 
         if (modo == "EDITAR_APENAS_STATUS") {
-            var status = constraints[2] ? constraints[2].initialValue : null;
-            var usuarioAnalise = constraints[3] ? constraints[3].initialValue : null; // 👈 Novo campo
+            var status = constraints.STATUS;
+            var usuarioAnalise = constraints.USUARIO_ANALISE;
 
             if (!status) {
                 throw "Constraint 'STATUS' obrigatória para edição apenas de status!";
             }
 
-            query = "UPDATE EQUIPAMENTOS_CONTRATOS_AUXILIAR SET STATUS = ?, USUARIO_ANALISE = ? WHERE PREFIXO = ?";
-            params.push(parseInt(status));
-            params.push(usuarioAnalise); 
-            params.push(prefixo);
+            var query = "UPDATE EQUIPAMENTOS_CONTRATOS_AUXILIAR SET STATUS = ?, USUARIO_ANALISE = ? WHERE PREFIXO = ?";
+
+            quantidadeRetorno = executeInsert(query, [
+                {type:"int", value:status},
+                {type:"string", value:usuarioAnalise},
+                {type:"string", value:prefixo},
+            ], "/jdbc/CastilhoCustom");
+
         } else if (modo == "EDITAR_TUDO") {
-            var valorEquipamento = constraints[2] ? constraints[2].initialValue : null;
-            var valorFipe = constraints[3] ? constraints[3].initialValue : null;
-            var valorImplemento = constraints[4] ? constraints[4].initialValue : null;
-            var valorDepreciacao = constraints[5] ? constraints[5].initialValue : null;
-            var precoEquipamento = constraints[6] ? constraints[6].initialValue : null;
-            var finalizadoEm = constraints[7] ? constraints[7].initialValue : null;
-            var classificacaoBem = constraints[8] ? constraints[8].initialValue : null;
-            var negociacaoSuprimentos = constraints[9] ? constraints[9].initialValue : null;
+            var valorEquipamento = constraints.VALOR_EQUIPAMENTO;
+            var valorFipe = constraints.VALOR_FIPE;
+            var valorImplemento = constraints.VALOR_IMPLEMENTO;
+            var valorDepreciacao = constraints.VALOR_DEPRECIACAO;
+            var precoEquipamento = constraints.PRECO_EQUIPAMENTO;
+            var finalizadoEm = constraints.FINALIZADO_EM;
+            var classificacaoBem = constraints.CLASSIFICACAO_BEM;
+            var negociacaoSuprimentos = constraints.NEGOCIACAO_SUPRIMENTOS;
+            var status = constraints.STATUS;
+            var usuarioAnalise = constraints.USUARIO_ANALISE;
 
             var setParts = [];
+            var valuesList = [];
 
-            if (valorEquipamento) { setParts.push("VALOR_EQUIPAMENTO = ?"); params.push(valorEquipamento); }
-            if (valorFipe) { setParts.push("VALOR_FIPE = ?"); params.push(valorFipe); }
-            if (valorImplemento) { setParts.push("VALOR_IMPLEMENTO = ?"); params.push(valorImplemento); }
-            if (valorDepreciacao) { setParts.push("VALOR_DEPRECIACAO = ?"); params.push(valorDepreciacao); }
-            if (precoEquipamento) { setParts.push("PRECO_EQUIPAMENTO = ?"); params.push(precoEquipamento); }
-            if (finalizadoEm) { setParts.push("FINALIZADO_EM = ?"); params.push(finalizadoEm); }
-            if (classificacaoBem) { setParts.push("CLASSIFICACAO_BEM = ?"); params.push(classificacaoBem); }
-            if (negociacaoSuprimentos) { setParts.push("NEGOCIACAO_SUPRIMENTOS = ?"); params.push(negociacaoSuprimentos); }
+            if (valorEquipamento) { setParts.push("VALOR_EQUIPAMENTO = ?"); valuesList.push({ type: "float", value: valorEquipamento }); }
+            if (valorFipe) { setParts.push("VALOR_FIPE = ?"); valuesList.push({ type: "float", value: valorFipe }); }
+            if (valorImplemento) { setParts.push("VALOR_IMPLEMENTO = ?"); valuesList.push({ type: "float", value: valorImplemento }); }
+            if (valorDepreciacao) { setParts.push("VALOR_DEPRECIACAO = ?"); valuesList.push({ type: "float", value: valorDepreciacao }); }
+            if (precoEquipamento) { setParts.push("PRECO_EQUIPAMENTO = ?"); valuesList.push({ type: "float", value: precoEquipamento }); }
+            if (finalizadoEm) { setParts.push("FINALIZADO_EM = ?"); valuesList.push({ type: "date", value: finalizadoEm }); }
+            if (classificacaoBem) { setParts.push("CLASSIFICACAO_BEM = ?"); valuesList.push({ type: "float", value: classificacaoBem }); }
+            if (negociacaoSuprimentos) { setParts.push("NEGOCIACAO_SUPRIMENTOS = ?"); valuesList.push({ type: "string", value: negociacaoSuprimentos }); }
+            if (status) { setParts.push("STATUS = ?"); valuesList.push({ type: "int", value: status }); }
+            if (usuarioAnalise) { setParts.push("USUARIO_ANALISE = ?"); valuesList.push({ type: "string", value: usuarioAnalise }); }
 
             if (setParts.length === 0) {
                 throw "Nenhum campo de atualização informado!";
             }
 
             query = "UPDATE EQUIPAMENTOS_CONTRATOS_AUXILIAR SET " + setParts.join(", ") + " WHERE PREFIXO = ?";
-            params.push(prefixo);
+            valuesList.push({type:"string",value: prefixo});
+
+            
+            quantidadeRetorno = executeInsert(query, valuesList, "/jdbc/CastilhoCustom");
 
         } else {
             throw "Modo inválido: " + modo;
         }
 
         log.info("Query final update equipamentos: " + query);
-        log.dir(params);
 
-        var ic = new javax.naming.InitialContext();
-        var ds = ic.lookup("/jdbc/CastilhoCustom");
-        conn = ds.getConnection();
-        stmt = conn.prepareStatement(query);
-
-//        for (var i = 0; i < params.length; i++) {
-//            if (typeof params[i] === "number") {
-//                stmt.setInt(i + 1, params[i]);
-//            } else {
-//                stmt.setString(i + 1, params[i]);
-//            }
-//        }
-        for (var i = 0; i < params.length; i++) {
-
-            var value = params[i];
-
-            // Se for NUMBER → Int
-            if (typeof value === "number") {
-                stmt.setBigDecimal(i + 1, new java.math.BigDecimal(String(value)));
-                continue;
-            }
-
-            // Se for data no formato YYYY-MM-DD → DATE
-            if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-                stmt.setDate(i + 1, java.sql.Date.valueOf(value));
-                continue;
-            }
-
-            // Padrão → String
-            stmt.setString(i + 1, value);
-        }
-
-        var updated = stmt.executeUpdate();
-        stmt.close();
-        conn.close();
-
-      //  newDataset.addRow(["SUCCESS", "Atualização concluída com sucesso. Registros afetados: " + updated]);
-        if (modo == "EDITAR_APENAS_STATUS" || modo === "EDITAR_APENAS_STATUS") {
-            newDataset.addRow(["SUCCESS", "Equipamento liberado para análise com sucesso!"]);
+        if (modo == "EDITAR_APENAS_STATUS") {
+            return returnDataset("SUCCESS", "Equipamento liberado para análise com sucesso!", "");
         } else {
-            newDataset.addRow(["SUCCESS", "Atualização concluída com sucesso. Registros afetados: " + updated]);
+            return returnDataset("SUCCESS", "Atualização concluída com sucesso. Registros afetados: " + quantidadeRetorno, "");
         }
     } catch (e) {
         log.error("❌ Erro no dataset dsUpdateAnaliseEquipamento: " + e);
-        newDataset.addRow(["ERRO", e.message || e]);
-        if (stmt) stmt.close();
-        if (conn) conn.close();
+        return returnDataset("ERRO", e.message || e, "");
     }
-
-    return newDataset;
 }
 
+
+// Utils
+function getConstraints(constraints) {
+    var retorno = {};
+    if (constraints != null) {
+        for (var i = 0; i < constraints.length; i++) {
+            var constraint = constraints[i];
+            retorno[constraint.fieldName] = constraint.initialValue;
+        }
+    }
+    return retorno;
+}
+function executeInsert(query, constraints, dataSource) {
+    try {
+        log.info("executandoQuery");
+        log.info(query);
+        log.dir(constraints);
+
+        // var dataSource = dataSource;
+        var ic = new javax.naming.InitialContext();
+        var ds = ic.lookup(dataSource);
+
+
+        var conn = ds.getConnection();
+        var stmt = conn.prepareStatement(query);
+
+        var counter = 1;
+        for (var i = 0; i < constraints.length; i++) {
+            var val = constraints[i];
+            if (val.type == "int") {
+                stmt.setInt(counter, val.value);
+            }
+            else if (val.type == "float") {
+                stmt.setFloat(counter, val.value);
+            }
+            else if (val.type == "date") {
+                stmt.setString(counter, val.value);
+            }
+            else if (val.type == "datetime") {
+                stmt.setString(counter, val.value);
+            } else {
+                stmt.setString(counter, val.value);
+            }
+            counter++;
+        }
+
+
+        var resultCount = stmt.executeUpdate();
+        return  resultCount;
+        
+    } catch (error) {
+        var msg = "";
+            // Try to extract useful message safely
+            if (error && error.javaException) {
+                msg = error.javaException.getMessage();
+            } else if (error && error.message) {
+                if (error.message.Error) {
+                }else{
+                    msg = error.message;
+                }
+
+
+            } else {
+                msg = String(error);
+            }
+
+            log.error("ERRO==============> " + msg);
+            log.error("Type of error: " + typeof error);
+            log.error("Type of msg: " + typeof msg);
+
+            // Safely rethrow as standard JS error
+            throw "Erro ao executar Dataset: " + msg;
+
+    } finally {
+        if (stmt != null) {
+            stmt.close();
+        }
+        if (conn != null) {
+            conn.close();
+        }
+    }
+}
+function returnDataset(STATUS, MENSAGEM, RESULT) {
+    var dataset = DatasetBuilder.newDataset();
+    dataset.addColumn("STATUS");
+    dataset.addColumn("MENSAGEM");
+    dataset.addColumn("RESULT");
+    dataset.addRow([STATUS, MENSAGEM, RESULT]);
+    return dataset;
+}

@@ -1,3 +1,13 @@
+const STATUS_EQUIPAMENTO = {
+    "Pendente Contrato": 1,
+    "Contrato em Andamento com análise pendente": 2,
+    "Contrato em Andamento com análise realizada": 3,
+    "Contrato Vigente": 4,
+    "Equipamento desmobilizado": 5,
+    "Contrato encerrado": 6,
+    "Análise em andamento": 7,
+}
+
 
 var MyWidget = SuperWidget.extend({
     variavelNumerica: null,
@@ -327,10 +337,12 @@ var MyWidget = SuperWidget.extend({
         var usuarioLogado = rowData.USUARIO_LOGADO
         var modalId = 'modalEditEquipamento_' + new Date().getTime();
         
-        function isFinalizado(val) {
-            if (!val) return false;
-            const s = String(val).trim().toLowerCase();
-            return !(s === "" || s === "-" || s === "null" || s === "undefined");
+        function isFinalizado(STATUS) {
+            if (STATUS == STATUS_EQUIPAMENTO["Contrato em Andamento com análise realizada"] || STATUS == STATUS_EQUIPAMENTO["Contrato Vigente"]) {
+                return true;
+            }else{
+                return false;
+            }
         }
 
         var modalContent = `
@@ -388,7 +400,7 @@ var MyWidget = SuperWidget.extend({
             ]
         }, function (err, data) {
         	  const $modal = $("#" + modalId);
-        	  if (isFinalizado(rowData.FINALIZADO_EM)) {
+        	  if (isFinalizado(rowData.STATUS)) {
         	        $modal.find(".btn-concluir-equipamento, .btn-editar-equipamento").prop("disabled", true);
         	    } else {
         	        $modal.find(".btn-concluir-equipamento, .btn-editar-equipamento").prop("disabled", false);
@@ -719,8 +731,8 @@ var MyWidget = SuperWidget.extend({
 
                     DatasetFactory.getDataset("dsUpdateAnaliseEquipamento", null, [c1, c2, c3, c4], null, {
                         success: function (ds) {
-                            var statusResp = ds.values[0].status;
-                            var mensagem = ds.values[0].mensagem;
+                            var statusResp = ds.values[0].STATUS;
+                            var mensagem = ds.values[0].MENSAGEM;
                             FLUIGC.toast({
                                 title: statusResp === "SUCCESS" ? "Sucesso: " : "Erro: ",
                                 message: mensagem,
@@ -771,7 +783,7 @@ var MyWidget = SuperWidget.extend({
                       var precoEquipamento = limparMoeda(row.find('.precoEquipamento').val());
                       var classificacaoBem = limparMoeda(row.find('.classificacaoBem').val());
                     //  var dataFinalizado = moment().format('DD/MM/YYYY');
-                      var dataFinalizado = moment().format('YYYY-MM-DD');
+                      var dataFinalizado = moment().format('YYYY-DD-MM');
                       var negociacaoSuprimentos = negociacaoEscolhida
                       if (!valorAtual || valorAtual === "0" || isNaN(valorAtual)) {
                           return; 
@@ -791,8 +803,8 @@ var MyWidget = SuperWidget.extend({
                      
                       DatasetFactory.getDataset("dsUpdateAnaliseEquipamento", null, [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11], null, {
                           success: function (ds) {
-                              var status = ds.values[0].status;
-                              var mensagem = ds.values[0].mensagem;
+                              var status = ds.values[0].STATUS;
+                              var mensagem = ds.values[0].MENSAGEM;
                               console.log(mensagem)
                               if (status === "SUCCESS") atualizados++;
                               if (atualizados === total) {
@@ -824,7 +836,7 @@ var MyWidget = SuperWidget.extend({
                     var valorDepreciacao = limparMoeda(row.find('.depreciacaoImplemento').val());
                     var classificacaoBem = limparMoeda(row.find('.classificacaoBem').val());
                     var precoEquipamento = limparMoeda(row.find('.precoEquipamento').val());
-                    var dataFinalizado = moment().format('DD/MM/YYYY');
+                    var dataFinalizado = moment().format('YYYY-DD-MM');
 
                     if (!valorAtual || valorAtual === "0" || isNaN(valorAtual)) {
                         FLUIGC.toast({
@@ -858,8 +870,8 @@ var MyWidget = SuperWidget.extend({
 
                     DatasetFactory.getDataset("dsUpdateAnaliseEquipamento", null, [c1, c2, c3, c4, c5, c6, c7, c8, c9], null, {
                         success: function (ds) {
-                            var status = ds.values[0].status;
-                            var mensagem = ds.values[0].mensagem;
+                            var status = ds.values[0].STATUS;
+                            var mensagem = ds.values[0].MENSAGEM;
                             FLUIGC.toast({
                                 title: status === "SUCCESS" ? "Sucesso: " : "Erro: ",
                                 message: mensagem,
