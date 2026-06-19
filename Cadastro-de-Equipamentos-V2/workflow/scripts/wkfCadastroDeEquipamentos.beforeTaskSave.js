@@ -57,6 +57,10 @@ function insereHistorico(observacao, acao, atividade) {
     var USER = getValue("WKUser");
     var DATA = getDateTimeNow();
 
+    if (atividade == "Fim") {
+        USER = "Fluig";
+    }
+
     var novaLinha = new java.util.HashMap();
     novaLinha.put("tableHistoricoUsuario", USER);
     novaLinha.put("tableHistoricoData", DATA);
