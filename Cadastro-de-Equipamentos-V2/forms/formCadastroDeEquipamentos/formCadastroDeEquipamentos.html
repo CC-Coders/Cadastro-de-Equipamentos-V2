@@ -135,96 +135,99 @@
 		<div class="pagina ativa" data-index="0" id="paginaIdentificacao">
 			<h2>Identificação (Equipamento e Obra)</h2>
 			<div class="row">
-				<div class="col-md-6">
+				<div class="col-md-4">
 					<label for="coligada" class="required">Coliga/Empresa:</label>
 					<select name="coligada" id="coligada" class=""></select>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-4">
 					<label for="obra" class="required">Obra: </label>
 					<select name="obra" id="obra" class=""></select>
 				</div>
-			</div>
-			<br>
-			<div class="row">
-				<div class="col-md-6">
+				<div class="col-md-4">
 					<label for="descricaoEquipamento" class="required">Descrição do Equipamento:</label>
 					<input type="text" name="descricaoEquipamento" id="descricaoEquipamento" class="form-control">
 				</div>
-				<div class="col-md-6">
-					<label for="prefixo" class="required">Prefixo:</label>
-					<input type="text" name="prefixo" id="prefixo" class="form-control">
-				</div>
 			</div>
-		</div>
-		<div class="pagina" data-index="1" id="paginaDetalhes">
+
+			<br>
+
 			<h2>Detalhes Técnicos e Financeiros</h2>
 			<div class="row">
-				<div class="col-md-6">
+				<div class="col-md-3">
 					<label for="categoria" class="required">Categoria:</label>
 					<select name="categoria" id="categoria" class="form-control">
 						<option value=""></option>
 						<option value="MA">MA (Máquina Alugada)</option>
-						<option value="PA">PA (Ponto de Abastecimento)</option>
-						<option value="Outros">Outros</option>
+						<option value="PA">PA (Subempreiteiros/Freteiros)</option>
+						<option value="Outros">Outros (Sem Abastecimento)</option>
 					</select>
 					<br>
 				</div>
-				<div class="col-md-6 inputGroup">
+				<div class="col-md-3 inputGroup">
 					<label for="quantidade" class="required">Quantidade:</label>
 					<input name="quantidade" id="quantidade" class="form-control inputOutros"/>
 					<br>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6 inputGroup">
-					<label for="modelo" class="required">Modelo:</label>
-					<select name="modelo" id="modelo" class="inputPA inputMA"></select>
-					<br>
+				<div class="col-md-3">
+					<label for="prefixo" class="required">Prefixo:</label>
+					<input type="text" name="prefixo" id="prefixo" class="form-control">
 				</div>
-				<div class="col-md-6 inputGroup ">
-					<label for="fabricante">Fabricante:</label>
-					<input type="text" name="fabricante" id="fabricante" class="form-control inputPA inputMA" readonly inert="inert">
-					<br>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6 inputGroup">
-					<label for="classeMecanica">Classe Mecânica:</label>
-					<input type="text" name="classeMecanica" id="classeMecanica" class="form-control inputMA" readonly inert="inert">
-					<br>
-				</div>
-				<div class="col-md-6 inputGroup">
-					<label for="classOperacional">Classe Operacional:</label>
-					<input type="text" name="classOperacional" id="classOperacional" class="form-control inputMA" readonly inert="inert">
-					<br>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6 inputGroup">
-					<label for="AnoFabricacao" class="required">Ano Fabricação:</label>
-					<input type="text" name="AnoFabricacao" id="AnoFabricacao" class="form-control inputPA inputMA">
-					<br>
-				</div>
-				<div class="col-md-6 inputGroup">
-					<label for="AnoModelo" class="required">Ano Modelo:</label>
-					<input type="text" name="AnoModelo" id="AnoModelo" class="form-control inputPA inputMA">
-					<br>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6 inputGroup">
+				<div class="col-md-3 inputGroup">
 					<label for="placa" class="required">Placa:</label>
 					<input type="text" name="placa" id="placa" class="form-control inputPA inputMA">
 					<br>
 				</div>
-				<div class="col-md-6 inputGroup">
+				<div class="col-md-3 inputGroup">
 					<label for="chassi" class="required">Chassis:</label>
 					<input type="text" name="chassi" id="chassi" class="form-control inputPA inputMA">
 					<br>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-4 inputGroup">
+
+			<div class="row" id="rowModelo">
+				<div class="col-md-3" id="divAutopropelido" style="display: none;">
+					<label class="required">Autopropelido:</label>
+					<select name="autopropelido" id="autopropelido" class="form-control inputMA">
+						<option value=""></option>
+						<option value="SIM">Sim</option>
+						<option value="NAO">Não</option>
+					</select>
+					<br>
+				</div>
+				<div class="col-md-3 inputGroup">
+					<label for="classOperacional" class="required">Classe Operacional:</label>
+					<select name="classOperacional" id="classOperacional" class="inputMA"></select>
+					<br>
+				</div>
+				<div class="col-md-3 inputGroup">
+					<label for="modelo" class="required">Modelo:</label>
+					<select name="modelo" id="modelo" class="inputPA inputMA"></select>
+					<br>
+				</div>
+				<div class="col-md-3 inputGroup">
+					<label for="classeMecanica">Classe Mecânica:</label>
+					<input type="text" name="classeMecanica" id="classeMecanica" class="form-control inputPA inputMA" readonly inert="inert" placeholder="Preenchimento automático.">
+					<br>
+				</div>
+			</div>
+
+			<div class="row" id="rowFabricante">
+				<div class="col-md-3 inputGroup" id="divFabricante">
+					<label for="fabricante">Fabricante:</label>
+					<input type="text" name="fabricante" id="fabricante" class="form-control inputPA inputMA" readonly inert="inert"placeholder="Preenchimento automático.">
+					<br>
+				</div>
+				<div class="col-md-3 inputGroup" id="divAnoFabricante">
+					<label for="AnoFabricacao" class="required">Ano Fabricação:</label>
+					<input type="text" name="AnoFabricacao" id="AnoFabricacao" class="form-control inputPA inputMA">
+					<br>
+				</div>
+				<div class="col-md-3 inputGroup" id="divAnoModelo">
+					<label for="AnoModelo" class="required">Ano Modelo:</label>
+					<input type="text" name="AnoModelo" id="AnoModelo" class="form-control inputPA inputMA">
+					<br>
+				</div>
+				<div class="col-md-3 inputGroup">
 					<label for="potenciaMotor" class="required">Potência do Motor:</label>
 					<div class="flexInput">
 						<input type="text" name="potenciaMotor" id="potenciaMotor" class="form-control inputMA">
@@ -234,27 +237,6 @@
 						</select>
 					</div>
 					<br>
-				</div>
-				<div class="col-md-4">
-
-				</div>
-				<div class="col-md-4"></div>
-			</div>
-
-			<div class="row inputGroup">
-				<div class="col-md-12">
-					<label for="">Características Técnicas:</label>
-					<table class="table table-bordered inputMA" id="tableCaracteristicasTecnicas">
-						<thead>
-							<tr>
-								<th>DESCRIÇÃO</th>
-								<th>VALOR PADRÃO</th>
-								<th>VALOR</th>
-								<th>UNID</th>
-							</tr>
-						</thead>
-						<tbody></tbody>
-					</table>
 				</div>
 			</div>
 
@@ -321,10 +303,28 @@
 						<label for="valorMaoDeObra" class="required">Valor de Mão de Obra (R$):</label>
 						<input type="text" name="valorMaoDeObra" id="valorMaoDeObra" class="form-control">
 					</div>
+					<br>
+				</div>
+			</div>
+
+			<div class="row inputGroup">
+				<div class="col-md-12">
+					<label for="">Características Técnicas:</label>
+					<table class="table table-bordered inputMA" id="tableCaracteristicasTecnicas">
+						<thead>
+							<tr>
+								<th>DESCRIÇÃO</th>
+								<th>VALOR PADRÃO</th>
+								<th>VALOR</th>
+								<th>UNID</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
 				</div>
 			</div>
 		</div>
-		<div class="pagina" data-index="2" id="paginaOperacional">
+		<div class="pagina" data-index="1" id="paginaOperacional">
 			<h2>Dados Operacionais</h2>
 			<div class="row">
 				<div class="col-md-6">
@@ -344,33 +344,26 @@
 					<br>
 				</div>
 			</div>
-			<div class="row divConsumo">
+			<div class="row" id="divCombustivel">
 				<div class="col-md-4 inputGroup">
-					<label for="tipoCombustivel" class="required">Tipo de combustível:</label>
-					<select name="tipoCombustivel" id="tipoCombustivel" class="form-control inputPA inputMA">
+					<label>Tipo de Combustível:</label>
+					<select name="tipoCombustivel" id="tipoCombustivel" class="form-control inputMA">
 						<option value=""></option>
-						<option value="400">GASOLINA COMUM</option>
 						<option value="401">DIESEL S-10</option>
 						<option value="402">DIESEL S-500</option>
-						<option value="403">ETANOL COMUM</option>
-						<option value="404">GASOLINA ADITIVADA</option>
-						<option value="432">ELETRICIDADE</option>
-						<option value="476">OLEO QUEIMA OLEO DE XISTO - OTL - OTE</option>
-						<option value="486">AW HLP 46</option>
-						<option value="488">DIESEL DB5-S50</option>
 					</select>
 					<br>
 				</div>
 				<div class="col-md-4 inputGroup">
 					<label for="litrosTanque" class="required">Tanque (Litros):</label>
-					<input type="text" name="litrosTanque" id="litrosTanque" class="form-control inputPA inputMA">
+					<input type="text" name="litrosTanque" id="litrosTanque" class="form-control inputMA">
 					<br>
 				</div>
 				<div class="col-md-4 inputGroup">
 					<label for="consumoMedio" class="required">Consumo Médio:</label>
 					<div class="flexInput">
-						<input type="text" name="consumoMedio" id="consumoMedio" class="form-control inputPA inputMA">
-						<select name="tipoConsumoMedio" id="tipoConsumoMedio" class="form-control inputPA inputMA">
+						<input type="text" name="consumoMedio" id="consumoMedio" class="form-control inputMA">
+						<select name="tipoConsumoMedio" id="tipoConsumoMedio" class="form-control inputMA">
 							<option value="km/L">km/L</option>
 							<option value="L/H">L/H</option>
 						</select>
@@ -379,7 +372,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="pagina" data-index="3" id="paginaFornecedor">
+		<div class="pagina" data-index="2" id="paginaFornecedor">
 			<h2>Dados do Fornecedor & Anexos</h2>
 			<div class="row">
 				<div class="col-md-6">
@@ -424,7 +417,8 @@
 
 			</div>
 			<h2>Documentação</h2>
-			<div id="divAnexar">
+			<p id="divTxtSemAnexo" style="display: none;">A categoria PA (Subempreiteiros/Freteiros) não exige o envio de documentação.</p>
+			<div id="divAnexar" style="display: none;">
 				<div class="row">
 					<div class="col-md-6">
 						<label for="">Anexo:</label>
@@ -452,9 +446,9 @@
 				<br>
 			</div>
 
-			<b>Documentos anexados:</b>
-			<div>
-				<div class="row" style="margin-bottom: 10px;">
+			<div id="divDocsAnexados" style="display: none;">
+				<b>Documentos anexados:</b>
+				<div class="row" style="margin-bottom: 10px;" id="divDocEquip">
 					<div class="col-md-2">
 						<span class="spanStatusAnexos">❌</span>
 						<b>Documentação do Equipamento: </b>
@@ -463,7 +457,7 @@
 						<div id="divListaAnexosDocumentacaoEquipamento" class="divListaAnexos" style="display: flex;"></div>
 					</div>
 				</div>
-				<div class="row" style="margin-bottom: 10px;">
+				<div class="row" style="margin-bottom: 10px;" id="divFotoEquip">
 					<div class="col-md-2">
 						<span class="spanStatusAnexos">❌</span>
 						<b>Foto do Equipamento: </b>
@@ -472,7 +466,7 @@
 						<div id="divListaAnexosFotoEquipamento" class="divListaAnexos" style="display: flex;"></div>
 					</div>
 				</div>
-				<div class="row" style="margin-bottom: 10px;">
+				<div class="row" style="margin-bottom: 10px;" id="divLaudoTecnico">
 					<div class="col-md-2">
 						<span class="spanStatusAnexos">❌</span>
 							<b style="display: inline-grid">
@@ -485,7 +479,7 @@
 						<div id="divListaAnexosLaudo" class="divListaAnexos" style="display: flex;"></div>
 					</div>
 				</div>
-				<div class="row" style="margin-bottom: 10px;">
+				<div class="row" style="margin-bottom: 10px;" id="divPlanoManut">
 					<div class="col-md-2">
 						<span class="spanStatusAnexos">❌</span>
 						<b>Plano de Manutenção: </b>							
@@ -494,7 +488,7 @@
 						<div id="divListaAnexosPlanoManutencao" class="divListaAnexos" style="display: flex;"></div>
 					</div>
 				</div>
-				<div class="row" style="margin-bottom: 10px;">
+				<div class="row" style="margin-bottom: 10px;" id="divArt">
 					<div class="col-md-2">
 						<span class="spanStatusAnexos">❌</span>
 						<b style="display: inline-grid">
@@ -509,7 +503,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="pagina" data-index="4" id="paginaHistorico">
+		<div class="pagina" data-index="3" id="paginaHistorico">
 			<h2>Histórico</h2>
 			<div id="divOpcoesAprovacao" style="display: none;">
 				<div class="row">
@@ -552,11 +546,10 @@
 			</button>
 	
 			<div class="bolinhas" style="overflow-x: scroll">
-				<div class="pagination pagination-active" data-index="0">Identificação</div>
-				<div class="pagination" data-index="1">Detalhes</div>
-				<div class="pagination" data-index="2">Operacional</div>
-				<div class="pagination" data-index="3">Fornecedor & Anexo</div>
-				<div class="pagination" data-index="4">Histórico e Decisão</div>
+				<div class="pagination pagination-active" data-index="0">Dados Gerais</div>
+				<div class="pagination" data-index="1">Operacional</div>
+				<div class="pagination" data-index="2">Fornecedor & Anexo</div>
+				<div class="pagination" data-index="3">Histórico e Decisão</div>
 			</div>
 	
 			<button id="btn-avancar" type="button">
