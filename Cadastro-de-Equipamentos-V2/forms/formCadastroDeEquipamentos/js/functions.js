@@ -246,6 +246,8 @@ function promiseBuscaModelosDeEquipamentosDoSisma(categoria) {
 
     } else if (categoria == "PA") {
         codigoEspecie = 5
+    } else {
+        return;
     }
 
     return new Promise((resolve, reject)=>{
@@ -267,6 +269,13 @@ function promiseBuscaModelosDeEquipamentosDoSisma(categoria) {
 }
 function preencheOptionsDosModelos() {
     var previousIDCLOP = $("#IDCLOP").val(); // captura ANTES do clear() apagar
+
+    var categoria = $("#categoria").val() ? $("#categoria").val() : $("#categoria").text();
+
+    // Quando categoria "Outros" não executa a função sobre Modelos
+    if (categoria == "Outros" || categoria == "Outros (Sem Abastecimento)") {
+        return;
+    }
 
     if (!$("#modelo")[0].selectize) {
         $("#modelo").selectize({
