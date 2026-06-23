@@ -10,7 +10,7 @@
     transform-style: preserve-3d;
     transform-origin: left center;
     margin-top: 100px;
-    margin-bottom: 100px;
+    margin-bottom: 20px;
 }
 .pagina.ativa {
     opacity: 1;
@@ -49,4 +49,30 @@
     font-weight: bold;
     background: #ffa751 !important;
     color: white;
+}
+
+/* Seleciona todas as .pagina que NÃO possuem a classe .ativa */
+.pagina:not(.ativa) {
+
+  /* Colapsa completamente a altura do elemento */
+  height: 0 !important;
+
+  /* Esconde qualquer conteúdo que ultrapasse a altura (0) */
+  overflow: hidden !important;
+
+  /* Remove margem superior para não deixar espaço vazio */
+  margin-top: 0 !important;
+
+  /* Remove margem inferior para não afetar o layout */
+  margin-bottom: 0 !important;
+}
+
+/* Seleciona apenas a página atualmente ativa/visível */
+.pagina.ativa {
+
+  /* Permite que a altura se ajuste automaticamente ao conteúdo */
+  height: auto !important;
+
+  /* Permite que o conteúdo seja exibido normalmente */
+  overflow: visible !important;
 }
