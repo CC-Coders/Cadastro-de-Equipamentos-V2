@@ -111,28 +111,28 @@ function cadastraEquipamento(constraints){
 }
 function cadastraOutros(equipamento, CGCCFO, NUMPROCESS, isPAouMA){
     try {
-    var NOME = getFornecedorPorCNPJ(isPAouMA, CGCCFO)[0].NOME;
-    var query = "INSERT INTO EQUIPAMENTOS_CONTRATOS_AUXILIAR_OUTROS (";
-    query += "  CODCOLIGADA, ";
-    query += "  CODCCUSTO, ";
-    query += "  PREFIXO, ";
-    query += "  DESCRICAO, ";
-    query += "  FORNECEDOR, ";
-    query += "  FORNECEDOR_CNPJ, ";
-    query += "  DATA_CHEGADA, ";
-    query += "  HORAS_ATUAIS, ";
-    query += "  KM_ATUAIS, ";
-    query += "  VALOR_LOCACAO, ";
-    query += "  NUMPROCES_CADASTROEQUIPAMENTOS, ";
-    query += "  VALOR_MOBILIZADO, ";
-    query += "  UN_MOBILIZADO, ";
-    query += "  VALOR_EXTRA, ";
-    query += "  UN_EXTRA, ";
-    query += "  STATUS, ";
-    query += "  QUANTIDADE)";
-    query += " VALUES (?,?,?,?,?,?,?,?,?,? ,?,?,?,?,?,?,?)";
+        var NOME = getFornecedorPorCNPJ(isPAouMA, CGCCFO)[0].NOME;
+        var query = "INSERT INTO EQUIPAMENTOS_CONTRATOS_AUXILIAR_OUTROS (";
+        query += "  CODCOLIGADA, ";
+        query += "  CODCCUSTO, ";
+        query += "  PREFIXO, ";
+        query += "  DESCRICAO, ";
+        query += "  FORNECEDOR, ";
+        query += "  FORNECEDOR_CNPJ, ";
+        query += "  DATA_CHEGADA, ";
+        query += "  HORAS_ATUAIS, ";
+        query += "  KM_ATUAIS, ";
+        query += "  VALOR_LOCACAO, ";
+        query += "  NUMPROCES_CADASTROEQUIPAMENTOS, ";
+        query += "  VALOR_MOBILIZADO, ";
+        query += "  UN_MOBILIZADO, ";
+        query += "  VALOR_EXTRA, ";
+        query += "  UN_EXTRA, ";
+        query += "  STATUS, ";
+        query += "  QUANTIDADE)";
+        query += " VALUES (?,?,?,?,?,?,?,?,?,? ,?,?,?,?,?,?,?)";
 
-        executeInsert(query, [
+        var idGerado = executeInsert(query, [
             {type:"int", value:equipamento.CODCOLIGADA },
             {type:"varchar", value:equipamento.CODCCUSTO },
             {type:"varchar", value:equipamento.PREFIXO },
@@ -151,6 +151,17 @@ function cadastraOutros(equipamento, CGCCFO, NUMPROCESS, isPAouMA){
             {type:"int", value:1 },
             {type:"int", value:equipamento.QUANTIDADE },
         ], "/jdbc/CastilhoCustom");
+
+        // Faz UPDATE do campo PREFIXO com o ID da linha, para poder usar em relações no Revitalização Contratos
+        var updateQuery = "UPDATE EQUIPAMENTOS_CONTRATOS_AUXILIAR_OUTROS SET PREFIXO = ? WHERE ID = ?"
+        executaUpdate(updateQuery, [
+            { type: "varchar", value: idGerado },
+            { type: "int", value: idGerado },
+        ], "/jdbc/CastilhoCustom");
+
+        log.info("## UPDATE ID da tabela EQUIPAMENTOS_CONTRATOS_AUXILIAR_OUTROS foi feito");
+
+        return idGerado;
 
     } catch (error) {
        var msg = "";
@@ -240,7 +251,6 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ, conn
         query += " NUMEBEM, ";//ID da Solicitacao
         query += " POTENCIAHP, ";//Potencia
         query += " CODITERC, ";//ID do Fornecedor quando MA
-        query += " DESCRICAO, ";//Descricao
         query += " ALUGUEL_CONTRATO, "//Valor de Locação
         query += " NUMSERIE,"//Numero de Serie
         query += " CODIPAIS,"//Pais
@@ -298,7 +308,7 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ, conn
 
         query += " CODIINES)";//STATUS
         query += " VALUES ";
-        query += "(?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?)";
+        query += "(?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?)";
 
         log.info("dsInsereEquipamentoSisma query:");
         log.dir(query);
@@ -329,7 +339,6 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ, conn
             { type: "int", value: NUMPROCESS },//NUMEBEM
             { type: "int", value: EQUIPAMENTO.POTENCIAHP },//POTENCIAHP
             { type: "int", value: isPAouMA == "PA" ? fornecedor.CODITERC : 0 },//CODIPROP
-            { type: "varchar", value: EQUIPAMENTO.DESCRICAO },//DESCRICAO
             { type: "float", value: EQUIPAMENTO.ALUGUEL_CONTRATO },//ALUGUEL_CONTRATO
             { type: "varchar", value: EQUIPAMENTO.NUMECHAS },//NUMSERIE
             { type: "int", value: "0" },//CODIPAIS
@@ -388,6 +397,8 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ, conn
             { type: "int", value: "0" },//CODIINES
         ], conn);
 
+        buscaEAtualizaModeloEquipNoSisma();
+
         log.info("dsInsereEquipamentoSisma executou insert");
         log.dir(retorno);
         return retorno;
@@ -413,6 +424,53 @@ function insereEquipamento(IDEQUI, EQUIPAMENTO, NUMPROCESS, isPAouMA, CNPJ, conn
 
             // Safely rethrow as standard JS error
             throw "Erro ao executar Dataset: " + msg;
+    }
+
+    // Ao inves de atualizar a coluna DESCRICAO na tabela EQUIPAMENTO com o a descrição informada na Solicit
+    // Atualiza com o nome real do Modelo que foi cadastrado no SISMA, tanto PA quando MA.
+    //
+    // Porque quando busca e abre o cadastro do equip pela 1º vez no SISMA ele fica com um "bug" visual
+    // de mostrar essa descrição informada na solicit, sendo que deveria ser o Modelo.
+    //
+    // Isso é "corrigido" quando se abre o cadastro no SISMA e é clicado em "Gravar" mesmo que não altere nada.
+    function buscaEAtualizaModeloEquipNoSisma() {
+        try {
+            var query = "";
+            query += "SELECT DESCRRESUM FROM MODELO WHERE IDMODE = ? ";
+
+            var descricaoModelo = executaQuery(query, [
+                { type: "int", value: EQUIPAMENTO.IDMODE }
+            ], conn);
+
+            var updateQuery = "UPDATE EQUIPAMENTO SET DESCRICAO = ? WHERE IDEQUI = ?";
+            executaUpdate(updateQuery, [
+                { type: "varchar", value: descricaoModelo[0].DESCRRESUM },
+                { type: "int", value: IDEQUI }
+            ], conn);
+
+            log.info("## UPDATE tabela EQUIPAMENTO, coluna DESCRICAO (nome modelo) foi feito");
+
+        } catch (error) {
+                var msg = "";
+                // Try to extract useful message safely
+                if (error && error.javaException) {
+                    msg = error.javaException.getMessage();
+                } else if (error && error.message) {
+                    if (error.message.Error) {
+                    }else{
+                        msg = error.message;
+                    }
+                } else {
+                    msg = String(error);
+                }
+
+                log.error("ERRO==============> " + msg);
+                log.error("Type of error: " + typeof error);
+                log.error("Type of msg: " + typeof msg);
+
+                // Safely rethrow as standard JS error
+                throw "Erro ao executar Dataset: " + msg;
+        }
     }
 }
 function insereTransfdiv3(IDEQUI, EQUIPAMENTO, conn) { // conn = conexão compartilhada da transação, aberta em cadastraEquipamento
@@ -585,7 +643,7 @@ function insereCombustivel(IDEQUI, EQUIPAMENTO, conn) { // conn = conexão compa
             { type: "int", value: "1" }, // CONTROLACONSUMO
             { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST },
             { type: "float", value: EQUIPAMENTO.CAPATANQ_ABAST },
-            { type: "int", value: EQUIPAMENTO.PRINCIPAL },
+            { type: "int", value: "1" }, // PRINCIPAL
             { type: "float", value: EQUIPAMENTO.CONSUMO_KM || 0 },
             { type: "float", value: EQUIPAMENTO.CONSUMO_HORA || 0 },
             { type: "int", value: EQUIPAMENTO.CODIUNID_CAPACIDADE_COMBUSTIVEL },
@@ -916,6 +974,7 @@ function insereObservacaoEquip(IDEQUI, EQUIPAMENTO, conn) { // conn = conexão c
     }
 }
 
+// Cadastro na CastilhoCustom para usar os equipamentos no Revitalização Contratos
 function insereCadastroAuxiliar(EQUIPAMENTO, conn) { // conn = conexão compartilhada da transação (para o banco CastilhoCustom)
     try {
         var query = "INSERT INTO EQUIPAMENTOS_CONTRATOS_AUXILIAR (";
@@ -1139,14 +1198,36 @@ function lancaErroSeConstraintsObrigatoriasNaoInformadas(constraints, listConstr
         }
     }
 }
-function executaQuery(query, constraints, dataSource) {
-    try {
-        var dataSource = dataSource;
-        var ic = new javax.naming.InitialContext();
-        var ds = ic.lookup(dataSource);
+function executaQuery(query, constraints, dataSourceOrConn) {
+    // O terceiro parâmetro era sempre uma string com o nome do banco (ex: "/jdbc/Sisma").
+    // Renomeamos para dataSourceOrConn porque agora pode ser duas coisas:
+    //   - Uma string "/jdbc/Sisma" -> comportamento antigo, abre e fecha conexão aqui dentro
+    //   - Um objeto de conexão já aberta -> usa ela e NÃO fecha (quem abriu é responsável)
 
-        var conn = ds.getConnection();
-        var stmt = conn.prepareStatement(query);
+    try {
+        log.info("executandoQuery");
+        log.info(query);
+        log.dir(constraints);
+
+        var ic = new javax.naming.InitialContext();
+
+        // ownConn = true -> veio como string, nós já abrimos a conexão aqui
+        // ownConn = false -> veio como conexão já aberta de fora (modo transação)
+        var ownConn = typeof dataSourceOrConn === "string";
+
+        if (ownConn) {
+            // Comportamento original: busca o banco pelo nome e abre uma conexão nova
+            var ds = ic.lookup(dataSourceOrConn);
+            conn = ds.getConnection();
+
+        } else {
+            // Modo transação: usa a conexão que veio de fora
+            // Essa conexão já tem autoCommit=false, então o INSERT fica pendente
+            // até o commit() ou roulback() lá em cadastraEquipamento
+            conn = dataSourceOrConn;
+        }
+
+        stmt = conn.prepareStatement(query);
 
         var counter = 1;
         for (var i = 0; i < constraints.length; i++) {
@@ -1208,7 +1289,10 @@ function executaQuery(query, constraints, dataSource) {
         if (stmt != null) {
             stmt.close();
         }
-        if (conn != null) {
+        // Só fecha conexão se foi a gente que abriu (ownConn = true)
+        // Se veio de fora (ownConn = false), deixa aberta - quem abriu fecha
+        // Fecha antes do commit/rollback cancela a transação inteira, evitando cadastro "quebrado"
+        if (ownConn && conn != null) {
             conn.close();
         }
     }
@@ -1265,18 +1349,13 @@ function executeInsert(query, constraints, dataSourceOrConn) {
         }
 
 
-        var hasResultSet = stmt.execute();
-        log.dir(hasResultSet);
-        if (hasResultSet) {
-            var rs = stmt.getResultSet();
-            log.info("result set");
-            log.dir(rs);
-            if (rs.next()) {
-                var id = rs.getInt(1);
-                log.info("id");
-                log.dir(id);
-                return id;
-            }
+        stmt.execute();
+
+        var generatedKeys = stmt.getGeneratedKeys();
+        if (generatedKeys.next()) {
+            var id = generatedKeys.getInt(1);
+            log.info("ID gerado: " + id);
+            return id;
         }
     } catch (error) {
         var msg = "";
@@ -1301,6 +1380,75 @@ function executeInsert(query, constraints, dataSourceOrConn) {
             // Safely rethrow as standard JS error
             throw "Erro ao executar Dataset: " + msg;
 
+    } finally {
+        if (stmt != null) {
+            stmt.close();
+        }
+        // Só fecha conexão se foi a gente que abriu (ownConn = true)
+        // Se veio de fora (ownConn = false), deixa aberta - quem abriu fecha
+        // Fecha antes do commit/rollback cancela a transação inteira, evitando cadastro "quebrado"
+        if (ownConn && conn != null) {
+            conn.close();
+        }
+    }
+}
+function executaUpdate(query, constraints, dataSourceOrConn) {
+    // O terceiro parâmetro era sempre uma string com o nome do banco (ex: "/jdbc/Sisma").
+    // Renomeamos para dataSourceOrConn porque agora pode ser duas coisas:
+    //   - Uma string "/jdbc/Sisma" -> comportamento antigo, abre e fecha conexão aqui dentro
+    //   - Um objeto de conexão já aberta -> usa ela e NÃO fecha (quem abriu é responsável)
+
+    try {
+        log.info("executandoQuery");
+        log.info(query);
+        log.dir(constraints);
+
+        var ic = new javax.naming.InitialContext();
+
+        // ownConn = true -> veio como string, nós já abrimos a conexão aqui
+        // ownConn = false -> veio como conexão já aberta de fora (modo transação)
+        var ownConn = typeof dataSourceOrConn === "string";
+
+        if (ownConn) {
+            // Comportamento original: busca o banco pelo nome e abre uma conexão nova
+            var ds = ic.lookup(dataSourceOrConn);
+            conn = ds.getConnection();
+
+        } else {
+            // Modo transação: usa a conexão que veio de fora
+            // Essa conexão já tem autoCommit=false, então o INSERT fica pendente
+            // até o commit() ou roulback() lá em cadastraEquipamento
+            conn = dataSourceOrConn;
+        }
+
+        var stmt = conn.prepareStatement(query);
+
+        var counter = 1;
+        for (var i = 0; i < constraints.length; i++) {
+            var val = constraints[i];
+            if (val.type == "int") {
+                stmt.setInt(counter, val.value);
+            }
+            else if (val.type == "float") {
+                stmt.setFloat(counter, val.value);
+            }
+            else if (val.type == "date") {
+                stmt.setString(counter, val.value);
+            }
+            else if (val.type == "datetime") {
+                stmt.setString(counter, val.value);
+            } else {
+                stmt.setString(counter, val.value);
+            }
+            counter++;
+        }
+
+        stmt.executeUpdate();
+        return true;
+
+    } catch (e) {
+        log.error("ERRO==============> " + e.message);
+        throw e;
     } finally {
         if (stmt != null) {
             stmt.close();
