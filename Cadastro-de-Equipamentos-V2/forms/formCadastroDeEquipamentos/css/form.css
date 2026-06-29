@@ -77,3 +77,35 @@ label.required::after {
   content: " *";
   color: #c00;
 }
+
+
+/* ------------------------------------------------ */
+
+
+/* Container geral */
+.selectize-control.form-control {
+  padding: 0;
+  border: none;
+  box-shadow: none;
+}
+
+/* Input do selectize */
+.selectize-control .selectize-input {
+  height: 34px;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: none;
+}
+
+/* Focus igual Fluig */
+.selectize-control .selectize-input.focus {
+  border-color: #66afe9;
+  outline: 0;
+}
+
+/* Dropdown */
+.selectize-dropdown {
+  border-radius: 4px;
+}
