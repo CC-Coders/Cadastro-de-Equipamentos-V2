@@ -72,7 +72,15 @@ async function loadTelaInicio(){
 
 }
 async function loadTelaAjuste() {
-    preenchePermissoesDoUsuario();
+    if ($("#userCode").val() == "FlavioHerculano") {
+        preenchePermissoesDoUsuario(true);
+
+    } else if ($("#userCode").val() == "roney.tomm" || $("#userCode").val() == "clerivan.falcao") { 
+        preenchePermissoesDoUsuario(true);
+
+    } else {
+        preenchePermissoesDoUsuario();
+    }
     insereOptionsDosFornecedores();
     asyncMontaHistorico();
     $("#tipoAnexo").val("");
@@ -96,6 +104,7 @@ async function loadTelaAjuste() {
     geraAnexos();
     geraTabelaCaracteristicasTecnicas();    
     alteraCategoriaDaSolicitacao();
+    alteraAutopropelidoDaSolicitacao();
     
     if ($("#checkboxTemMaoDeObra").is(":checked")) {
         $("#divValorMaoDeObra").show();
@@ -110,6 +119,7 @@ async function loadTelaCentralDeEquipamentos() {
     asyncMontaHistorico();
     geraTabelaCaracteristicasTecnicas();
     alteraCategoriaDaSolicitacao();
+    alteraAutopropelidoDaSolicitacao();
     preencheObras($("#CODCOLIGADA").val());
     geraAnexos();
     $("#divOpcoesAprovacao").show();
@@ -135,11 +145,12 @@ async function loadTelaCentralDeEquipamentos() {
 async function loadTelaQSST() {
     asyncMontaHistorico();
     geraAnexos();
+    alteraCategoriaDaSolicitacao();
     ajusta_reordenaColunasCategoriaPA();
+    alteraAutopropelidoDaSolicitacao();
     geraTabelaCaracteristicasTecnicas();
     modelos = await promiseBuscaModelosDeEquipamentosDoSisma($("#categoria").val());
     preencheOptionsDosModelos();
-    alteraCategoriaDaSolicitacao();
     $("#divOpcoesAprovacao").show();
     $("#divAnexar").hide();
     bloqueiaCampos();
@@ -156,6 +167,7 @@ async function loadTelaVIEW() {
     ajusta_reordenaColunasCategoriaPA();
     geraTabelaCaracteristicasTecnicas();
     alteraCategoriaDaSolicitacao();
+    alteraAutopropelidoDaSolicitacao();
 
     $("#coligada, #obra, #modelo, #classOperacional, #fornecedor").addClass("form-control");
 
@@ -218,6 +230,7 @@ function bindings() {
         $("#fabricante").val("");
         $("#classeMecanica").val("");
         $("#classOperacional").val("");
+        $("#autopropelido").val("");
 
         alteraCategoriaDaSolicitacao();
         ajusta_reordenaColunasCategoriaPA();
@@ -419,6 +432,7 @@ function bindings() {
 
 var beforeSendValidate = function () {
     const atividade = $("#atividade").val();
+
     if (atividade == ATIVIDADES.INICIO || atividade == ATIVIDADES.INICIO_0 || atividade == ATIVIDADES.CENTRAL_DE_EQUIPAMENTOS) {
         var valida = validateForm();
         if (valida.length > 0) {
@@ -528,12 +542,12 @@ var beforeSendValidate = function () {
             }
 
             // A Central de Equip não controla capacidade tanque quando PA
-            if (!$("#litrosTanque").val() && $("#categoria").val() != "PA") {
+            if (!$("#litrosTanque").val()) {
                 errorMessage.push("Informe a Capacidade do Tanque");
             }
 
             // A Central de Equip não controla consumo quando PA
-            if (!$("#consumoMedio").val() && $("#categoria").val() != "PA") {
+            if (!$("#consumoMedio").val()) {
                 errorMessage.push("Informe o Consumo Médio");
             }
         }
@@ -547,29 +561,40 @@ var beforeSendValidate = function () {
         //
         // Ou estiver na atividade QSST e a decisão deles for "Aprovado"
         // Espeficficamente "Aprovado" pra não impedir de reprovar e voltar ao solicitante por falta de anexo.
-        if (atividade == ATIVIDADES.INICIO || atividade == ATIVIDADES.INICIO_0 || (atividade == ATIVIDADES.QSST && $("#decisao").val() == "Aprovado")) {
+        //
+        // Quando for algum usuário da lista, não obriga/valida anexos
+        if (
+        (
+            atividade == ATIVIDADES.INICIO 
+            || atividade == ATIVIDADES.INICIO_0 
+            || (atividade == ATIVIDADES.QSST && $("#decisao").val() == "Aprovado")
+        )
+        && $("#userCode").val() != "FlavioHerculano" 
+        && $("#userCode").val() != "flavio.herculano"
+        //&& $("#userCode").val() != "clerivan.falcao"
+        ) {
 
             // A Central de Equip não pede anexo quando PA
-            if ($("#categoria").val() != "Outros" && $("#categoria").val() != "PA") {
-                if ($("#anexosDocumentosEquipamento").val() == "" && $("#autopropelido").val() == "NAO") {
+            if ($("#categoria").val() != "PA") {
+                if ($("#anexosDocumentosEquipamento").val() == "" && $("#autopropelido").val() == "NAO" && $("#categoria").val() != "Outros") {
                     errorMessage.push("Anexe a Documentação do Equipamento");
                 }
-                if ($("#anexosFotosEquipamentos").val() == "" && $("#autopropelido").val() == "SIM") {
+                if ($("#anexosFotosEquipamentos").val() == "") {
                     errorMessage.push("Anexe a Foto do Equipamento");
                 }
-                if ($("#anexosLaudoTecnico").val() == "" && $("#autopropelido").val() == "NAO") {
+                if ($("#anexosLaudoTecnico").val() == "" && $("#autopropelido").val() == "NAO" && $("#categoria").val() != "Outros") {
                     errorMessage.push("Anexe o Laudo Técnico");
                 }
-                if ($("#anexpsPlanoManutencao").val() == "" && $("#autopropelido").val() == "NAO") {
+                if ($("#anexpsPlanoManutencao").val() == "" && $("#autopropelido").val() == "NAO" && $("#categoria").val() != "Outros") {
                     errorMessage.push("Anexe o Plano de Manutenção");
                 }
-                if ($("#anexosART").val() == "" && $("#autopropelido").val() == "NAO") {
+                if ($("#anexosART").val() == "" && $("#autopropelido").val() == "NAO" && $("#categoria").val() != "Outros") {
                     errorMessage.push("Anexe a ART");
                 }
-                if (!$("#dataVencimentoART").val() && $("#autopropelido").val() == "NAO") {
+                if (!$("#dataVencimentoART").val() && $("#autopropelido").val() == "NAO" && $("#categoria").val() != "Outros") {
                     errorMessage.push("Informe a Data de Vencimento da ART");
                 }   
-                if (!$("#dataVencimentoLaudo").val() && $("#autopropelido").val() == "NAO") {
+                if (!$("#dataVencimentoLaudo").val() && $("#autopropelido").val() == "NAO" && $("#categoria").val() != "Outros") {
                     errorMessage.push("Informe a Data de Vencimento do Laudo Técnico");
                 }
                 
