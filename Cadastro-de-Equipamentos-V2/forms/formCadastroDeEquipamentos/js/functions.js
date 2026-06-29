@@ -21,6 +21,8 @@ function alteraCategoriaDaSolicitacao() {
     // Para caso de alterar a categoria e os anexos não tiver de acordo...
     $("#autopropelido").trigger("change");
 
+    preencheOptionsAnexosPorCategoria(categoria);
+
     if (categoria == "") {
         $(".inputPA, .inputOutros, .inputMA").closest("div.inputGroup").hide();
         $("#divCombustivel").hide();
@@ -57,6 +59,33 @@ function alteraCategoriaDaSolicitacao() {
 
     } else {
         $("#divCombustivel").hide();
+    }
+
+    
+    function preencheOptionsAnexosPorCategoria(categoria) {
+        console.log("function preencheOptionsAnexosPorCategoria foi chamada.")
+        if (categoria == "Outros" || categoria == "Outros (Sem Abastecimento)") {
+
+            $("#tipoAnexo option").each(function () {
+                var isFoto = $(this).val() == "Foto do Equipamento";
+                    
+                if (isFoto) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+
+            // Anexos que não se usa nesse caso
+            $("#divDocEquip, #divLaudoTecnico, #divPlanoManut, #divArt").hide();
+        
+        } else {
+            // Mostra todas as opções de anexo novamente
+            $("#tipoAnexo option").show();
+            $("#tipoAnexo").val("");
+
+            $("#divDocEquip, #divLaudoTecnico, #divPlanoManut, #divArt").show();
+        }
     }
 }
 function alteraAutopropelidoDaSolicitacao() {
