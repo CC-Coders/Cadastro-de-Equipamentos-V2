@@ -28,7 +28,7 @@
     <processDefinitionVersionPK>
       <companyId>1</companyId>
       <processId>Cadastro de Equipamentos V2</processId>
-      <version>41</version>
+      <version>49</version>
     </processDefinitionVersionPK>
     <versionDescription></versionDescription>
     <formId>0</formId>
@@ -405,7 +405,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>1</expressionOrder>
-        <version>41</version>
+        <version>49</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition></condition>
@@ -417,7 +417,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>2</expressionOrder>
-        <version>41</version>
+        <version>49</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -431,7 +431,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>3</expressionOrder>
-        <version>41</version>
+        <version>49</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -445,7 +445,19 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>4</expressionOrder>
-        <version>41</version>
+        <version>49</version>
+        <sequence>14</sequence>
+      </conditionProcessStatePK>
+      <condition></condition>
+      <destinationSequenceId>19</destinationSequenceId>
+      <conditionType>1</conditionType>
+    </ConditionProcessState>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>5</expressionOrder>
+        <version>49</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition></condition>
@@ -457,7 +469,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>1</expressionOrder>
-        <version>41</version>
+        <version>49</version>
         <sequence>26</sequence>
       </conditionProcessStatePK>
       <condition></condition>
@@ -469,7 +481,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>2</expressionOrder>
-        <version>41</version>
+        <version>49</version>
         <sequence>26</sequence>
       </conditionProcessStatePK>
       <condition></condition>
@@ -481,11 +493,11 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>3</expressionOrder>
-        <version>41</version>
+        <version>49</version>
         <sequence>26</sequence>
       </conditionProcessStatePK>
       <condition></condition>
-      <destinationSequenceId>19</destinationSequenceId>
+      <destinationSequenceId>8</destinationSequenceId>
       <conditionType>1</conditionType>
     </ConditionProcessState>
   </list>
@@ -668,14 +680,14 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <version>1</version>
-        <linkSequence>29</linkSequence>
+        <linkSequence>30</linkSequence>
       </processLinkPK>
       <actionLabel></actionLabel>
       <returnPermited>false</returnPermited>
       <initialStateSequence>26</initialStateSequence>
-      <finalStateSequence>19</finalStateSequence>
+      <finalStateSequence>5</finalStateSequence>
       <returnLabel></returnLabel>
-      <name>Outros</name>
+      <name>PA</name>
       <automaticLink>false</automaticLink>
       <defaultLink>false</defaultLink>
       <type>0</type>
@@ -685,14 +697,14 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <version>1</version>
-        <linkSequence>30</linkSequence>
+        <linkSequence>31</linkSequence>
       </processLinkPK>
       <actionLabel></actionLabel>
       <returnPermited>false</returnPermited>
       <initialStateSequence>26</initialStateSequence>
-      <finalStateSequence>5</finalStateSequence>
+      <finalStateSequence>8</finalStateSequence>
       <returnLabel></returnLabel>
-      <name>PA</name>
+      <name>Outros</name>
       <automaticLink>false</automaticLink>
       <defaultLink>false</defaultLink>
       <type>0</type>
@@ -1013,7 +1025,7 @@ function getServerURL() {&#xd;
   <list>
     <SwimLane>
       <color>FFFFFF</color>
-      <height>431</height>
+      <height>461</height>
       <width>931</width>
       <positionX>10</positionX>
       <positionY>10</positionY>
@@ -1029,7 +1041,7 @@ function getServerURL() {&#xd;
     </SwimLane>
     <SwimLane>
       <color>9F9F9F</color>
-      <height>215</height>
+      <height>230</height>
       <width>901</width>
       <positionX>40</positionX>
       <positionY>10</positionY>
@@ -1045,10 +1057,10 @@ function getServerURL() {&#xd;
     </SwimLane>
     <SwimLane>
       <color>C0C0C0</color>
-      <height>216</height>
+      <height>231</height>
       <width>901</width>
       <positionX>40</positionX>
-      <positionY>225</positionY>
+      <positionY>240</positionY>
       <stateName>Assignee</stateName>
       <type>2</type>
       <parentSequence>1</parentSequence>
@@ -1067,7 +1079,7 @@ function getServerURL() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>41</version>
+        <version>49</version>
         <linkSequence>22</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1078,7 +1090,7 @@ function getServerURL() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>41</version>
+        <version>49</version>
         <linkSequence>20</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1089,7 +1101,7 @@ function getServerURL() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>41</version>
+        <version>49</version>
         <linkSequence>21</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1100,7 +1112,7 @@ function getServerURL() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>41</version>
+        <version>49</version>
         <linkSequence>23</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1111,7 +1123,7 @@ function getServerURL() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>41</version>
+        <version>49</version>
         <linkSequence>18</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1122,29 +1134,7 @@ function getServerURL() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>41</version>
-        <linkSequence>29</linkSequence>
-        <bendSequence>1</bendSequence>
-      </processLinkBendPK>
-      <positionX>160</positionX>
-      <positionY>420</positionY>
-    </ProcessLinkBend>
-    <ProcessLinkBend>
-      <processLinkBendPK>
-        <companyId>1</companyId>
-        <processId>wkfCadastroDeEquipamentos</processId>
-        <version>41</version>
-        <linkSequence>29</linkSequence>
-        <bendSequence>2</bendSequence>
-      </processLinkBendPK>
-      <positionX>772</positionX>
-      <positionY>420</positionY>
-    </ProcessLinkBend>
-    <ProcessLinkBend>
-      <processLinkBendPK>
-        <companyId>1</companyId>
-        <processId>wkfCadastroDeEquipamentos</processId>
-        <version>41</version>
+        <version>49</version>
         <linkSequence>30</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1155,12 +1145,34 @@ function getServerURL() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>41</version>
+        <version>49</version>
         <linkSequence>30</linkSequence>
         <bendSequence>2</bendSequence>
       </processLinkBendPK>
       <positionX>402</positionX>
       <positionY>187</positionY>
+    </ProcessLinkBend>
+    <ProcessLinkBend>
+      <processLinkBendPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>49</version>
+        <linkSequence>31</linkSequence>
+        <bendSequence>1</bendSequence>
+      </processLinkBendPK>
+      <positionX>157</positionX>
+      <positionY>438</positionY>
+    </ProcessLinkBend>
+    <ProcessLinkBend>
+      <processLinkBendPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>49</version>
+        <linkSequence>31</linkSequence>
+        <bendSequence>2</bendSequence>
+      </processLinkBendPK>
+      <positionX>402</positionX>
+      <positionY>438</positionY>
     </ProcessLinkBend>
   </list>
   <list/>
@@ -1243,6 +1255,24 @@ function getServerURL() {&#xd;
       <ruleOrder>2</ruleOrder>
       <field>decisaoCentral</field>
       <value>Aprovado</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
+      <expressionOrder>5</expressionOrder>
+      <ruleOrder>1</ruleOrder>
+      <field>decisaoSeguranca</field>
+      <value>Aprovado</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
+      <expressionOrder>5</expressionOrder>
+      <ruleOrder>2</ruleOrder>
+      <field>categoria</field>
+      <value>Outros</value>
       <operator>1</operator>
       <valueType>1</valueType>
     </ConditionProcessAutomaticRules>
