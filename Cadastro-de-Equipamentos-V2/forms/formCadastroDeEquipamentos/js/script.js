@@ -561,18 +561,7 @@ var beforeSendValidate = function () {
         //
         // Ou estiver na atividade QSST e a decisão deles for "Aprovado"
         // Espeficficamente "Aprovado" pra não impedir de reprovar e voltar ao solicitante por falta de anexo.
-        //
-        // Quando for algum usuário da lista, não obriga/valida anexos
-        if (
-        (
-            atividade == ATIVIDADES.INICIO 
-            || atividade == ATIVIDADES.INICIO_0 
-            || (atividade == ATIVIDADES.QSST && $("#decisao").val() == "Aprovado")
-        )
-        && $("#userCode").val() != "FlavioHerculano" 
-        && $("#userCode").val() != "flavio.herculano"
-        //&& $("#userCode").val() != "clerivan.falcao"
-        ) {
+        if (atividade == ATIVIDADES.INICIO || atividade == ATIVIDADES.INICIO_0 || (atividade == ATIVIDADES.QSST && $("#decisao").val() == "Aprovado")) {
 
             // A Central de Equip não pede anexo quando PA
             if ($("#categoria").val() != "PA") {
