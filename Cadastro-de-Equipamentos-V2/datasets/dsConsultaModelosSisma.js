@@ -1,7 +1,7 @@
 function createDataset(fields, constraints, sortFields) {
     try {
         var constraints = getConstraints(constraints);
-        lancaErroSeConstraintsObrigatoriasNaoInformadas(constraints, []);
+        lancaErroSeConstraintsObrigatoriasNaoInformadas(constraints, ["CODIESPE"]);
 
         var query = "";
         query += "SELECT ";
@@ -22,14 +22,19 @@ function createDataset(fields, constraints, sortFields) {
         query += "   MODELO ";
         query += "   INNER JOIN FABRICANTE ON FABRICANTE.CODIFABR = MODELO.CODIFABR ";
         query += "   INNER JOIN CLASSMECAN ON CLASSMECAN.CODICLME = MODELO.CODICLME ";
-        query += "   INNER JOIN CLASSOPERA ON CLASSOPERA.IDCLOP = MODELO.IDCLOP";
-		query += "   INNER JOIN ITEMMODCARTEC ON MODELO.IDMODE = ITEMMODCARTEC.IDMODE";
-		query += "   INNER JOIN ITEMCARACTEC ON ITEMCARACTEC.ITEM = ITEMMODCARTEC.ITEM";
-		query += "   INNER JOIN UNIDADE ON ITEMCARACTEC.CODIUNID = UNIDADE.CODIUNID ";
+        query += "   INNER JOIN CLASSOPERA ON CLASSOPERA.IDCLOP = MODELO.IDCLOP ";
+		query += "   LEFT JOIN ITEMMODCARTEC ON MODELO.IDMODE = ITEMMODCARTEC.IDMODE ";
+		query += "   LEFT JOIN ITEMCARACTEC ON ITEMCARACTEC.ITEM = ITEMMODCARTEC.ITEM ";
+		query += "   LEFT JOIN UNIDADE ON ITEMCARACTEC.CODIUNID = UNIDADE.CODIUNID ";
         query += "WHERE ";
-        query += "   MODELO.CODIINES = 0;";
+        query += "   MODELO.CODIINES = 0 ";
+        query += "   AND MODELO.CODIESPE = ? ";
+        query += "   AND MODELO.CODIMODE <> 0 "; // Não retorna um modelo inválido ( "Não informado" ) do SISMA
+        query += "   AND MODELO.DESCRRESUM NOT LIKE 'PE%' ";
 
-        var retorno = executaQuery(query, [], "/jdbc/Sisma");
+        var retorno = executaQuery(query, [
+            { type: "int", value: constraints.CODIESPE }
+        ], "/jdbc/Sisma");
         return returnDataset("SUCCESS","",JSON.stringify(retorno));
 
     } catch (error) {
