@@ -13,40 +13,276 @@ function preencheObras(CODCOLIGADA){
     $("#obra")[0].selectize.addOption(obras.map(e=>{return {value:`${e.CODCCUSTO} - ${e.perfil}`, text:`${e.CODCCUSTO} - ${e.perfil}`}}));
     $("#obra")[0].selectize.setValue(previousValue);
 }
-function alteraCategoriaDaSolicitacao(categoria) {
+function alteraCategoriaDaSolicitacao() {
+
+    // text por causa de modo VIEW que os campos ficam span
+    var categoria = $("#categoria").val() ? $("#categoria").val() : $("#categoria").text();
+
+    // Para caso de alterar a categoria e os anexos não tiver de acordo...
+    $("#autopropelido").trigger("change");
+
+    preencheOptionsAnexosPorCategoria(categoria);
+
     if (categoria == "") {
         $(".inputPA, .inputOutros, .inputMA").closest("div.inputGroup").hide();
-    }
-    if (categoria == "MA") {
+        $("#divCombustivel").hide();
+
+    } else if (categoria == "MA" || categoria == "MA (Máquina Alugada)") {
         $(".inputPA, .inputOutros").closest("div.inputGroup").hide();
         $(".inputMA").closest("div.inputGroup").show();
-        $(".divConsumo").show();
-        $("#divAnexar").show();
-        $(".divListaAnexos").closest(".row").show();
+        $("#divAnexar, #divDocsAnexados, #divCombustivel, #divAutopropelido").show(); 
+        $("#prefixo").closest("div").show(); 
         $("#CODIESPE").val(1);
-    }
-    if (categoria == "PA") {
+
+        // Oculta o texto que não precisa de anexo (quando PA)
+        $("#divTxtSemAnexo").hide();
+
+    } else if (categoria == "PA" || categoria == "PA (Subempreiteiros/Freteiros)") {
         $(".inputMA, .inputOutros").closest("div.inputGroup").hide();
         $(".inputPA").closest("div.inputGroup").show();
-        $(".divConsumo").hide(); 
-        $("#divAnexar").hide();   
-        $(".divListaAnexos").closest(".row").hide();
+        $("#divAnexar, #divDocsAnexados, #divAutopropelido").hide();
+        $("#prefixo").closest("div").show(); 
         $("#CODIESPE").val(5);
-    }
-    if (categoria == "Outros") {
+
+        // Mostra o texto que não precisa de anexo (quando PA)
+        $("#divTxtSemAnexo").show();
+
+    } else if (categoria == "Outros" || categoria == "Outros (Sem Abastecimento)") {
         $(".inputMA, .inputPA").closest("div.inputGroup").hide();
         $(".inputOutros").closest("div.inputGroup").show();
-        $(".divConsumo").show(); 
-        $("#divAnexar").show();
-        $(".divListaAnexos").closest(".row").show();
+        $("#divAnexar, #divDocsAnexados").show();
+        $("#prefixo").closest("div").hide();
+        $("#divAutopropelido").hide();
+
+        // Oculta o texto que não precisa de anexo (quando PA)
+        $("#divTxtSemAnexo").hide();
+
+    } else {
+        $("#divCombustivel").hide();
+    }
+
+    
+    function preencheOptionsAnexosPorCategoria(categoria) {
+        console.log("function preencheOptionsAnexosPorCategoria foi chamada.")
+        if (categoria == "Outros" || categoria == "Outros (Sem Abastecimento)") {
+
+            $("#tipoAnexo option").each(function () {
+                var isFoto = $(this).val() == "Foto do Equipamento";
+                    
+                if (isFoto) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+
+            // Anexos que não se usa nesse caso
+            $("#divDocEquip, #divLaudoTecnico, #divPlanoManut, #divArt").hide();
         
+        } else {
+            // Mostra todas as opções de anexo novamente
+            $("#tipoAnexo option").show();
+            $("#tipoAnexo").val("");
+
+            $("#divDocEquip, #divLaudoTecnico, #divPlanoManut, #divArt").show();
+        }
+    }
+}
+function alteraAutopropelidoDaSolicitacao() {
+
+    // text por causa de modo VIEW que os campos ficam span
+    var categoria = $("#categoria").val() ? $("#categoria").val() : $("#categoria").text();
+    var autopropelido = $("#autopropelido").val() ? $("#autopropelido").val() : $("#autopropelido").text();
+
+    if (categoria == "MA" || categoria == "MA (Máquina Alugada)") {
+
+        if (autopropelido == "SIM" || autopropelido == "Sim") {
+
+            $("#tipoAnexo option").each(function () {
+                var isFoto = $(this).val() == "Foto do Equipamento";
+                
+                if (isFoto) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+
+            // Anexos que não se usa nesse caso
+            $("#divDocEquip, #divLaudoTecnico, #divPlanoManut, #divArt").hide();
+
+        // NÃO
+        } else {
+            // Mostra todas as opções de anexo novamente
+            $("#tipoAnexo option").show();
+            $("#tipoAnexo").val("");
+
+            $("#divDocEquip, #divLaudoTecnico, #divPlanoManut, #divArt").show();
+        }
+        
+    } else {
+        $("#autopropelido").val(""); // Limpa o campo
+
+        // Mostra todas as opções de anexo novamente
+        $("#tipoAnexo option").show();
+        $("#tipoAnexo").val("");
+
+        $("#divDocEquip, #divLaudoTecnico, #divPlanoManut, #divArt").show();
+    }
+}
+function ajusta_reordenaColunasCategoriaPA() {
+    var categoria = $("#categoria").val() ? $("#categoria").val() : $("#categoria").text();
+
+    if (categoria == "PA" || categoria == "PA (Subempreiteiros/Freteiros)") {
+
+        // Oculta as rows durante a reordenação para evitar o usuário ver a transição
+        $("#rowModelo, #rowFabricante").hide();
+
+         // Cria um div col-md-3 com flex para colocar os dois anos lado a lado dentro do col-md-3
+        var wrapperColunasAnos = $('<div class="col-md-3 inputGroup" id="divWrapperColunasAnos" style="display: flex; gap: 8px;"></div>');
+
+        // Move os divs de Ano Fabricação e Ano Modelo para dentro do wrapper:
+        // - Remove col-md-3 deles pois agora o wrapper é quem ocupa o col-md-3
+        // - Aplica flex:1 para que os dois dividam o espaço igual dentro do wrapper
+        // - Appenda os dois dentro do wrapperColunasAnos
+        $("#divAnoFabricante, #divAnoModelo")
+            .removeClass("col-md-3")
+            .css("flex", "1")
+            .appendTo(wrapperColunasAnos);
+
+        // Move #divFabricante (que estava em #rowFabricante) e o wrapper de anos para o final de #rowModelo
+        // Ficando assim: Modelo , Classe Mecânica , Fabricante , [AnoFab + AnoMod]
+        $("#rowModelo").append($("#divFabricante"), wrapperColunasAnos);
+
+        // Mostra as rows novamente após a reordenação
+        $("#rowModelo, #rowFabricante").show();
+
+    // Para as outras Categorias
+    } else {
+        var wrapper = $("#divWrapperColunasAnos");
+
+        if (wrapper.length) {
+
+            // Oculta as rows durante a restauração para evitar flash visual
+            $("#rowModelo, #rowFabricante").hide();
+
+            // Restaura col-md-3 e move dics de volta para rowFabricante, antes de Potencia
+            $("#divAnoFabricante, #divAnoModelo")
+                .addClass("col-md-3")
+                .css("flex", "")
+                .insertBefore($("#rowFabricante .inputGroup:last"));
+
+            wrapper.remove();
+
+            // Move #divFabricante de volta para o início de #rowFabricante
+            $("#divFabricante").prependTo("#rowFabricante");
+
+            // Mostra as divs já reordenadas, sem flash delas se organizando
+            $("#rowModelo, #rowFabricante").show();
+        }
+
+        // Move Fabricante de volta para rowFabricante
+        $("#divFabricante").prependTo("#rowFabricante");
+    }
+
+}
+
+// Classe Operacional
+function preencheOptionsDasClassesOperacionais(previousValue) {
+    
+    if (!previousValue) {
+        previousValue = $("#IDCLOP").val() ? $("#IDCLOP").val() : $("#IDCLOP").text();
+    }
+
+    var classes = Array.from(
+        new Map(modelos
+            .filter(e => e.ID_CLASSEOPERACIONAL)
+            .map(e => [e.ID_CLASSEOPERACIONAL, { id: e.ID_CLASSEOPERACIONAL, nome: e.CLASSEOPERACIONAL }])
+        ).values()
+    ).sort((a, b) => a.nome.localeCompare(b.nome));
+
+    if ($("#classOperacional")[0].selectize) {
+        $("#classOperacional")[0].selectize.clear(true);
+        $("#classOperacional")[0].selectize.clearOptions();
+        $("#classOperacional")[0].selectize.addOption(
+            classes.map(e => ({ value: `${e.id} - ${e.nome}`, text: e.nome }))
+        );
+
+        var found = classes.find(e => e.id == previousValue);
+        if (found) {
+            $("#classOperacional")[0].selectize.setValue(`${found.id} - ${found.nome}`, true);
+            $("#IDCLOP").val(found.id);
+        }
+
+        return;
+    }
+
+    $("#classOperacional").selectize();
+    $("#classOperacional")[0].selectize.addOption(
+        classes.map(e => ({ value: `${e.id} - ${e.nome}`, text: e.nome }))
+    );
+
+    var found = classes.find(e => e.id == previousValue);
+    if (found) {
+        $("#classOperacional")[0].selectize.setValue(`${found.id} - ${found.nome}`, true);
+    }
+}
+function preencheModelosPorClasseOperacional(ID_CLASSEOPERACIONAL) {
+    var previousModelo = $("#IDMODE").val() ? $("#IDMODE").val() : $("#IDMODE").text();
+
+    var modelosFiltrados = modelos
+        .filter(e => e.ID_CLASSEOPERACIONAL == ID_CLASSEOPERACIONAL)
+        .sort((a, b) => a.MODELO.localeCompare(b.MODELO));
+
+    $("#modelo")[0].selectize.clear();
+    $("#modelo")[0].selectize.clearOptions();
+    $("#modelo")[0].selectize.addOption(
+        modelosFiltrados.map(e => ({ value: `${e.ID_MODELO} - ${e.MODELO}`, text: e.MODELO }))
+    );
+
+    if (previousModelo) {
+        var found = modelosFiltrados.find(e => e.ID_MODELO == previousModelo);
+        if (found) {
+            $("#modelo")[0].selectize.setValue(`${found.ID_MODELO} - ${found.MODELO}`, true);
+
+            $("#classOperacional")[0].selectize.setValue(`${found.ID_CLASSEOPERACIONAL} - ${found.CLASSEOPERACIONAL}`, true);
+
+            $("#fabricante").val(found.FABRICANTE);
+            $("#classeMecanica").val(found.CLASSEMECANICA);
+            $("#potenciaMotor").val(found.POTENCIAHP);
+
+            $("#IDMODE").val(found.ID_MODELO);
+            $("#CODICLME").val(found.ID_CLASSEMECANICA);
+            $("#IDCLOP").val(found.ID_CLASSEOPERACIONAL);
+            $("#CODIFABR").val(found.ID_FABRICANTE);
+        }
     }
 }
 
 // Modelo
-function promiseBuscaModelosDeEquipamentosDoSisma(){
+function promiseBuscaModelosDeEquipamentosDoSisma(categoria) {
+    var codigoEspecie = "";
+
+    // Codigo espécie SISMA depende se é MA ou PA
+    // MA - Especie 1 = Maquina Motora (Equip. Castilho e MA's)
+    // PA - Especie 6 = Terceiro (Equip. Teceiros, cobrança em Medição)
+
+    if (!categoria) {
+        return;
+
+    } else if (categoria == "MA") {
+        codigoEspecie = 1
+
+    } else if (categoria == "PA") {
+        codigoEspecie = 5
+    } else {
+        return;
+    }
+
     return new Promise((resolve, reject)=>{
-        DatasetFactory.getDataset("dsConsultaModelosSisma",null,null,null,{
+        DatasetFactory.getDataset("dsConsultaModelosSisma",null,[
+            DatasetFactory.createConstraint("CODIESPE", codigoEspecie, codigoEspecie, ConstraintType.MUST)
+        ],null,{
             success:ds=>{
                 if (ds.values[0].STATUS != "SUCCESS") {
                     reject(ds.values[0].MENSAGEM);
@@ -60,18 +296,38 @@ function promiseBuscaModelosDeEquipamentosDoSisma(){
         });
     });
 }
-function preencheOptionsDosModelos(){
-    var previousValue = $("#modelo").val();
-    var html = "<option></option>";
-    html+= modelos.map(e=> `<option value="${e.ID_MODELO} - ${e.MODELO}">${e.MODELO}</option>`).join("");
-    $("#modelo").html(html);
-    $("#modelo").val(previousValue);
-    $("#modelo").selectize({
-        onChange: async function (value, isOnInitialize) {
-            const [ID_MODELO, MODELO] = value.split(" - ");
-            preencheInformacoesDoModelo(ID_MODELO);
-        }
-    });
+function preencheOptionsDosModelos() {
+    var previousIDCLOP = $("#IDCLOP").val(); // captura ANTES do clear() apagar
+
+    var categoria = $("#categoria").val() ? $("#categoria").val() : $("#categoria").text();
+
+    // Quando categoria "Outros" não executa a função sobre Modelos
+    if (categoria == "Outros" || categoria == "Outros (Sem Abastecimento)") {
+        return;
+    }
+
+    if (!$("#modelo")[0].selectize) {
+        $("#modelo").selectize({
+            onChange: function(value) {
+                const [ID_MODELO] = value.split(" - ");
+                preencheInformacoesDoModelo(ID_MODELO);
+            }
+        });
+    } else {
+        $("#modelo")[0].selectize.clear();
+        $("#modelo")[0].selectize.clearOptions();
+    }
+
+    if ($("#categoria").val() == "MA") {
+        preencheOptionsDasClassesOperacionais(previousIDCLOP);
+    } else {
+        // PA e outros: popula modelos direto, sem passar pela classe
+        $("#modelo")[0].selectize.addOption(
+            modelos
+                .sort((a, b) => a.MODELO.localeCompare(b.MODELO))
+                .map(e => ({ value: `${e.ID_MODELO} - ${e.MODELO}`, text: e.MODELO }))
+        );
+    }
 }
 async function preencheInformacoesDoModelo(ID_MODELO){
     if (!ID_MODELO) {
@@ -95,19 +351,13 @@ async function preencheInformacoesDoModelo(ID_MODELO){
 
     $("#fabricante").val(found.FABRICANTE);
     $("#classeMecanica").val(found.CLASSEMECANICA);
-    $("#classOperacional").val(found.CLASSEOPERACIONAL);
+    $("#classOperacional")[0].selectize.setValue(`${found.ID_CLASSEOPERACIONAL} - ${found.CLASSEOPERACIONAL}`, true);
     $("#potenciaMotor").val(found.POTENCIAHP);
 
     $("#IDMODE").val(found.ID_MODELO);
     $("#CODICLME").val(found.ID_CLASSEMECANICA);
     $("#IDCLOP").val(found.ID_CLASSEOPERACIONAL);
     $("#CODIFABR").val(found.ID_FABRICANTE);
-
-    var combustivel = await promiseConsultaCombustivelPorModelo(found.ID_MODELO);
-    $("#tipoCombustivel").html("<option></option>");
-    for (const item of combustivel) {
-        $("#tipoCombustivel").append(`<option value="${item.CODIMATE}">${item.DESCRICAO}</option>`);
-    }
 
     var caracteristicasTecnicas = await promiseConsultaCaracteristicasTecnicas(found.ID_MODELO);
     $("#tableCaracteristicasTecnicas>tbody").html("");
@@ -187,18 +437,31 @@ function geraTabelaCaracteristicasTecnicas(){
     for (const item of json) {
         $("#tableCaracteristicasTecnicas>tbody").append(htmlItemCaracTec(item));
     }
+
+    // Adiciona mask no campo Valor da Caracteristica Técnica
+    // Nesse momento a tabela já estará gerada pela a função htmlItemCaracTec()
+    $(".VALOR").mask('000.000', {reverse:true});
 }
 function htmlItemCaracTec(data) {
     var permiteAlteracao = $("#atividade").val() != ATIVIDADES.QSST && $("#formMode").val() != "VIEW";
+
+    var TIPOCARAC = data.TIPOCARAC ?? "";
+    var CODICATC = data.CODICATC ?? "";
+    var ITEM = data.ITEM ?? "";
+    var DESCRICAO = data.DESCRICAO ?? "";
+    var VALOR_PADRAO = [null, undefined, "", "null"].includes(data.VALOR_PADRAO) ? 0 : data.VALOR_PADRAO;
+    var VALOR = [null, undefined, "", "null"].includes(data.VALOR_PADRAO) ? 0 : data.VALOR;
+    var SIGLA = data.SIGLA ?? "";
+
     var html =
         `<tr>
-            <input type="hidden" class="TIPOCARAC" value="${data.TIPOCARAC}"/>
-            <input type="hidden" class="CODICATC" value="${data.CODICATC}"/>
-            <input type="hidden" class="ITEM" value="${data.ITEM}"/>
-            <td><input class="form-control DESCRICAO" value="${data.DESCRICAO}" readonly /></td>
-            <td><input class="form-control VALOR_PADRAO" value="${data.VALOR_PADRAO}" readonly /></td>
-            <td><input class="form-control VALOR" value="${data.VALOR}" ${!permiteAlteracao ? "readonly" : ""} /></td>
-            <td><input class="form-control SIGLA" value="${data.SIGLA}" readonly /></td>
+            <input type="hidden" class="TIPOCARAC" value="${TIPOCARAC}"/>
+            <input type="hidden" class="CODICATC" value="${CODICATC}"/>
+            <input type="hidden" class="ITEM" value="${ITEM}"/>
+            <td><input class="form-control DESCRICAO" value="${DESCRICAO}" readonly /></td>
+            <td><input class="form-control VALOR_PADRAO" value="${VALOR_PADRAO}" readonly /></td>
+            <td><input class="form-control VALOR" value="${VALOR}" ${!permiteAlteracao ? "readonly" : ""} /></td>
+            <td><input class="form-control SIGLA" value="${SIGLA}" readonly /></td>
         </tr>`;
     return html;
 }
@@ -513,6 +776,7 @@ async function asyncMontaHistorico() {
     }
     function geraHtmlHistorico(linha) {
         var DATA = linha.DATA.split(" ");
+        var textoObs = (linha.OBSERVACAO || "").replace(/^(<br\s*\/?>|\s)*/gi, "").trim();
         DATA = DATA[0].split("-").reverse().join("/") + " " + DATA[1];
 
         var html = `<div class="card">
@@ -520,9 +784,9 @@ async function asyncMontaHistorico() {
                     <div style="display:flex;">
                         <div class="divImageUser" style="margin-right:20px;"></div>
                         <div>
-                            <h3 class="card-title" style="margin-bottom:0px; color:black;">${BuscaNomeUsuario(linha.USUARIO)} <small>${linha.ACAO}</small></h3>
+                            <h3 class="card-title" style="margin-bottom:0px; color:black;">${BuscaNomeUsuario(linha.USUARIO)} <small>${linha.ATIVIDADE}</small></h3>
                             <small>${DATA}</small>
-                            <p class="card-text">${linha.OBSERVACAO && linha.OBSERVACAO.trim() ? linha.OBSERVACAO : ""}</p>
+                            <p class="card-text">${textoObs ? textoObs : (linha.ACAO || "")}</p>
                         </div>
                     </div>
                 </div>

@@ -28,10 +28,10 @@
     <processDefinitionVersionPK>
       <companyId>1</companyId>
       <processId>Cadastro de Equipamentos V2</processId>
-      <version>5</version>
+      <version>49</version>
     </processDefinitionVersionPK>
     <versionDescription></versionDescription>
-    <formId>39243</formId>
+    <formId>0</formId>
     <editionMode>true</editionMode>
     <updateAttachmentsVersion>false</updateAttachmentsVersion>
     <controlsAttachmentsSecurity>false</controlsAttachmentsSecurity>
@@ -341,7 +341,7 @@
       <subProcessId></subProcessId>
       <formFolder>0</formFolder>
       <automatic>true</automatic>
-      <positionX>130</positionX>
+      <positionX>127</positionX>
       <positionY>284</positionY>
       <inhibitTransfer>false</inhibitTransfer>
       <stateType>1</stateType>
@@ -405,10 +405,10 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>1</expressionOrder>
-        <version>5</version>
+        <version>49</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
-      <condition>false</condition>
+      <condition></condition>
       <destinationSequenceId>19</destinationSequenceId>
       <conditionType>1</conditionType>
     </ConditionProcessState>
@@ -417,7 +417,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>2</expressionOrder>
-        <version>5</version>
+        <version>49</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -431,7 +431,7 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>3</expressionOrder>
-        <version>5</version>
+        <version>49</version>
         <sequence>14</sequence>
       </conditionProcessStatePK>
       <condition>false</condition>
@@ -444,8 +444,32 @@
       <conditionProcessStatePK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>4</expressionOrder>
+        <version>49</version>
+        <sequence>14</sequence>
+      </conditionProcessStatePK>
+      <condition></condition>
+      <destinationSequenceId>19</destinationSequenceId>
+      <conditionType>1</conditionType>
+    </ConditionProcessState>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>5</expressionOrder>
+        <version>49</version>
+        <sequence>14</sequence>
+      </conditionProcessStatePK>
+      <condition></condition>
+      <destinationSequenceId>19</destinationSequenceId>
+      <conditionType>1</conditionType>
+    </ConditionProcessState>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>1</expressionOrder>
-        <version>5</version>
+        <version>49</version>
         <sequence>26</sequence>
       </conditionProcessStatePK>
       <condition></condition>
@@ -457,11 +481,23 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <expressionOrder>2</expressionOrder>
-        <version>5</version>
+        <version>49</version>
         <sequence>26</sequence>
       </conditionProcessStatePK>
       <condition></condition>
-      <destinationSequenceId>19</destinationSequenceId>
+      <destinationSequenceId>5</destinationSequenceId>
+      <conditionType>1</conditionType>
+    </ConditionProcessState>
+    <ConditionProcessState>
+      <conditionProcessStatePK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <expressionOrder>3</expressionOrder>
+        <version>49</version>
+        <sequence>26</sequence>
+      </conditionProcessStatePK>
+      <condition></condition>
+      <destinationSequenceId>8</destinationSequenceId>
       <conditionType>1</conditionType>
     </ConditionProcessState>
   </list>
@@ -644,12 +680,29 @@
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
         <version>1</version>
-        <linkSequence>29</linkSequence>
+        <linkSequence>30</linkSequence>
       </processLinkPK>
       <actionLabel></actionLabel>
       <returnPermited>false</returnPermited>
       <initialStateSequence>26</initialStateSequence>
-      <finalStateSequence>19</finalStateSequence>
+      <finalStateSequence>5</finalStateSequence>
+      <returnLabel></returnLabel>
+      <name>PA</name>
+      <automaticLink>false</automaticLink>
+      <defaultLink>false</defaultLink>
+      <type>0</type>
+    </ProcessLink>
+    <ProcessLink>
+      <processLinkPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>1</version>
+        <linkSequence>31</linkSequence>
+      </processLinkPK>
+      <actionLabel></actionLabel>
+      <returnPermited>false</returnPermited>
+      <initialStateSequence>26</initialStateSequence>
+      <finalStateSequence>8</finalStateSequence>
       <returnLabel></returnLabel>
       <name>Outros</name>
       <automaticLink>false</automaticLink>
@@ -724,6 +777,10 @@ function moneyToFloat(val) {&#xd;
 function insereHistorico(observacao, acao, atividade) {&#xd;
     var USER = getValue(&quot;WKUser&quot;);&#xd;
     var DATA = getDateTimeNow();&#xd;
+&#xd;
+    if (atividade == &quot;Fim&quot;) {&#xd;
+        USER = &quot;Fluig&quot;;&#xd;
+    }&#xd;
 &#xd;
     var novaLinha = new java.util.HashMap();&#xd;
     novaLinha.put(&quot;tableHistoricoUsuario&quot;, USER);&#xd;
@@ -864,7 +921,7 @@ function getDadosEquipamento() {&#xd;
     var tipoConsumoMedio = hAPI.getCardValue(&quot;tipoConsumoMedio&quot;);&#xd;
     var consumoMedio = hAPI.getCardValue(&quot;consumoMedio&quot;);&#xd;
 &#xd;
-    var CODIMEDI = tipoConsumoMedio == &quot;km/L&quot; ? 1 : 2;&#xd;
+    var CODIMEDI = tipoConsumoMedio == &quot;km/L&quot; ? 2 : 1;&#xd;
 &#xd;
     var CONSUMO_KM = tipoConsumoMedio == &quot;km/L&quot; ? consumoMedio : &quot;&quot;;&#xd;
     var CONSUMO_HORA = tipoConsumoMedio == &quot;L/H&quot; ? consumoMedio : &quot;&quot;;&#xd;
@@ -968,7 +1025,7 @@ function getServerURL() {&#xd;
   <list>
     <SwimLane>
       <color>FFFFFF</color>
-      <height>421</height>
+      <height>461</height>
       <width>931</width>
       <positionX>10</positionX>
       <positionY>10</positionY>
@@ -984,7 +1041,7 @@ function getServerURL() {&#xd;
     </SwimLane>
     <SwimLane>
       <color>9F9F9F</color>
-      <height>210</height>
+      <height>230</height>
       <width>901</width>
       <positionX>40</positionX>
       <positionY>10</positionY>
@@ -1000,10 +1057,10 @@ function getServerURL() {&#xd;
     </SwimLane>
     <SwimLane>
       <color>C0C0C0</color>
-      <height>211</height>
+      <height>231</height>
       <width>901</width>
       <positionX>40</positionX>
-      <positionY>220</positionY>
+      <positionY>240</positionY>
       <stateName>Assignee</stateName>
       <type>2</type>
       <parentSequence>1</parentSequence>
@@ -1022,7 +1079,7 @@ function getServerURL() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>5</version>
+        <version>49</version>
         <linkSequence>22</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1033,7 +1090,7 @@ function getServerURL() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>5</version>
+        <version>49</version>
         <linkSequence>20</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1044,7 +1101,7 @@ function getServerURL() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>5</version>
+        <version>49</version>
         <linkSequence>21</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1055,7 +1112,7 @@ function getServerURL() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>5</version>
+        <version>49</version>
         <linkSequence>23</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1066,7 +1123,7 @@ function getServerURL() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>5</version>
+        <version>49</version>
         <linkSequence>18</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
@@ -1077,23 +1134,45 @@ function getServerURL() {&#xd;
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>5</version>
-        <linkSequence>29</linkSequence>
+        <version>49</version>
+        <linkSequence>30</linkSequence>
         <bendSequence>1</bendSequence>
       </processLinkBendPK>
-      <positionX>160</positionX>
-      <positionY>420</positionY>
+      <positionX>157</positionX>
+      <positionY>187</positionY>
     </ProcessLinkBend>
     <ProcessLinkBend>
       <processLinkBendPK>
         <companyId>1</companyId>
         <processId>wkfCadastroDeEquipamentos</processId>
-        <version>5</version>
-        <linkSequence>29</linkSequence>
+        <version>49</version>
+        <linkSequence>30</linkSequence>
         <bendSequence>2</bendSequence>
       </processLinkBendPK>
-      <positionX>772</positionX>
-      <positionY>420</positionY>
+      <positionX>402</positionX>
+      <positionY>187</positionY>
+    </ProcessLinkBend>
+    <ProcessLinkBend>
+      <processLinkBendPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>49</version>
+        <linkSequence>31</linkSequence>
+        <bendSequence>1</bendSequence>
+      </processLinkBendPK>
+      <positionX>157</positionX>
+      <positionY>438</positionY>
+    </ProcessLinkBend>
+    <ProcessLinkBend>
+      <processLinkBendPK>
+        <companyId>1</companyId>
+        <processId>wkfCadastroDeEquipamentos</processId>
+        <version>49</version>
+        <linkSequence>31</linkSequence>
+        <bendSequence>2</bendSequence>
+      </processLinkBendPK>
+      <positionX>402</positionX>
+      <positionY>438</positionY>
     </ProcessLinkBend>
   </list>
   <list/>
@@ -1136,6 +1215,15 @@ function getServerURL() {&#xd;
     </ConditionProcessAutomaticRules>
     <ConditionProcessAutomaticRules>
       <sequence>14</sequence>
+      <expressionOrder>1</expressionOrder>
+      <ruleOrder>3</ruleOrder>
+      <field>categoria</field>
+      <value>MA</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
       <expressionOrder>2</expressionOrder>
       <ruleOrder>1</ruleOrder>
       <field>decisaoCentral</field>
@@ -1153,17 +1241,62 @@ function getServerURL() {&#xd;
       <valueType>1</valueType>
     </ConditionProcessAutomaticRules>
     <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
+      <expressionOrder>4</expressionOrder>
+      <ruleOrder>1</ruleOrder>
+      <field>categoria</field>
+      <value>PA</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
+      <expressionOrder>4</expressionOrder>
+      <ruleOrder>2</ruleOrder>
+      <field>decisaoCentral</field>
+      <value>Aprovado</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
+      <expressionOrder>5</expressionOrder>
+      <ruleOrder>1</ruleOrder>
+      <field>decisaoSeguranca</field>
+      <value>Aprovado</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>14</sequence>
+      <expressionOrder>5</expressionOrder>
+      <ruleOrder>2</ruleOrder>
+      <field>categoria</field>
+      <value>Outros</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
       <sequence>26</sequence>
       <expressionOrder>1</expressionOrder>
       <ruleOrder>1</ruleOrder>
       <field>categoria</field>
-      <value>Outros</value>
-      <operator>2</operator>
+      <value>MA</value>
+      <operator>1</operator>
       <valueType>1</valueType>
     </ConditionProcessAutomaticRules>
     <ConditionProcessAutomaticRules>
       <sequence>26</sequence>
       <expressionOrder>2</expressionOrder>
+      <ruleOrder>1</ruleOrder>
+      <field>categoria</field>
+      <value>PA</value>
+      <operator>1</operator>
+      <valueType>1</valueType>
+    </ConditionProcessAutomaticRules>
+    <ConditionProcessAutomaticRules>
+      <sequence>26</sequence>
+      <expressionOrder>3</expressionOrder>
       <ruleOrder>1</ruleOrder>
       <field>categoria</field>
       <value>Outros</value>
